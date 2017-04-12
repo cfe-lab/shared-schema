@@ -1,3 +1,4 @@
+#encoding: utf8
 import string
 
 
@@ -22,15 +23,18 @@ def fields_table(fields):
     return fields_tmpl.substitute(rows=rows)
 
 
+#<a class="to-top" href="#top">back to top</a>
 entity_tmpl = string.Template('''
-<a name="$anchor_name" />
-<h3>$name</h3>
-<p>$description</p>
-$fields_table''')
+<div class="entity" id="$anchor_name">
+  <a name="$anchor_name"></a>
+  <h3>$name <a href="#$anchor_name">🔗</a></h3>
+  <p>$description</p>
+  $fields_table
+</div>''')
 
 def entry(entity):
     tmpl_data = {
-        "anchor_name": entity.name,
+        "anchor_name": entity.name.lower(),
         "name": entity.name.capitalize(),
         "description": entity.description,
         "fields_table": fields_table(entity.fields),
