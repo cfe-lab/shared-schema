@@ -7,7 +7,7 @@ import test.example_data
 
 
 
-class TestSchemaData(unittest.TestCase):
+class TestSchema(unittest.TestCase):
 
     def test_no_duplicate_keys(self):
         bad_data = [
@@ -15,10 +15,10 @@ class TestSchemaData(unittest.TestCase):
             entity("a", "", []),
         ]
         with self.assertRaises(AssertionError):
-            schema_data = schema.data.SchemaData(bad_data)
+            schema_data = schema.data.Schema(bad_data)
 
     def test_find_relations(self):
-        sd = schema.data.SchemaData(test.example_data.entities)
+        sd = schema.data.Schemab(test.example_data.entities)
         rels = sd.relationships
         expected_rels = {("baz", "foo")}
         self.assertEqual(

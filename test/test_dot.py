@@ -9,7 +9,7 @@ class TestElementRenderers(unittest.TestCase):
 
     def test_entity_node(self):
         foo_ent = entities[0]
-        expected = '''Foo [href="#foo", tooltip="A foo"];'''
+        expected = '''foo [href="/#foo", tooltip="A foo", target="_parent"];'''
         calcd = dot.node(foo_ent)
         self.assertEqual(
             calcd,
@@ -18,8 +18,8 @@ class TestElementRenderers(unittest.TestCase):
         )
 
     def test_link_edge(self):
-        relation = ("foo", "bar")
-        expected = "Foo -> Bar;"
+        relation = ("Foo", "BaR")
+        expected = "Foo -> BaR;"
         calcd = dot.edge(relation)
         self.assertEqual(
             calcd,
@@ -28,4 +28,4 @@ class TestElementRenderers(unittest.TestCase):
         )
 
     def test_make_smoketest(self):
-        dot.make(data.SchemaData(entities))
+        dot.make(data.Schema(entities))
