@@ -1,17 +1,20 @@
 SCRIPTS=$(shell find . -name '*.py')
-SOURCE=Spy
+STATIC_FILES=$(shell find static -type f)
 
-all: $(SCRIPTS) tmp/schema.svg
-
-# install-tools:
-# 	sudo apt-get install graphviz python3 findutils
+all: doc/schema.svg doc/index.html static
 
 clean:
 	find doc/ -mindepth 1 -delete
 	find . -name '*.pyc' -delete
 
-tmp/schema.svg: schema/dot.py schema/data.py
-	mkdir -p tmp
-	python -m schema dot | dot -Tsvg > tmp/schema.svg
+test:
+	python3 -m unittest
 
+doc/schema.svg: schema/dot.py schema/data.py
+	python -m schema dot | dot -Tsvg > doc/schema.svg
 
+static: $(STATIC_FILES)
+	cp static/* doc/
+
+doc/index.html: $(SCRIPTS)
+	python -m schema index > doc/index.html
