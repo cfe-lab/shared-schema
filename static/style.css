@@ -1,0 +1,39 @@
+body {
+    max-width: 50em;
+    margin: auto;
+    font-family: "Droid Sans", Arial, sans-serif;
+}
+
+embed {
+    max-width: 100%;
+}
+
+
+h2 {
+    border-bottom: 2px dotted blue;
+}
+
+
+th {
+    padding: 0em 0.5em 1em 0.5em;;
+}
+
+td {
+    font-family: monospace;
+    padding: 0.2em 0.5em;
+    border-top: 1px solid gray;
+}
+
+div.entity {
+    padding: 1em 0.5em;
+}
+
+h3 a {
+    text-decoration: none;
+    color: gray;
+    font-size: 80%;
+}
+
+div.entity:target {
+    background-color: lightgray;
+}

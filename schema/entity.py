@@ -35,7 +35,7 @@ entity_tmpl = string.Template('''
 def entry(entity):
     tmpl_data = {
         "anchor_name": entity.name.lower(),
-        "name": entity.name.capitalize(),
+        "name": entity.name,
         "description": entity.description,
         "fields_table": fields_table(entity.fields),
     }
