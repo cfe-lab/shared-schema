@@ -2,19 +2,17 @@
 '''
 
 def node(entity):
-    name = entity.name.capitalize()
+    name = entity.name
     tooltip = entity.description
     href = "#{}".format(entity.name.lower())
-    tmpl = '''{name} [href="{href}", tooltip="{tooltip}"];'''
+    tmpl = '''{name} [href="/{href}", tooltip="{tooltip}", target="_parent"];'''
     return tmpl.format(name=name, tooltip=tooltip, href=href)
 
 
 def edge(relation):
     source, target = relation
-    source_name = source.capitalize()
-    target_name = target.capitalize()
-    tmpl = '''{source_name} -> {target_name};'''
-    return tmpl.format(source_name=source_name, target_name=target_name)
+    tmpl = '''{source} -> {target};'''
+    return tmpl.format(source=source, target=target)
 
 
 def nodes(schema_data):
