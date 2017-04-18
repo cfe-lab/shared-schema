@@ -37,7 +37,8 @@ def index(title, entities):
 # Create entries
 
 def entity_tables(schema_data):
-    entities = schema_data.entities.values()
+    raw_entities = schema_data.entities.values()
+    entities = sorted(raw_entities, key=lambda e: e.name)
     entries = (entity.entry(e) for e in entities)
     return "\n".join(entries)
 
