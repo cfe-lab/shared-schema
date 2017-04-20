@@ -27,7 +27,7 @@ def fields_table(fields):
 entity_tmpl = string.Template('''
 <div class="entity" id="$anchor_name">
   <a name="$anchor_name"></a>
-  <h3>$name <a href="#$anchor_name">🔗</a></h3>
+  <h3>$name <a href="#$anchor_name">🔗</a> <a href="#top">🠉</a></h3>
   <p>$description</p>
   $fields_table
 </div>''')

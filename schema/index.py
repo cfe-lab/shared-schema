@@ -18,14 +18,14 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
     <body>
         <a name="top"></a>
         <h1>SHARED Schema</h1>
-        <p>Draft version ($date)</p>
+        <p>Draft (alpha version as of $date)</p>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>
             <p><a href="schema.svg" target="_blank">bigger</a></p>
         </div>
         <h2>Data Dictionary</h2>
-        <p>The fields associated with each table. The following data-types are allowed:</p>
+        <p>The fields in each table are described below. The data-types are used are:</p>
 
         <table>
             <tr>
