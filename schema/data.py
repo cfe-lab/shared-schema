@@ -69,8 +69,8 @@ schema_data = Schema([
          field("location", "string", "The collaborator's physical location"),
         ]),
 
-    # QUESTION(nknight): Location? How do we represent geographica data (how accurate do we need to be?)
-    # QUESTION(nknight): Treatment Center? (as distrinct from collaborator; could be useful for geographic data)
+    # QUESTION(nknight): Location? How do we represent geographical data (how accurate do we need to be?)
+    # QUESTION(nknight): Treatment/Contact Centre? (as distinct from collaborator; could be useful for geographic data)
 
 
     # ==================================================
@@ -90,7 +90,7 @@ schema_data = Schema([
         "An HCV drug",
         [field("id", "uuid", "Unique identifier"),
          field("name", "string", "The drug's name"),
-         # QUESTION(nknight): some kind of key to a drug db?
+         # QUESTION(nknight): some kind of key to a drug database?
          # QUESTION(nknight): other drug info?
         ]),
 
@@ -98,7 +98,7 @@ schema_data = Schema([
         "ClinicalData",
         "Diagnostic information about a participant",
         [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant to whom the data pertains"),
+         field("person_id", "foreign key (Person)", "The participant to whom this data pertains"),
          field("collaborator_id", "foreign key (Collaborator)", "The source of the data"),
          field("height", "float", "Participant's height (in m)"),
          field("weight", "float", "Participant's weight (in kg)"),
@@ -122,7 +122,7 @@ schema_data = Schema([
         [field("id", "uuid", "Unique identifier"),
          field("person_id", "foreign key (Person)", "Participant to whom this data pertains"),
          # QUESTION(nknight): standard events and procedures coding system?
-         field("event_code", "string", "Standardized event coding system"),
+         field("event_code", "string", "Standardised event coding system"),
          field("event_date", "date", "Date of procedure or diagnosis"),
         ]),
 
@@ -130,7 +130,7 @@ schema_data = Schema([
         "DemographicData",
         "Demographic information about a participant",
         [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant to whom the data pertains"),
+         field("person_id", "foreign key (Person)", "The participant to whom this data pertains"),
          field("collaborator_id", "foreign key (Collaborator)", "The source of the data"),
          field("date_collected", "date", "The date this data was collected"),
          field("date_of_birth", "date", "Participant's date of birth"),
@@ -143,7 +143,7 @@ schema_data = Schema([
         "BehaviorData",
         "Behavioral information about a participant",
         [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant to whom the data pertains"),
+         field("person_id", "foreign key (Person)", "The participant to whom this data pertains"),
          field("collaborator_id", "foreign key (Collaborator)", "The collaborator who provided the data"),
          field("date_collected", "date", "The date this data was collected"),
          field("sexual_orientation", "enum (heterosexual, non-heterosexual)",
@@ -159,10 +159,10 @@ schema_data = Schema([
                "Period of recall for 'idu_recent'"),
          field("idu_min_freq", "enum(daily, weekly, rarely)",
                "Minimum frequency of recent drug use (daily: once or more every day; weekly: not every day, but more than once a week; rarely: less than once a week)"),
-         field("idu_min_feq_period", "enum(1month, 3months, 6months, 12months, other, unknown)",
+         field("idu_min_freq_period", "enum(1month, 3months, 6months, 12months, other, unknown)",
                "Period of recall for idu_min_freq"),
          field("idu_syr_borrowed", "bool",
-               "Recent receiptive syringe sharing (i.e. using a syringe that has previously been used by someone else)"),
+               "Recent receptive syringe sharing (i.e. using a syringe that has previously been used by someone else)"),
          field("idu_syr_borrowed_period", "enum(1month, 3months, 6months, 12months, other, unknown)",
                "Period of recall for 'idu_syr_borrowed'"),
          field("idu_syr_borrowed_min_freq", "enum(daily, weekly, rarely)",
@@ -171,67 +171,67 @@ schema_data = Schema([
                "Period of recall for 'idu_syr_borrowed_min_freq'"),
          field("idu_eqp_borrowed", "bool",
                "Recent receptive sharing of other injecting equipment (cookers, containers, cottons, etc.) that "),
-         field("idu_eqp_borrowed_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("idu_eqp_borrowed_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'idu_eqp_borrowed'"),
          field("idu_eqp_borrowed_min_freq", "enum(daily, weekly, rarely)",
                "Minimum frequency for 'idu_eqp_borrowed_min_freq'"),
          field("idu_shared_partners", "integer",
                "Number of people shared with recently (including use before and after)"),
-         field("idu_shared_partners_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("idu_shared_partners_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'idu_shared_partners'"),
 
          field("prison", "bool", "Recent prison"),
-         field("prison_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("prison_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'prison'"),
 
          field("alcohol", "bool", "Recent alcohol use"),
-         field("alcohol_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("alcohol_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'alcohol'"),
          field("alcohol_min_freq", "enum(daily, weekly, rarely)",
                "Minimum frequency of alcohol use"),
-         field("alcohol_min_freq_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("alcohol_min_freq_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'alcohol_min_freq'"),
          field("alcohol_drinks", "float", "Average number of drinks per session"),
-         field("alcohlol_amount", "float", "Average amount of alcohol per drink (in grams)"),
+         field("alcohol_amount", "float", "Average amount of alcohol per drink (in grams)"),
 
          field("sex_hcv", "bool", "Recent sexual partner known to be HCV positive?"),
-         field("sex_hcv_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("sex_hcv_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'sex_hcv'"),
          field("sex_idu", "bool", "Recent sexual partner who injects drugs?"),
-         field("sex_idu_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("sex_idu_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'sex_idu'"),
          field("inj_sexpart", "bool",
                "Recent injecting with sex partner (in the same space, not necessarily sharing"),
-         field("inj_sexpart_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("inj_sexpart_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'sex_inj'"),
          field("inj_sexpart_min_freq", "enum(daily, weekly, rarely)",
                "Frequency of recent injecting with sex partner"),
-         field("inj_sexpart_min_freq_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("inj_sexpart_min_freq_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'inj_sexpart_min_freq'"),
 
-         field("sexpart_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
-               "Recall period for sexual partner & condom use questions"),
+         field("sexpart_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
+               "Recall period for sexual partner & condom use"),
          field("sexpart", "integer", "Total number of recent sexual partners (regular or casual)"),
          field("sexpart_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
                "Condom use with all sex partners"),
          field("sexpart_cm", "integer", "Total number of cis-male sexual partners"),
          field("sexpart_cm_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with cis-male sexual partners"),
+               "Condom use with cis-male sexual partners"),
          field("sexpart_cf", "integer", "Total number of cis-female sexual partners"),
          field("sexpart_cf_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with cis-female sexual partners"),
+               "Condom use with cis-female sexual partners"),
          field("sexpart_tm", "integer", "Total number of trans-male sexual partners"),
          field("sexpart_tm_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with trans-male sexual partners"),
+               "Condom use with trans-male sexual partners"),
          field("sexpart_tf", "integer", "Total number of trans-female sexual partners"),
          field("sexpart_tf_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with trans-female sexual partners"),
+               "Condom use with trans-female sexual partners"),
          field("sexpart_is", "integer", "Total number of intersex sexual partners"),
          field("sexpart_is_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with intersex sexual partners"),
+               "Condom use with intersex sexual partners"),
          field("sexpart_inj", "integer", "Total number of sex partners they injected with"),
          field("sexpart_inj_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
-               "Comdom use with sexual partners they injected with"),
+               "Condom use with sexual partners they injected with"),
          field("sexpart_comm", "integer",
                "Total number of partner with whom they traded sex for money, housing, goods, favours, etc."),
          field("sexpart_comm_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
@@ -239,7 +239,7 @@ schema_data = Schema([
 
          field("opiate_pharm", "bool", "Recent opiate pharmacotherapy"),
          field("opiod", "bool", "Recent opiod use (Morphine, Oxycodone, Methadone, Buprenorphine, etc."),
-         field("opiod_period", "enum(1month, 3months, 6months, 12months, unkonwn, other)",
+         field("opiod_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'opiod'"),
         ]),
 
@@ -270,7 +270,7 @@ schema_data = Schema([
         "TreatmentData",
         "Information about a participant's treatment",
         [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant to whom the data pertains"),
+         field("person_id", "foreign key (Person)", "The participant to whom this data pertains"),
          field("collaborator_id", "foreign key (Collaborator)", "Collaborator who collected this data"),
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt", "date", "Scheduled treatment end date"),
@@ -302,7 +302,8 @@ schema_data = Schema([
     entity(
         "DeathAndLastFollowup",
         "Records data about  leaving the study",
-        [field("drop", "bool", "The participant dropped out"),
+        [field("person_id", "foreign key (Person)", ""),
+         field("drop", "bool", "The participant dropped out"),
          field("drop_dt", "date", "Date the participant dropped out"),
          field("drop_reason", "string", "Reason for dropping out (if applicable)"),
          field("died", "bool", "Is the participant deceased?"),
@@ -337,7 +338,7 @@ schema_data = Schema([
         "Isolate",
         "Virus isolate (from an individual or used in a lab experiment)",
         [field("id", "uuid", "Unique id"),
-         field("isolation_date", "date", "Date the virus was isoated"),
+         field("isolation_date", "date", "Date the virus was isolated"),
          field("type", "enum (clinical, lab)", "The kind of isolate. (extra data available depending on kind "),
          field("isolate_date", "date", "Date the virus was isolated"),
          field("entered_date", "date", "Date the isolate was entered into the database"),
@@ -345,7 +346,7 @@ schema_data = Schema([
     # QUESTION(nknight): generic isolate fields? (hicdep additionally has "gene")
     # QUESTION(nknight): external references for isolates (e.g. to GenBank)?
     # QUESTION(nknight): Do isolates have a single viral component (e.g. do we need to handle multiple genotypes per isolate)?
-    # QUESTION(nknight): How do we record genotyp/subtype information? (per isolate, per participant, per what?)
+    # QUESTION(nknight): How do we record genotype/subtype information? (per isolate, per participant, per what?)
 
     entity(
         "ClinicalIsolate",
@@ -355,7 +356,7 @@ schema_data = Schema([
          field("cultured", "bool", "Whether or not the isolate was cultured before sequencing"),
         ]),
     # QUESTION(nknight): clinical isolate fields (hicdep has template, clone method, and seq method"
-    # QUESTION(nknight): Do lab isolates come from participantss? Do we want a third kind that are purely synthetic?
+    # QUESTION(nknight): Do lab isolates come from participants? Do we want a third kind that are purely synthetic?
 
     entity(
         "LabIsolate",
@@ -363,7 +364,7 @@ schema_data = Schema([
         [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
          field("mutations", "string", "A list of the mutations applied to the isolate"),
         ]),
-    # QUESTION(nknight): lab isolate fields? (hicdep has + parent, mutationlist, sdm, passage)
+    # QUESTION(nknight): lab isolate fields? (hicdep has + parent, mutation list, sdm, passage)
 
     entity(
         "Sequence",
@@ -382,7 +383,7 @@ schema_data = Schema([
         "A substitution, insertion, or deletion in an RNA sequence",
         [field("id", "uuid", "Unique identifier"),
          field("name", "string", "Name of the substitution"),
-         field("reference_sequence", "string", "Name of the concencus wild-type reference sequence"),
+         field("reference_sequence", "string", "Name of the consensus wild-type reference sequence"),
          field("position", "integer", "Nucleotide position (with respect to the reference sequence)"),
          field("length", "integer", "Length of the substitution"),
          field("resistance_associated", "bool", "True if this is a resistance associated substitution"),
@@ -410,7 +411,7 @@ schema_data = Schema([
          field("drug_id", "foreign key (Drug)", "The drug being tested"),
          field("method_id", "foreign key (SusceptibilityMethod)", "Name of the susceptibility test method"),
          # QUESTION(nknight): precision?
-         field("result", "float", "Drug concentration required for in hibition (in nM)"),
+         field("result", "float", "Drug concentration required for inhibition (in nM)"),
          field("result_bound", "enum (<, =, >)", ""),
          field("IC", "enum (50, 90, 95)", "% inhibition"),
          field("fold", "float", "Fold-change compared to wild type"),

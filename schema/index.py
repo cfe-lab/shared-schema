@@ -59,7 +59,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
             </tr>
             <tr>
                 <td>enum (...)</td>
-                <td>Once of a given set of values. For example, enthnicity might be represented by the data-type 'enum(caucasian, latino, asian, black, indigenous-american)'. An '...' indicates that the allowed values are to-be-determined.</td>
+                <td>One of a set of values. For example, enthnicity might be represented by the data-type 'enum(caucasian, latino, asian, black, indigenous-american)'. An '...' indicates that the allowed values are to-be-determined.</td>
             </tr>
             <tr>
                 <td>foreign key (tbl_name)</td>
