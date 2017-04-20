@@ -26,6 +26,10 @@ def edges(schema_data):
 
 
 dot_template = '''digraph "{title}" {{
+overlap=false;
+root=Person;
+ratio=compress;
+rankdir=RL;
 {edge_lines}
 {node_lines}
 }}'''

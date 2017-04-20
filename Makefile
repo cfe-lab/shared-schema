@@ -11,7 +11,7 @@ test:
 	python3 -m unittest
 
 doc/schema.svg: schema/dot.py schema/data.py
-	python -m schema dot | dot -Tsvg > doc/schema.svg
+	python -m schema dot  | unflatten | dot -Tsvg > doc/schema.svg
 
 static: $(STATIC_FILES)
 	cp static/* doc/
