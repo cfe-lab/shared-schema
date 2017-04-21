@@ -1,14 +1,44 @@
 #encoding: utf8
 import string
 
+import schema.util as util
+
+
+fk_link_tmpl = string.Template(
+    '''<a href="#$fk_anchor">$fk_name</a>'''
+)
+def fk_link(fk_name):
+    fk_anchor = fk_name.lower()
+    return fk_link_tmpl.substitute(
+        fk_name=fk_name,
+        fk_anchor=fk_anchor,
+    )
+
+
+fk_field_tmpl = string.Template(
+    '''<tr> <td>$name</td> <td>foreign key ($link)</td></tr>'''
+)
+
+def fk_field_row(field):
+    fk_target = util.foreign_key_target(field.type)
+    link = fk_link(fk_target)
+    return fk_field_tmpl.substitute(
+        name=field.name,
+        fk_target=fk_target,
+        link=link,
+    )
+
 
 field_tmpl = string.Template(
     '''<tr> <td>$name</td> <td>$type</td> <td>$description</td> </tr>'''
 )
 
 def field_row(field):
-    fs = field._asdict()
-    return field_tmpl.substitute(**fs)
+    if 'foreign key' in field.type:
+        return fk_field_row(field)
+    else:
+        fs = field._asdict()
+        return field_tmpl.substitute(**fs)
 
 
 fields_tmpl = string.Template('''
