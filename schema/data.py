@@ -1,17 +1,13 @@
 #encoding: utf8
+
 import collections
-import re
+
+import schema.util as util
 
 # Data Parsing
 
 entity = collections.namedtuple("entity", ["name", "description", "fields"])
 field = collections.namedtuple("field", ["name", "type", "description"])
-
-
-def foreign_key_target(field_type):
-    '''What entity does a foreign key target?'''
-    matches = re.findall("\((.+)\)", field_type)
-    return matches[0]
 
 
 class Schema(object):
@@ -35,7 +31,7 @@ class Schema(object):
         for ename, entity in self.entities.items():
             types = (f.type for f in entity.fields)
             foreign_keys = [t for t in types if "foreign key" in t]
-            targets = [foreign_key_target(f) for f in foreign_keys]
+            targets = [util.foreign_key_target(f) for f in foreign_keys]
             for target in targets:
                 rel = (entity.name, target)
                 rels.add(rel)
@@ -49,14 +45,12 @@ class Schema(object):
         if not (known_type or fk or enum):
             return False
         elif fk:
-            fk_target = foreign_key_target(t)
+            fk_target = util.foreign_key_target(t)
             err_msg = "invalid foreign key target: {}".format(fk_target)
             assert  fk_target in entities, err_msg
             return True
         else:
             return True
-
-
 
 
 schema_data = Schema([
@@ -66,11 +60,8 @@ schema_data = Schema([
         "A collaborating site (provides participant data)",
         [field("id", "uuid", "Unique identifier"),
          field("name", "string", "Name of the collaborating entity"),
-         field("location", "string", "The collaborator's physical location"),
+         field("country", "string", "The collaborator's physical location (country)"),
         ]),
-
-    # QUESTION(nknight): Location? How do we represent geographical data (how accurate do we need to be?)
-    # QUESTION(nknight): Treatment/Contact Centre? (as distinct from collaborator; could be useful for geographic data)
 
 
     # ==================================================
@@ -86,13 +77,30 @@ schema_data = Schema([
         ]),
 
     entity(
-        "Drug",
-        "An HCV drug",
-        [field("id", "uuid", "Unique identifier"),
-         field("name", "string", "The drug's name"),
-         # QUESTION(nknight): some kind of key to a drug database?
-         # QUESTION(nknight): other drug info?
+        "MedicalFacility",
+        "A treatment, diagnosis, or research centre",
+        [field("id", "uuid", ""),
+         field("name", "string", "Name of the treatment centre"),
+         field("country", "string", "Location of the treatment centre"),
+         field("region", "string", "Region of the treatment centre (if applicable)"),
+         field("notes", "string", "Free-form notes on a facility (e.g. treatment vs. diagnosis)"),
         ]),
+
+    entity(
+        "Medication",
+        "",
+        [field("id", "uuid", "Unique identifier"),
+         field("short_name", "string", "The drug's three-letter abbreviation"),
+         field("full_name", "string", "The drug's name"),
+         # BLOCKED(nknight): Pharmaco-economics code
+        ]),
+
+    entity("MedicationAbbreviations",
+           "Common abbreviations for medications",
+           [field("medication_id", "foreign key (Medication)",
+                  "The medication this abbreviation is applied to"),
+            field("abbreviation", "string", ""),
+           ]),
 
     entity(
         "ClinicalData",
@@ -102,7 +110,7 @@ schema_data = Schema([
          field("collaborator_id", "foreign key (Collaborator)", "The source of the data"),
          field("height", "float", "Participant's height (in m)"),
          field("weight", "float", "Participant's weight (in kg)"),
-         field("seroconverted", "bool", ""),
+         field("seroconverted", "bool", "Has the participant seroconverted?"),
          field("meld", "float", "MELD score"),
          field("ctp", "float", "Child-Turcotte-Pugh score"),
          field("ishak", "float", "Ishak fibrosis score"),
@@ -110,10 +118,23 @@ schema_data = Schema([
          field("q_life_phys", "float", "Physical quality of life score"),
          field("q_life_ment", "float", "Mental quality of life score"),
          field("q_life_instrument", "string", "Quality of life instrument and version"),
-         field("depression", "bool", "Has the participant ever been diagnosed with depression"),
+         field("depression", "bool", "Has the participant ever been diagnosed with depression?"),
          field("viral_load", "float", "Viral load"),
-         # QUESTION(nknight): exposure?
-         # QUESTION(nknight): separate test results table?
+         field("route_of_infection", "string", "Likely route of infection"),
+         field("infection_duration", "integer", "Days since likely infection"),
+        ]),
+
+    entity(
+        "TestResult",
+        "The outcome of a test result (e.g. bilirubin, alt, CD4)",
+        [field("id", "uuid", "Unique identifier"),
+         field("person_id", "foreign key (Person)", ""),
+         field("name", "string", "Name of the test"),
+         field("unit", "string", "Unit of the test result (e.g. ppm)"),
+         field("result", "float", "The value of the test result"),
+         field("date", "date", "Date the test was performed"),
+         field("test_facility", "foreign key (MedicalFacility)",
+               "Facility that performed the test"),
         ]),
 
     entity(
@@ -121,9 +142,11 @@ schema_data = Schema([
         "Significant clinical events and/or procedures (e.g. diagnoses, surgeries, etc.)",
         [field("id", "uuid", "Unique identifier"),
          field("person_id", "foreign key (Person)", "Participant to whom this data pertains"),
-         # QUESTION(nknight): standard events and procedures coding system?
+         # BLOCKED(nknight): standard events and procedures coding system
          field("event_code", "string", "Standardised event coding system"),
          field("event_date", "date", "Date of procedure or diagnosis"),
+         field("facility", "foreign key (MedicalFacility)",
+               "The facility providing the treament event, diagnosis, etc."),
         ]),
 
     entity(
@@ -135,7 +158,6 @@ schema_data = Schema([
          field("date_collected", "date", "The date this data was collected"),
          field("date_of_birth", "date", "Participant's date of birth"),
          field("country_of_birth", "string", ""),
-         # QUESTION(nknight): what are the possible/useful values here?
          field("ethnicity", "enum (...)", ""),
         ]),
 
@@ -152,6 +174,8 @@ schema_data = Schema([
          field("highest_education", "enum(...)", "Participant's highest level of education to date"),
          field("employed", "enum(employed, unemployed, other)", "Employment status"),
          field("housing", "enum(stable, unstable, prison, other)", "Housing status"),
+         field("country", "string", "The participant's country of residence"),
+         field("region", "string", "The participant's region of residence"),
 
          field("idu", "bool", "Injection drug use? (ever)"),
          field("idu_recent", "bool", "Recent injection drug use?"),
@@ -180,11 +204,11 @@ schema_data = Schema([
          field("idu_shared_partners_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'idu_shared_partners'"),
 
-         field("prison", "bool", "Recent prison"),
+         field("prison", "bool", "Has the participant recently been in prison?"),
          field("prison_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'prison'"),
 
-         field("alcohol", "bool", "Recent alcohol use"),
+         field("alcohol", "bool", "Has the participant recently used alcohol?"),
          field("alcohol_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Period of recall for 'alcohol'"),
          field("alcohol_min_freq", "enum(daily, weekly, rarely)",
@@ -237,7 +261,7 @@ schema_data = Schema([
          field("sexpart_comm_condom", "enum(always, usually, sometimes, rarely, never, unknown, refused)",
                "Condom use with sex partners they traded sex to"),
 
-         field("opiate_pharm", "bool", "Recent opiate pharmacotherapy"),
+         field("opiate_pharm", "bool", "Has the participant recently had opiate pharmacotherapy?"),
          field("opiod", "bool", "Recent opiod use (Morphine, Oxycodone, Methadone, Buprenorphine, etc."),
          field("opiod_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'opiod'"),
@@ -250,8 +274,8 @@ schema_data = Schema([
          field("behaviourdata_id", "foreign key (BehaviorData)",
                "The behaviour data this usage was recorded with"),
          field("drug", "string", "Name of the drug"),
-         field("injected", "bool", "Whether the drug was injected"),
-         field("prescribed", "bool", "Whether the drug was prescribed"),
+         field("injected", "bool", "Was the drug used by injection?"),
+         field("prescribed", "bool", "Was the drug prescribed?"),
          field("period", "enum(1month, 3months, 6months, 12months, other, unknown)",
                "Recall period for this drug"),
         ]),
@@ -264,6 +288,9 @@ schema_data = Schema([
          field("gene", "string", "Name of the relevant gene"),
          field("snp", "string", "Single nucleotide polymorphism"),
          field("snp_genotype", "string", "Genotype of 'snp'"),
+         field("sequencing_facility", "foreign key (MedicalFacility)",
+               "The facility that obtained this sequence"),
+         field("date", "date", "The date this sequence was obtained"),
         ]),
 
     entity(
@@ -275,6 +302,7 @@ schema_data = Schema([
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt", "date", "Scheduled treatment end date"),
          field("end_dt_bound", "enum(<, >, =)", "Uncertainty on 'end_dt'"),
+         field("treatment_facility", "foreign key(MedicalFacility)", "The facility providing treatment"),
         ]),
 
     entity(
@@ -286,14 +314,13 @@ schema_data = Schema([
                "Sustained viral response(svr), virological breakthrough (vbt), or relapse"),
          field("early_stop", "bool", "Did the participant discontinue treatment earlier than intended?"),
          field("stop_reason", "string", "Reason for dropping out"),
-         # QUESTION(nknight): Site?
-        ]),
+    ]),
 
     entity(
         "TreatmentDrugData",
         "How much and what kind of a drug was included in a treatment regimen",
         [field("treatment_id", "foreign key (TreatmentData)", "Which treatment this prescription was included in"),
-         field("drug_id", "foreign key (Drug)", "Which drug was prescribed"),
+         field("medication_id", "foreign key (Medication)", "Which drug was prescribed"),
          field("dosage", "float", "Dosage of the drug prescribed (in μg)"),
          field("dose_number", "float", "Number of doses taken per dose_period"),
          field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
@@ -303,14 +330,25 @@ schema_data = Schema([
         "DeathAndLastFollowup",
         "Records data about  leaving the study",
         [field("person_id", "foreign key (Person)", ""),
-         field("drop", "bool", "The participant dropped out"),
+         field("drop", "bool", "Did the participant dropped out?"),
          field("drop_dt", "date", "Date the participant dropped out"),
          field("drop_reason", "string", "Reason for dropping out (if applicable)"),
          field("died", "bool", "Is the participant deceased?"),
          field("died_dt", "date", "The participant's date of death"),
          field("autopsy", "bool", "Was an autopsy performed?"),
-         # QUESTION(nknight): split cause into separate table?
          field("cause_of_death", "string", "Cause of death (e.g. ICD-10 code)"),
+         field("country", "string", "The participant's country at time of death"),
+         field("region", "string", "The participant's region at time of death"),
+        ]),
+
+    entity(
+        "CauseOfDeath",
+        "Primary cause of death and other underlying conditions",
+        [field("ltfu_id", "foreign key (DeathAndLastFollowup)",
+               "The death record this data pertains to"),
+         field("cause", "string", "A code for the cause of death"),
+         field("importance", "bool",
+               "Was this a primary cause of death?"),
         ]),
 
 
@@ -324,11 +362,10 @@ schema_data = Schema([
          field("author", "string", ""),
          field("title", "string", ""),
          field("journal", "string", ""),
+         field("url", "string", "URL to the reference online"),
          field("publication_dt", "date", "Null for unpublished results"),
          field("pubmed_id", "string", ""),
-        ]),
-
-    # QUESTION(nknight): other kinds of reference? (other than pubmed)
+    ]),
 
 
     # ==================================================
@@ -340,31 +377,33 @@ schema_data = Schema([
         [field("id", "uuid", "Unique id"),
          field("isolation_date", "date", "Date the virus was isolated"),
          field("type", "enum (clinical, lab)", "The kind of isolate. (extra data available depending on kind "),
-         field("isolate_date", "date", "Date the virus was isolated"),
          field("entered_date", "date", "Date the isolate was entered into the database"),
+         field("genbank_id", "string", "GenBank ID (if available)"),
+         field("source_facility", "foreign key (MedicalFacility)", "The facility that performed this isolation"),
+         field("genotype", "string", "The genotype of the isolate (may not be applicable, e.g. for chimeras)"),
+         field("subgenotype", "string", ""),
         ]),
-    # QUESTION(nknight): generic isolate fields? (hicdep additionally has "gene")
-    # QUESTION(nknight): external references for isolates (e.g. to GenBank)?
-    # QUESTION(nknight): Do isolates have a single viral component (e.g. do we need to handle multiple genotypes per isolate)?
-    # QUESTION(nknight): How do we record genotype/subtype information? (per isolate, per participant, per what?)
 
     entity(
         "ClinicalIsolate",
         "Isolate information",
         [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
          field("person_id", "foreign key (Person)", "The participant who gave the isolate"),
-         field("cultured", "bool", "Whether or not the isolate was cultured before sequencing"),
+         field("cultured", "bool", "Was the isolate cultured before sequencing?"),
         ]),
-    # QUESTION(nknight): clinical isolate fields (hicdep has template, clone method, and seq method"
-    # QUESTION(nknight): Do lab isolates come from participants? Do we want a third kind that are purely synthetic?
 
     entity(
         "LabIsolate",
         "Isolates created in the lab",
         [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
          field("mutations", "string", "A list of the mutations applied to the isolate"),
+         field("sdm", "bool", "Was site-directed mutagenesis applied to the isolate?"),
+         field("parent_sequence", "foreign key (Sequence)", "The sequence from which this isolate is derived"),
+         field("kind", "enum(full, stable-subgenomic, transient-subgenomic",
+               "The kind of isolate created (full synthetic genome, transient subgenomic replicon,"
+               "or stable subgenomic cell-line)"),
+         field("replicon_passage", "integer", "The passage number (for sub-cultured isolates)"),
         ]),
-    # QUESTION(nknight): lab isolate fields? (hicdep has + parent, mutation list, sdm, passage)
 
     entity(
         "Sequence",
@@ -372,11 +411,13 @@ schema_data = Schema([
         [field("id", "uuid", "Unique identifier"),
          field("isolate_id", "foreign key (Isolate)", "Isolate the sequence was obtained from"),
          field("seq", "string", "nucleotide sequence"),
-         # QUESTION(nknight): sequence fields (hicdep has + clonename, naseq, aaseq, firstaa, lastaa)
-         # QUESTION(nknight): sequence length? should be 19Kb or less, no?
-         # QUESTION(nknight): How many sequences will we be storing (millions, billions)?
-
-        ]),
+         field("reference", "string", "The reference genome this sequence is described with respect to"),
+         field("nt_start", "integer", "The starting position of the nucleotide sequence (with respect to the reference)"),
+         field("nucleotides", "string", "The sequence's raw nucleotide sequence"),
+         field("aa_start", "integer", "The starting position of the amino acid sequence (with respect to the reference)"),
+         field("aa_derived", "bool", "Was the amino-acid sequence derived from the nucleotide sequence?"),
+         field("amino_acids", "string", "The sequence's raw amino-acid sequence"),
+    ]),
 
     entity(
         "Substitution",
@@ -386,7 +427,7 @@ schema_data = Schema([
          field("reference_sequence", "string", "Name of the consensus wild-type reference sequence"),
          field("position", "integer", "Nucleotide position (with respect to the reference sequence)"),
          field("length", "integer", "Length of the substitution"),
-         field("resistance_associated", "bool", "True if this is a resistance associated substitution"),
+         field("resistance_associated", "bool", "Is this a resistance associated substitution"),
         ]),
 
     entity(
@@ -398,7 +439,6 @@ schema_data = Schema([
         ]),
 
 
-
     # ==================================================
     # Susceptibility results
 
@@ -408,15 +448,14 @@ schema_data = Schema([
         [field("id", "uuid", "Unique id"),
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
-         field("drug_id", "foreign key (Drug)", "The drug being tested"),
+         field("medication_id", "foreign key (Medication)", "The drug being tested"),
          field("method_id", "foreign key (SusceptibilityMethod)", "Name of the susceptibility test method"),
-         # QUESTION(nknight): precision?
          field("result", "float", "Drug concentration required for inhibition (in nM)"),
          field("result_bound", "enum (<, =, >)", ""),
          field("IC", "enum (50, 90, 95)", "% inhibition"),
          field("fold", "float", "Fold-change compared to wild type"),
          field("fold_bound", "enum (<, =, >)", "Represents uncertainty in the fold-change measurement"),
-        ]),
+    ]),
 
     entity(
         "SusceptibilityMethod",

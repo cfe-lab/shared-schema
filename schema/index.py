@@ -11,18 +11,18 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="style.css" rel="stylesheet">
+        <link href="http://neganp.github.io/shared-schema/style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
         <title>$title</title>
     </head>
     <body>
         <a name="top"></a>
         <h1>SHARED Schema</h1>
-        <p>Draft (alpha version as of $date)</p>
+        <p>Draft (alpha1 version as of $date)</p>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>
-            <p><a href="schema.svg" target="_blank">bigger</a></p>
+            <p><a href="http://neganp.github.io/shared-schema/schema.svg" target="_blank">bigger</a></p>
         </div>
         <h2>Data Dictionary</h2>
         <p>The fields in each table are described below. The data-types are used are:</p>
