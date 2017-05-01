@@ -9,421 +9,406 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 856)">
 <title>SHARED Schema</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-856 738.544,-856 738.544,4 -4,4"/>
-<!-- EventsAndProceduresData -->
-<g id="node1" class="node"><title>EventsAndProceduresData</title>
-<g id="a_node1"><a xlink:href="/#eventsandproceduresdata" xlink:title="Significant clinical events and/or procedures (e.g. diagnosed comorbid conditions, surgeries, transplants, etc.)" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-456" rx="105.082" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-452.3" font-family="Times,serif" font-size="14.00">EventsAndProceduresData</text>
+<!-- GeneticData -->
+<g id="node1" class="node"><title>GeneticData</title>
+<g id="a_node1"><a xlink:href="/#geneticdata" xlink:title="Records relevant genetic data about participants (e.g. IL28B)" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-672" rx="54.6905" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-668.3" font-family="Times,serif" font-size="14.00">GeneticData</text>
 </a>
 </g>
-</g>
-<!-- DataBatch -->
-<g id="node2" class="node"><title>DataBatch</title>
-<g id="a_node2"><a xlink:href="/#databatch" xlink:title="A study, trial, or other batch of data from a collaborator" target="_parent">
-<ellipse fill="none" stroke="black" cx="194.586" cy="-645" rx="48.1917" ry="18"/>
-<text text-anchor="middle" x="194.586" y="-641.3" font-family="Times,serif" font-size="14.00">DataBatch</text>
-</a>
-</g>
-</g>
-<!-- EventsAndProceduresData&#45;&gt;DataBatch -->
-<g id="edge1" class="edge"><title>EventsAndProceduresData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M302.655,-467.472C293.815,-471.322 285.546,-476.377 278.682,-483 238.303,-521.956 273.046,-556.819 242.682,-604 238.309,-610.794 232.491,-617.108 226.439,-622.644"/>
-<polygon fill="black" stroke="black" points="224.071,-620.064 218.74,-629.219 228.617,-625.387 224.071,-620.064"/>
 </g>
 <!-- Person -->
-<g id="node3" class="node"><title>Person</title>
-<g id="a_node3"><a xlink:href="/#person" xlink:title="A study participant" target="_parent">
-<ellipse fill="none" stroke="black" cx="194.586" cy="-577" rx="34.394" ry="18"/>
-<text text-anchor="middle" x="194.586" y="-573.3" font-family="Times,serif" font-size="14.00">Person</text>
+<g id="node2" class="node"><title>Person</title>
+<g id="a_node2"><a xlink:href="/#person" xlink:title="A study participant" target="_parent">
+<ellipse fill="none" stroke="black" cx="194.586" cy="-564" rx="34.394" ry="18"/>
+<text text-anchor="middle" x="194.586" y="-560.3" font-family="Times,serif" font-size="14.00">Person</text>
 </a>
 </g>
 </g>
-<!-- EventsAndProceduresData&#45;&gt;Person -->
-<g id="edge2" class="edge"><title>EventsAndProceduresData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M310.005,-468.929C299.059,-472.534 288.248,-477.133 278.682,-483 250.449,-500.314 226.439,-530.222 211.597,-551.655"/>
-<polygon fill="black" stroke="black" points="208.676,-549.726 205.996,-559.976 214.483,-553.634 208.676,-549.726"/>
+<!-- GeneticData&#45;&gt;Person -->
+<g id="edge1" class="edge"><title>GeneticData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M332.037,-666.444C313.944,-662.586 294.229,-656.054 278.682,-645 255.173,-628.286 263.754,-610.697 242.682,-591 238.822,-587.392 234.394,-584.069 229.832,-581.08"/>
+<polygon fill="black" stroke="black" points="231.378,-577.925 221.007,-575.755 227.761,-583.919 231.378,-577.925"/>
+</g>
+<!-- DataBatch -->
+<g id="node3" class="node"><title>DataBatch</title>
+<g id="a_node3"><a xlink:href="/#databatch" xlink:title="A study, trial, or other batch of data from a collaborator" target="_parent">
+<ellipse fill="none" stroke="black" cx="194.586" cy="-618" rx="48.1917" ry="18"/>
+<text text-anchor="middle" x="194.586" y="-614.3" font-family="Times,serif" font-size="14.00">DataBatch</text>
+</a>
+</g>
+</g>
+<!-- GeneticData&#45;&gt;DataBatch -->
+<g id="edge2" class="edge"><title>GeneticData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M339.681,-661.42C320.866,-656.66 298.612,-650.812 278.682,-645 266.272,-641.381 252.916,-637.18 240.619,-633.184"/>
+<polygon fill="black" stroke="black" points="241.616,-629.828 231.023,-630.04 239.436,-636.48 241.616,-629.828"/>
 </g>
 <!-- Collaborator -->
-<g id="node6" class="node"><title>Collaborator</title>
-<g id="a_node6"><a xlink:href="/#collaborator" xlink:title="A collaborating site (provides participant data)" target="_parent">
-<ellipse fill="none" stroke="black" cx="55.2451" cy="-753" rx="55.4913" ry="18"/>
-<text text-anchor="middle" x="55.2451" y="-749.3" font-family="Times,serif" font-size="14.00">Collaborator</text>
+<g id="node11" class="node"><title>Collaborator</title>
+<g id="a_node11"><a xlink:href="/#collaborator" xlink:title="A collaborating site (provides participant data)" target="_parent">
+<ellipse fill="none" stroke="black" cx="55.2451" cy="-618" rx="55.4913" ry="18"/>
+<text text-anchor="middle" x="55.2451" y="-614.3" font-family="Times,serif" font-size="14.00">Collaborator</text>
 </a>
 </g>
 </g>
 <!-- DataBatch&#45;&gt;Collaborator -->
-<g id="edge12" class="edge"><title>DataBatch&#45;&gt;Collaborator</title>
-<path fill="none" stroke="black" d="M173.025,-661.169C149.797,-679.434 111.81,-709.305 85.4981,-729.996"/>
-<polygon fill="black" stroke="black" points="83.0962,-727.433 77.3989,-736.365 87.4231,-732.935 83.0962,-727.433"/>
+<g id="edge30" class="edge"><title>DataBatch&#45;&gt;Collaborator</title>
+<path fill="none" stroke="black" d="M146.321,-618C138.067,-618 129.355,-618 120.731,-618"/>
+<polygon fill="black" stroke="black" points="120.68,-614.5 110.68,-618 120.68,-621.5 120.68,-614.5"/>
+</g>
+<!-- DeathAndLastFollowup -->
+<g id="node4" class="node"><title>DeathAndLastFollowup</title>
+<g id="a_node4"><a xlink:href="/#deathandlastfollowup" xlink:title="Records data about &#160;leaving the study" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-618" rx="95.5831" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-614.3" font-family="Times,serif" font-size="14.00">DeathAndLastFollowup</text>
+</a>
+</g>
+</g>
+<!-- DeathAndLastFollowup&#45;&gt;Person -->
+<g id="edge3" class="edge"><title>DeathAndLastFollowup&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M325.424,-603.77C310.177,-599.817 293.764,-595.398 278.682,-591 263.917,-586.694 247.813,-581.564 233.747,-576.938"/>
+<polygon fill="black" stroke="black" points="234.506,-573.502 223.913,-573.677 232.303,-580.146 234.506,-573.502"/>
+</g>
+<!-- DeathAndLastFollowup&#45;&gt;DataBatch -->
+<g id="edge4" class="edge"><title>DeathAndLastFollowup&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M288.181,-618C276.088,-618 264.019,-618 252.781,-618"/>
+<polygon fill="black" stroke="black" points="252.716,-614.5 242.716,-618 252.716,-621.5 252.716,-614.5"/>
 </g>
 <!-- NarcoticsUse -->
-<g id="node4" class="node"><title>NarcoticsUse</title>
-<g id="a_node4"><a xlink:href="/#narcoticsuse" xlink:title="Detailed data on narcotics use" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-834" rx="57.6901" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-830.3" font-family="Times,serif" font-size="14.00">NarcoticsUse</text>
+<g id="node5" class="node"><title>NarcoticsUse</title>
+<g id="a_node5"><a xlink:href="/#narcoticsuse" xlink:title="Detailed data on narcotics use" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-564" rx="57.6901" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-560.3" font-family="Times,serif" font-size="14.00">NarcoticsUse</text>
 </a>
 </g>
 </g>
 <!-- BehaviorData -->
-<g id="node5" class="node"><title>BehaviorData</title>
-<g id="a_node5"><a xlink:href="/#behaviordata" xlink:title="Behavioral information about a participant" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-834" rx="59.5901" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-830.3" font-family="Times,serif" font-size="14.00">BehaviorData</text>
+<g id="node6" class="node"><title>BehaviorData</title>
+<g id="a_node6"><a xlink:href="/#behaviordata" xlink:title="Behavioral information about a participant" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-564" rx="59.5901" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-560.3" font-family="Times,serif" font-size="14.00">BehaviorData</text>
 </a>
 </g>
 </g>
 <!-- NarcoticsUse&#45;&gt;BehaviorData -->
-<g id="edge3" class="edge"><title>NarcoticsUse&#45;&gt;BehaviorData</title>
-<path fill="none" stroke="black" d="M572.02,-834C536.89,-834 491.572,-834 454.342,-834"/>
-<polygon fill="black" stroke="black" points="454.071,-830.5 444.071,-834 454.071,-837.5 454.071,-830.5"/>
-</g>
-<!-- BehaviorData&#45;&gt;DataBatch -->
-<g id="edge38" class="edge"><title>BehaviorData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M327.027,-828.447C310.113,-824.546 292.406,-817.987 278.682,-807 235.449,-772.389 212.471,-709.273 202.273,-672.881"/>
-<polygon fill="black" stroke="black" points="205.58,-671.698 199.62,-662.938 198.817,-673.503 205.58,-671.698"/>
+<g id="edge5" class="edge"><title>NarcoticsUse&#45;&gt;BehaviorData</title>
+<path fill="none" stroke="black" d="M572.02,-564C536.89,-564 491.572,-564 454.342,-564"/>
+<polygon fill="black" stroke="black" points="454.071,-560.5 444.071,-564 454.071,-567.5 454.071,-560.5"/>
 </g>
 <!-- BehaviorData&#45;&gt;Person -->
-<g id="edge39" class="edge"><title>BehaviorData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M324.98,-830.66C307.956,-826.878 290.702,-819.83 278.682,-807 220.217,-744.599 285.27,-692.15 242.682,-618 238.258,-610.298 231.841,-603.326 225.16,-597.405"/>
-<polygon fill="black" stroke="black" points="227.252,-594.594 217.3,-590.958 222.812,-600.006 227.252,-594.594"/>
+<g id="edge28" class="edge"><title>BehaviorData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M323.939,-564C296.502,-564 264.447,-564 239.236,-564"/>
+<polygon fill="black" stroke="black" points="239.234,-560.5 229.234,-564 239.234,-567.5 239.234,-560.5"/>
 </g>
-<!-- BehaviorData&#45;&gt;Collaborator -->
-<g id="edge37" class="edge"><title>BehaviorData&#45;&gt;Collaborator</title>
-<path fill="none" stroke="black" d="M335.283,-823.263C287.429,-812.358 211.67,-794.739 146.49,-778 133.817,-774.745 120.192,-771.066 107.467,-767.551"/>
-<polygon fill="black" stroke="black" points="108.062,-764.084 97.4899,-764.778 106.188,-770.828 108.062,-764.084"/>
+<!-- BehaviorData&#45;&gt;DataBatch -->
+<g id="edge29" class="edge"><title>BehaviorData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M337.118,-575.23C318.866,-579.867 297.714,-585.45 278.682,-591 266.272,-594.619 252.916,-598.82 240.619,-602.816"/>
+<polygon fill="black" stroke="black" points="239.436,-599.52 231.023,-605.96 241.616,-606.172 239.436,-599.52"/>
+</g>
+<!-- Sequence -->
+<g id="node7" class="node"><title>Sequence</title>
+<g id="a_node7"><a xlink:href="/#sequence" xlink:title="Sequences and data needed for rapid alignment" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-202" rx="44.393" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-198.3" font-family="Times,serif" font-size="14.00">Sequence</text>
+</a>
+</g>
+</g>
+<!-- Isolate -->
+<g id="node8" class="node"><title>Isolate</title>
+<g id="a_node8"><a xlink:href="/#isolate" xlink:title="Virus isolate (from an individual or used in a lab experiment)" target="_parent">
+<ellipse fill="none" stroke="black" cx="194.586" cy="-225" rx="34.394" ry="18"/>
+<text text-anchor="middle" x="194.586" y="-221.3" font-family="Times,serif" font-size="14.00">Isolate</text>
+</a>
+</g>
+</g>
+<!-- Sequence&#45;&gt;Isolate -->
+<g id="edge6" class="edge"><title>Sequence&#45;&gt;Isolate</title>
+<path fill="none" stroke="black" d="M341.385,-207.104C310.773,-210.862 269.281,-215.955 238.387,-219.747"/>
+<polygon fill="black" stroke="black" points="237.846,-216.287 228.347,-220.979 238.699,-223.234 237.846,-216.287"/>
+</g>
+<!-- LabIsolate -->
+<g id="node9" class="node"><title>LabIsolate</title>
+<g id="a_node9"><a xlink:href="/#labisolate" xlink:title="Isolates created in the lab" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-221" rx="48.1917" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-217.3" font-family="Times,serif" font-size="14.00">LabIsolate</text>
+</a>
+</g>
+</g>
+<!-- LabIsolate&#45;&gt;Sequence -->
+<g id="edge7" class="edge"><title>LabIsolate&#45;&gt;Sequence</title>
+<path fill="none" stroke="black" d="M582.735,-217.404C541.433,-214.187 480.918,-209.473 437.72,-206.109"/>
+<polygon fill="black" stroke="black" points="437.925,-202.614 427.684,-205.327 437.382,-209.593 437.925,-202.614"/>
+</g>
+<!-- LabIsolate&#45;&gt;Isolate -->
+<g id="edge8" class="edge"><title>LabIsolate&#45;&gt;Isolate</title>
+<path fill="none" stroke="black" d="M582.385,-224.333C555.243,-226.111 520.332,-228.111 489.263,-229 395.71,-231.678 372.246,-231.251 278.682,-229 265.935,-228.693 252.098,-228.123 239.438,-227.506"/>
+<polygon fill="black" stroke="black" points="239.295,-223.995 229.131,-226.983 238.94,-230.986 239.295,-223.995"/>
+</g>
+<!-- ClinicalIsolate -->
+<g id="node10" class="node"><title>ClinicalIsolate</title>
+<g id="a_node10"><a xlink:href="/#clinicalisolate" xlink:title="Isolate information" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-348" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-344.3" font-family="Times,serif" font-size="14.00">ClinicalIsolate</text>
+</a>
+</g>
+</g>
+<!-- ClinicalIsolate&#45;&gt;Person -->
+<g id="edge9" class="edge"><title>ClinicalIsolate&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M325.002,-353.446C308.57,-357.372 291.645,-363.971 278.682,-375 229.081,-417.199 208.031,-494.696 199.988,-536.134"/>
+<polygon fill="black" stroke="black" points="196.524,-535.623 198.174,-546.089 203.41,-536.878 196.524,-535.623"/>
+</g>
+<!-- ClinicalIsolate&#45;&gt;Isolate -->
+<g id="edge10" class="edge"><title>ClinicalIsolate&#45;&gt;Isolate</title>
+<path fill="none" stroke="black" d="M327.948,-340.254C311.267,-336.241 293.462,-330.17 278.682,-321 250.202,-303.329 226.239,-272.783 211.474,-250.89"/>
+<polygon fill="black" stroke="black" points="214.314,-248.838 205.908,-242.39 208.458,-252.673 214.314,-248.838"/>
+</g>
+<!-- TestResult -->
+<g id="node12" class="node"><title>TestResult</title>
+<g id="a_node12"><a xlink:href="/#testresult" xlink:title="The outcome of a test result (e.g. bilirubin, alt, CD4)" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-510" rx="48.1917" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-506.3" font-family="Times,serif" font-size="14.00">TestResult</text>
+</a>
+</g>
+</g>
+<!-- TestResult&#45;&gt;Person -->
+<g id="edge11" class="edge"><title>TestResult&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M343.199,-519.693C323.682,-524.602 299.869,-530.822 278.682,-537 263.917,-541.306 247.813,-546.436 233.747,-551.062"/>
+<polygon fill="black" stroke="black" points="232.303,-547.854 223.913,-554.323 234.506,-554.498 232.303,-547.854"/>
+</g>
+<!-- TestResult&#45;&gt;DataBatch -->
+<g id="edge12" class="edge"><title>TestResult&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M337.306,-514.496C317.85,-518.177 295.754,-524.862 278.682,-537 255.173,-553.714 263.754,-571.303 242.682,-591 239.82,-593.675 236.646,-596.193 233.337,-598.534"/>
+<polygon fill="black" stroke="black" points="231.422,-595.605 224.933,-603.98 235.228,-601.479 231.422,-595.605"/>
+</g>
+<!-- Medication -->
+<g id="node13" class="node"><title>Medication</title>
+<g id="a_node13"><a xlink:href="/#medication" xlink:title="Medication" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-294" rx="51.1914" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-290.3" font-family="Times,serif" font-size="14.00">Medication</text>
+</a>
+</g>
+</g>
+<!-- MedicationAbbreviations -->
+<g id="node14" class="node"><title>MedicationAbbreviations</title>
+<g id="a_node14"><a xlink:href="/#medicationabbreviations" xlink:title="Common abbreviations for medications" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-294" rx="100.983" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-290.3" font-family="Times,serif" font-size="14.00">MedicationAbbreviations</text>
+</a>
+</g>
+</g>
+<!-- MedicationAbbreviations&#45;&gt;Medication -->
+<g id="edge13" class="edge"><title>MedicationAbbreviations&#45;&gt;Medication</title>
+<path fill="none" stroke="black" d="M528.984,-294C500.768,-294 470.923,-294 445.765,-294"/>
+<polygon fill="black" stroke="black" points="445.649,-290.5 435.649,-294 445.649,-297.5 445.649,-290.5"/>
 </g>
 <!-- DemographicData -->
-<g id="node7" class="node"><title>DemographicData</title>
-<g id="a_node7"><a xlink:href="/#demographicdata" xlink:title="Demographic information about a participant" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-726" rx="75.2868" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-722.3" font-family="Times,serif" font-size="14.00">DemographicData</text>
+<g id="node15" class="node"><title>DemographicData</title>
+<g id="a_node15"><a xlink:href="/#demographicdata" xlink:title="Demographic information about a participant" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-456" rx="75.2868" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-452.3" font-family="Times,serif" font-size="14.00">DemographicData</text>
 </a>
 </g>
-</g>
-<!-- DemographicData&#45;&gt;DataBatch -->
-<g id="edge5" class="edge"><title>DemographicData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M325.286,-714.599C309.809,-710.596 293.317,-705.445 278.682,-699 259.728,-690.654 240.226,-678.217 224.882,-667.382"/>
-<polygon fill="black" stroke="black" points="226.52,-664.248 216.364,-661.231 222.422,-669.923 226.52,-664.248"/>
 </g>
 <!-- DemographicData&#45;&gt;Person -->
-<g id="edge6" class="edge"><title>DemographicData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M316.069,-718.112C302.588,-714.059 289.312,-708.008 278.682,-699 248.625,-673.532 266.093,-649.684 242.682,-618 237.31,-610.731 230.442,-603.848 223.622,-597.87"/>
-<polygon fill="black" stroke="black" points="225.655,-595.008 215.731,-591.3 221.177,-600.388 225.655,-595.008"/>
+<g id="edge14" class="edge"><title>DemographicData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M321.629,-466.252C306.98,-470.199 291.8,-475.611 278.682,-483 253.261,-497.319 230.009,-521.359 214.607,-539.539"/>
+<polygon fill="black" stroke="black" points="211.767,-537.483 208.104,-547.424 217.167,-541.937 211.767,-537.483"/>
 </g>
-<!-- DemographicData&#45;&gt;Collaborator -->
-<g id="edge4" class="edge"><title>DemographicData&#45;&gt;Collaborator</title>
-<path fill="none" stroke="black" d="M312.48,-731.825C254.907,-736.583 174.29,-743.245 118.941,-747.819"/>
-<polygon fill="black" stroke="black" points="118.589,-744.336 108.911,-748.648 119.165,-751.312 118.589,-744.336"/>
+<!-- DemographicData&#45;&gt;DataBatch -->
+<g id="edge15" class="edge"><title>DemographicData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M314.854,-463.297C301.604,-467.397 288.729,-473.618 278.682,-483 241.702,-517.532 274.732,-551.849 242.682,-591 240.465,-593.707 237.901,-596.197 235.137,-598.476"/>
+<polygon fill="black" stroke="black" points="233.034,-595.677 226.939,-604.344 237.108,-601.369 233.034,-595.677"/>
 </g>
-<!-- TreatmentData -->
-<g id="node8" class="node"><title>TreatmentData</title>
-<g id="a_node8"><a xlink:href="/#treatmentdata" xlink:title="Information about a participant&#39;s treatment" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-780" rx="63.8893" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-776.3" font-family="Times,serif" font-size="14.00">TreatmentData</text>
+<!-- TreatmentMedicationData -->
+<g id="node16" class="node"><title>TreatmentMedicationData</title>
+<g id="a_node16"><a xlink:href="/#treatmentmedicationdata" xlink:title="How much and what kind of medications were included in a treatment regimen" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-348" rx="104.782" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-344.3" font-family="Times,serif" font-size="14.00">TreatmentMedicationData</text>
 </a>
 </g>
 </g>
-<!-- TreatmentData&#45;&gt;DataBatch -->
-<g id="edge8" class="edge"><title>TreatmentData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M326,-772.375C309.782,-768.376 292.723,-762.283 278.682,-753 247.708,-732.523 223.48,-696.56 209.369,-671.796"/>
-<polygon fill="black" stroke="black" points="212.36,-669.972 204.462,-662.909 206.231,-673.355 212.36,-669.972"/>
+<!-- TreatmentMedicationData&#45;&gt;Medication -->
+<g id="edge16" class="edge"><title>TreatmentMedicationData&#45;&gt;Medication</title>
+<path fill="none" stroke="black" d="M564.814,-333.812C525.331,-325.072 475.316,-314 438.058,-305.752"/>
+<polygon fill="black" stroke="black" points="438.427,-302.249 427.907,-303.505 436.914,-309.083 438.427,-302.249"/>
+</g>
+<!-- TreatmentData -->
+<g id="node17" class="node"><title>TreatmentData</title>
+<g id="a_node17"><a xlink:href="/#treatmentdata" xlink:title="Information about a participant&#39;s treatment" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-402" rx="63.8893" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-398.3" font-family="Times,serif" font-size="14.00">TreatmentData</text>
+</a>
+</g>
+</g>
+<!-- TreatmentMedicationData&#45;&gt;TreatmentData -->
+<g id="edge17" class="edge"><title>TreatmentMedicationData&#45;&gt;TreatmentData</title>
+<path fill="none" stroke="black" d="M564.814,-362.188C527.654,-370.414 481.163,-380.706 444.761,-388.764"/>
+<polygon fill="black" stroke="black" points="443.784,-385.396 434.777,-390.975 445.297,-392.23 443.784,-385.396"/>
 </g>
 <!-- TreatmentData&#45;&gt;Person -->
-<g id="edge9" class="edge"><title>TreatmentData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M322.27,-775.359C306.335,-771.41 290.362,-764.596 278.682,-753 234.613,-709.251 275.537,-670.693 242.682,-618 237.982,-610.463 231.466,-603.55 224.778,-597.634"/>
-<polygon fill="black" stroke="black" points="226.886,-594.837 216.946,-591.17 222.431,-600.235 226.886,-594.837"/>
+<g id="edge35" class="edge"><title>TreatmentData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M324.826,-408.853C308.755,-412.834 292.071,-419.11 278.682,-429 241.688,-456.325 217.583,-505.501 205.304,-536.357"/>
+<polygon fill="black" stroke="black" points="201.895,-535.47 201.591,-546.061 208.433,-537.972 201.895,-535.47"/>
 </g>
-<!-- TreatmentData&#45;&gt;Collaborator -->
-<g id="edge7" class="edge"><title>TreatmentData&#45;&gt;Collaborator</title>
-<path fill="none" stroke="black" d="M322.665,-775.016C264.829,-770.237 177.865,-763.05 119.17,-758.2"/>
-<polygon fill="black" stroke="black" points="119.17,-754.688 108.916,-757.353 118.593,-761.664 119.17,-754.688"/>
+<!-- TreatmentData&#45;&gt;DataBatch -->
+<g id="edge36" class="edge"><title>TreatmentData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M321.953,-406.328C306.013,-410.272 290.116,-417.162 278.682,-429 227.44,-482.05 286.4,-531.597 242.682,-591 240.671,-593.733 238.294,-596.231 235.694,-598.506"/>
+<polygon fill="black" stroke="black" points="233.318,-595.91 227.368,-604.676 237.486,-601.534 233.318,-595.91"/>
+</g>
+<!-- EventsAndProceduresData -->
+<g id="node18" class="node"><title>EventsAndProceduresData</title>
+<g id="a_node18"><a xlink:href="/#eventsandproceduresdata" xlink:title="Significant clinical events and/or procedures (e.g. diagnosed comorbid conditions, surgeries, transplants, etc.)" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-834" rx="105.082" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-830.3" font-family="Times,serif" font-size="14.00">EventsAndProceduresData</text>
+</a>
+</g>
+</g>
+<!-- EventsAndProceduresData&#45;&gt;Person -->
+<g id="edge18" class="edge"><title>EventsAndProceduresData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M300.82,-822.848C292.51,-818.921 284.87,-813.76 278.682,-807 212.963,-735.215 298.251,-670.9 242.682,-591 239.73,-586.757 235.882,-583.092 231.657,-579.953"/>
+<polygon fill="black" stroke="black" points="233.514,-576.986 223.203,-574.551 229.745,-582.885 233.514,-576.986"/>
+</g>
+<!-- EventsAndProceduresData&#45;&gt;DataBatch -->
+<g id="edge19" class="edge"><title>EventsAndProceduresData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M304.483,-822.11C295.125,-818.344 286.231,-813.423 278.682,-807 229.207,-764.908 208.137,-687.696 200.05,-646.181"/>
+<polygon fill="black" stroke="black" points="203.466,-645.405 198.223,-636.198 196.58,-646.665 203.466,-645.405"/>
+</g>
+<!-- TreatmentOutcome -->
+<g id="node19" class="node"><title>TreatmentOutcome</title>
+<g id="a_node19"><a xlink:href="/#treatmentoutcome" xlink:title="Outcome of a participant&#39;s treatment" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-402" rx="79.8859" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-398.3" font-family="Times,serif" font-size="14.00">TreatmentOutcome</text>
+</a>
+</g>
+</g>
+<!-- TreatmentOutcome&#45;&gt;TreatmentData -->
+<g id="edge20" class="edge"><title>TreatmentOutcome&#45;&gt;TreatmentData</title>
+<path fill="none" stroke="black" d="M549.706,-402C520.213,-402 486.901,-402 457.988,-402"/>
+<polygon fill="black" stroke="black" points="457.958,-398.5 447.958,-402 457.958,-405.5 457.958,-398.5"/>
 </g>
 <!-- Substitution -->
-<g id="node9" class="node"><title>Substitution</title>
-<g id="a_node9"><a xlink:href="/#substitution" xlink:title="A substitution, insertion, or deletion in an RNA sequence" target="_parent">
+<g id="node20" class="node"><title>Substitution</title>
+<g id="a_node20"><a xlink:href="/#substitution" xlink:title="A substitution, insertion, or deletion in an RNA sequence" target="_parent">
 <ellipse fill="none" stroke="black" cx="383.972" cy="-18" rx="53.0913" ry="18"/>
 <text text-anchor="middle" x="383.972" y="-14.3" font-family="Times,serif" font-size="14.00">Substitution</text>
 </a>
 </g>
 </g>
-<!-- TreatmentOutcome -->
-<g id="node10" class="node"><title>TreatmentOutcome</title>
-<g id="a_node10"><a xlink:href="/#treatmentoutcome" xlink:title="Outcome of a participant&#39;s treatment" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-780" rx="79.8859" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-776.3" font-family="Times,serif" font-size="14.00">TreatmentOutcome</text>
-</a>
-</g>
-</g>
-<!-- TreatmentOutcome&#45;&gt;TreatmentData -->
-<g id="edge10" class="edge"><title>TreatmentOutcome&#45;&gt;TreatmentData</title>
-<path fill="none" stroke="black" d="M549.706,-780C520.213,-780 486.901,-780 457.988,-780"/>
-<polygon fill="black" stroke="black" points="457.958,-776.5 447.958,-780 457.958,-783.5 457.958,-776.5"/>
-</g>
-<!-- CauseOfDeath -->
-<g id="node11" class="node"><title>CauseOfDeath</title>
-<g id="a_node11"><a xlink:href="/#causeofdeath" xlink:title="Primary cause of death and other underlying conditions" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-444" rx="62.2891" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-440.3" font-family="Times,serif" font-size="14.00">CauseOfDeath</text>
-</a>
-</g>
-</g>
-<!-- DeathAndLastFollowup -->
-<g id="node12" class="node"><title>DeathAndLastFollowup</title>
-<g id="a_node12"><a xlink:href="/#deathandlastfollowup" xlink:title="Records data about &#160;leaving the study" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-402" rx="95.5831" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-398.3" font-family="Times,serif" font-size="14.00">DeathAndLastFollowup</text>
-</a>
-</g>
-</g>
-<!-- CauseOfDeath&#45;&gt;DeathAndLastFollowup -->
-<g id="edge11" class="edge"><title>CauseOfDeath&#45;&gt;DeathAndLastFollowup</title>
-<path fill="none" stroke="black" d="M575.974,-434.887C543.698,-429.329 501.804,-422.116 465.48,-415.862"/>
-<polygon fill="black" stroke="black" points="465.843,-412.373 455.394,-414.125 464.655,-419.271 465.843,-412.373"/>
-</g>
-<!-- DeathAndLastFollowup&#45;&gt;DataBatch -->
-<g id="edge23" class="edge"><title>DeathAndLastFollowup&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M304.163,-412.01C294.626,-416.047 285.77,-421.545 278.682,-429 223.967,-486.547 282.734,-535.435 242.682,-604 238.606,-610.977 232.912,-617.366 226.887,-622.919"/>
-<polygon fill="black" stroke="black" points="224.519,-620.338 219.175,-629.486 229.058,-625.667 224.519,-620.338"/>
-</g>
-<!-- DeathAndLastFollowup&#45;&gt;Person -->
-<g id="edge24" class="edge"><title>DeathAndLastFollowup&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M308.818,-413.205C298.024,-417.032 287.572,-422.153 278.682,-429 238.694,-459.796 215.017,-515.635 203.726,-549.221"/>
-<polygon fill="black" stroke="black" points="200.35,-548.285 200.615,-558.877 207.013,-550.432 200.35,-548.285"/>
-</g>
-<!-- Isolate -->
-<g id="node13" class="node"><title>Isolate</title>
-<g id="a_node13"><a xlink:href="/#isolate" xlink:title="Virus isolate (from an individual or used in a lab experiment)" target="_parent">
-<ellipse fill="none" stroke="black" cx="194.586" cy="-137" rx="34.394" ry="18"/>
-<text text-anchor="middle" x="194.586" y="-133.3" font-family="Times,serif" font-size="14.00">Isolate</text>
-</a>
-</g>
-</g>
-<!-- LabIsolate -->
-<g id="node14" class="node"><title>LabIsolate</title>
-<g id="a_node14"><a xlink:href="/#labisolate" xlink:title="Isolates created in the lab" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-106" rx="48.1917" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-102.3" font-family="Times,serif" font-size="14.00">LabIsolate</text>
-</a>
-</g>
-</g>
-<!-- LabIsolate&#45;&gt;Isolate -->
-<g id="edge13" class="edge"><title>LabIsolate&#45;&gt;Isolate</title>
-<path fill="none" stroke="black" d="M582.531,-109.318C498.154,-115.354 320.69,-128.05 238.743,-133.912"/>
-<polygon fill="black" stroke="black" points="238.492,-130.421 228.767,-134.626 238.992,-137.404 238.492,-130.421"/>
-</g>
-<!-- Sequence -->
-<g id="node15" class="node"><title>Sequence</title>
-<g id="a_node15"><a xlink:href="/#sequence" xlink:title="Sequences and data needed for rapid alignment" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-72" rx="44.393" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-68.3" font-family="Times,serif" font-size="14.00">Sequence</text>
-</a>
-</g>
-</g>
-<!-- LabIsolate&#45;&gt;Sequence -->
-<g id="edge14" class="edge"><title>LabIsolate&#45;&gt;Sequence</title>
-<path fill="none" stroke="black" d="M584.447,-99.8034C542.719,-93.9872 480.323,-85.2903 436.452,-79.1755"/>
-<polygon fill="black" stroke="black" points="436.666,-75.6715 426.279,-77.7574 435.7,-82.6045 436.666,-75.6715"/>
-</g>
-<!-- Sequence&#45;&gt;Isolate -->
-<g id="edge36" class="edge"><title>Sequence&#45;&gt;Isolate</title>
-<path fill="none" stroke="black" d="M347.022,-82.2554C326.812,-88.2142 301.196,-96.0897 278.682,-104 263.094,-109.477 246.104,-116.104 231.572,-121.978"/>
-<polygon fill="black" stroke="black" points="229.89,-118.884 221.952,-125.901 232.533,-125.366 229.89,-118.884"/>
-</g>
-<!-- SequenceSubstitution -->
-<g id="node16" class="node"><title>SequenceSubstitution</title>
-<g id="a_node16"><a xlink:href="/#sequencesubstitution" xlink:title="Indicates that the attached sequence has the attached substitution" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-29" rx="87.1846" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-25.3" font-family="Times,serif" font-size="14.00">SequenceSubstitution</text>
-</a>
-</g>
-</g>
-<!-- SequenceSubstitution&#45;&gt;Substitution -->
-<g id="edge15" class="edge"><title>SequenceSubstitution&#45;&gt;Substitution</title>
-<path fill="none" stroke="black" d="M544.615,-25.199C512.587,-23.7547 476.715,-22.1371 447.1,-20.8016"/>
-<polygon fill="black" stroke="black" points="447.05,-17.2959 436.902,-20.3418 446.734,-24.2888 447.05,-17.2959"/>
-</g>
-<!-- SequenceSubstitution&#45;&gt;Sequence -->
-<g id="edge16" class="edge"><title>SequenceSubstitution&#45;&gt;Sequence</title>
-<path fill="none" stroke="black" d="M563.214,-40.5798C522.842,-47.6965 471.933,-56.6706 434.87,-63.2041"/>
-<polygon fill="black" stroke="black" points="434.044,-59.7957 424.803,-64.9786 435.259,-66.6894 434.044,-59.7957"/>
-</g>
 <!-- SusceptibilityResult -->
-<g id="node17" class="node"><title>SusceptibilityResult</title>
-<g id="a_node17"><a xlink:href="/#susceptibilityresult" xlink:title="Susceptibility test results" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-259" rx="81.4863" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-255.3" font-family="Times,serif" font-size="14.00">SusceptibilityResult</text>
+<g id="node21" class="node"><title>SusceptibilityResult</title>
+<g id="a_node21"><a xlink:href="/#susceptibilityresult" xlink:title="Susceptibility test results" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-133" rx="81.4863" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-129.3" font-family="Times,serif" font-size="14.00">SusceptibilityResult</text>
 </a>
 </g>
 </g>
 <!-- SusceptibilityResult&#45;&gt;Isolate -->
-<g id="edge17" class="edge"><title>SusceptibilityResult&#45;&gt;Isolate</title>
-<path fill="none" stroke="black" d="M606.658,-241.588C580.26,-221.922 534.149,-190.631 489.263,-175 404.073,-145.333 297.698,-138.482 239.199,-137.108"/>
-<polygon fill="black" stroke="black" points="239.261,-133.608 229.195,-136.916 239.126,-140.607 239.261,-133.608"/>
-</g>
-<!-- Medication -->
-<g id="node18" class="node"><title>Medication</title>
-<g id="a_node18"><a xlink:href="/#medication" xlink:title="Medication" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-348" rx="51.1914" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-344.3" font-family="Times,serif" font-size="14.00">Medication</text>
-</a>
-</g>
+<g id="edge22" class="edge"><title>SusceptibilityResult&#45;&gt;Isolate</title>
+<path fill="none" stroke="black" d="M548.543,-133.125C476.15,-135.442 367.739,-144.444 278.682,-175 258.979,-181.76 238.913,-193.664 223.436,-204.161"/>
+<polygon fill="black" stroke="black" points="221.085,-201.534 214.891,-210.129 225.093,-207.273 221.085,-201.534"/>
 </g>
 <!-- SusceptibilityResult&#45;&gt;Medication -->
-<g id="edge18" class="edge"><title>SusceptibilityResult&#45;&gt;Medication</title>
-<path fill="none" stroke="black" d="M595.95,-275.482C568.04,-288.99 526.706,-307.94 489.263,-321 472.811,-326.738 454.521,-331.876 437.91,-336.09"/>
-<polygon fill="black" stroke="black" points="436.68,-332.789 427.816,-338.592 438.364,-339.583 436.68,-332.789"/>
-</g>
-<!-- SusceptibilityMethod -->
-<g id="node19" class="node"><title>SusceptibilityMethod</title>
-<g id="a_node19"><a xlink:href="/#susceptibilitymethod" xlink:title="Susceptibility testing methods" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-294" rx="87.1846" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-290.3" font-family="Times,serif" font-size="14.00">SusceptibilityMethod</text>
-</a>
-</g>
-</g>
-<!-- SusceptibilityResult&#45;&gt;SusceptibilityMethod -->
-<g id="edge19" class="edge"><title>SusceptibilityResult&#45;&gt;SusceptibilityMethod</title>
-<path fill="none" stroke="black" d="M561.279,-268.703C531.89,-272.92 497.21,-277.896 466.417,-282.314"/>
-<polygon fill="black" stroke="black" points="465.538,-278.904 456.137,-283.789 466.533,-285.833 465.538,-278.904"/>
+<g id="edge21" class="edge"><title>SusceptibilityResult&#45;&gt;Medication</title>
+<path fill="none" stroke="black" d="M596.35,-149.544C575.269,-160.877 547.673,-176.905 525.263,-194 507.52,-207.534 506.833,-215.242 489.263,-229 467.9,-245.729 442.023,-261.878 421.391,-273.895"/>
+<polygon fill="black" stroke="black" points="419.53,-270.928 412.607,-278.947 423.02,-276.996 419.53,-270.928"/>
 </g>
 <!-- Reference -->
-<g id="node20" class="node"><title>Reference</title>
-<g id="a_node20"><a xlink:href="/#reference" xlink:title="A reference to a publication" target="_parent">
-<ellipse fill="none" stroke="black" cx="194.586" cy="-271" rx="46.2923" ry="18"/>
-<text text-anchor="middle" x="194.586" y="-267.3" font-family="Times,serif" font-size="14.00">Reference</text>
+<g id="node22" class="node"><title>Reference</title>
+<g id="a_node22"><a xlink:href="/#reference" xlink:title="A reference to a publication" target="_parent">
+<ellipse fill="none" stroke="black" cx="194.586" cy="-95" rx="46.2923" ry="18"/>
+<text text-anchor="middle" x="194.586" y="-91.3" font-family="Times,serif" font-size="14.00">Reference</text>
 </a>
 </g>
 </g>
 <!-- SusceptibilityResult&#45;&gt;Reference -->
-<g id="edge20" class="edge"><title>SusceptibilityResult&#45;&gt;Reference</title>
-<path fill="none" stroke="black" d="M548.557,-260.259C477.561,-261.509 371.219,-263.716 278.682,-267 269.566,-267.323 259.89,-267.731 250.486,-268.161"/>
-<polygon fill="black" stroke="black" points="250.252,-264.668 240.427,-268.634 250.581,-271.66 250.252,-264.668"/>
+<g id="edge23" class="edge"><title>SusceptibilityResult&#45;&gt;Reference</title>
+<path fill="none" stroke="black" d="M553.92,-126.424C467.396,-118.837 327.191,-106.541 250.319,-99.7999"/>
+<polygon fill="black" stroke="black" points="250.172,-96.2736 239.905,-98.8866 249.561,-103.247 250.172,-96.2736"/>
+</g>
+<!-- SusceptibilityMethod -->
+<g id="node23" class="node"><title>SusceptibilityMethod</title>
+<g id="a_node23"><a xlink:href="/#susceptibilitymethod" xlink:title="Susceptibility testing methods" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-72" rx="87.1846" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-68.3" font-family="Times,serif" font-size="14.00">SusceptibilityMethod</text>
+</a>
+</g>
+</g>
+<!-- SusceptibilityResult&#45;&gt;SusceptibilityMethod -->
+<g id="edge24" class="edge"><title>SusceptibilityResult&#45;&gt;SusceptibilityMethod</title>
+<path fill="none" stroke="black" d="M575.372,-119.613C538.396,-110.367 489.012,-98.0172 449.804,-88.2126"/>
+<polygon fill="black" stroke="black" points="450.62,-84.8088 440.069,-85.7781 448.922,-91.5997 450.62,-84.8088"/>
 </g>
 <!-- SusceptibilityMethod&#45;&gt;Reference -->
-<g id="edge31" class="edge"><title>SusceptibilityMethod&#45;&gt;Reference</title>
-<path fill="none" stroke="black" d="M308.643,-284.877C288.641,-282.422 267.408,-279.815 248.808,-277.533"/>
-<polygon fill="black" stroke="black" points="249.123,-274.045 238.771,-276.301 248.27,-280.993 249.123,-274.045"/>
-</g>
-<!-- TestResult -->
-<g id="node21" class="node"><title>TestResult</title>
-<g id="a_node21"><a xlink:href="/#testresult" xlink:title="The outcome of a test result (e.g. bilirubin, alt, CD4)" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-672" rx="48.1917" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-668.3" font-family="Times,serif" font-size="14.00">TestResult</text>
-</a>
-</g>
-</g>
-<!-- TestResult&#45;&gt;DataBatch -->
-<g id="edge21" class="edge"><title>TestResult&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M338.564,-665.601C311.961,-661.768 277.946,-656.867 249.768,-652.807"/>
-<polygon fill="black" stroke="black" points="250.072,-649.315 239.675,-651.353 249.074,-656.243 250.072,-649.315"/>
-</g>
-<!-- TestResult&#45;&gt;Person -->
-<g id="edge22" class="edge"><title>TestResult&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M339.345,-665.09C320.057,-660.945 297.528,-654.563 278.682,-645 272.241,-641.732 243.148,-617.502 221.188,-598.887"/>
-<polygon fill="black" stroke="black" points="223.362,-596.141 213.475,-592.331 218.828,-601.475 223.362,-596.141"/>
-</g>
-<!-- ClinicalIsolate -->
-<g id="node22" class="node"><title>ClinicalIsolate</title>
-<g id="a_node22"><a xlink:href="/#clinicalisolate" xlink:title="Isolate information" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-202" rx="61.99" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-198.3" font-family="Times,serif" font-size="14.00">ClinicalIsolate</text>
-</a>
-</g>
-</g>
-<!-- ClinicalIsolate&#45;&gt;Person -->
-<g id="edge26" class="edge"><title>ClinicalIsolate&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M346.592,-216.327C323.893,-227.048 295.828,-243.858 278.682,-267 213.551,-354.903 199.447,-490.325 196.41,-548.665"/>
-<polygon fill="black" stroke="black" points="192.9,-548.805 195.95,-558.951 199.893,-549.118 192.9,-548.805"/>
-</g>
-<!-- ClinicalIsolate&#45;&gt;Isolate -->
-<g id="edge25" class="edge"><title>ClinicalIsolate&#45;&gt;Isolate</title>
-<path fill="none" stroke="black" d="M339.334,-189.462C320.556,-183.848 298.426,-176.937 278.682,-170 263.094,-164.523 246.104,-157.896 231.572,-152.022"/>
-<polygon fill="black" stroke="black" points="232.533,-148.634 221.952,-148.099 229.89,-155.116 232.533,-148.634"/>
-</g>
-<!-- ClinicalData -->
-<g id="node23" class="node"><title>ClinicalData</title>
-<g id="a_node23"><a xlink:href="/#clinicaldata" xlink:title="Diagnostic information about a participant" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-618" rx="55.4913" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-614.3" font-family="Times,serif" font-size="14.00">ClinicalData</text>
-</a>
-</g>
-</g>
-<!-- ClinicalData&#45;&gt;DataBatch -->
-<g id="edge27" class="edge"><title>ClinicalData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M333.248,-625.165C307.595,-628.861 276.255,-633.377 249.962,-637.165"/>
-<polygon fill="black" stroke="black" points="249.181,-633.741 239.783,-638.632 250.179,-640.67 249.181,-633.741"/>
-</g>
-<!-- ClinicalData&#45;&gt;Person -->
-<g id="edge28" class="edge"><title>ClinicalData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M337.611,-608.075C306.897,-601.355 266.639,-592.546 236.831,-586.024"/>
-<polygon fill="black" stroke="black" points="237.273,-582.538 226.756,-583.82 235.777,-589.377 237.273,-582.538"/>
+<g id="edge37" class="edge"><title>SusceptibilityMethod&#45;&gt;Reference</title>
+<path fill="none" stroke="black" d="M308.643,-81.1232C288.641,-83.5783 267.408,-86.1845 248.808,-88.4674"/>
+<polygon fill="black" stroke="black" points="248.27,-85.0071 238.771,-89.6994 249.123,-91.955 248.27,-85.0071"/>
 </g>
 <!-- ViralLoadData -->
 <g id="node24" class="node"><title>ViralLoadData</title>
 <g id="a_node24"><a xlink:href="/#viralloaddata" xlink:title="ViralLoadData" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-564" rx="63.8893" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-560.3" font-family="Times,serif" font-size="14.00">ViralLoadData</text>
+<ellipse fill="none" stroke="black" cx="383.972" cy="-780" rx="63.8893" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-776.3" font-family="Times,serif" font-size="14.00">ViralLoadData</text>
 </a>
 </g>
-</g>
-<!-- ViralLoadData&#45;&gt;DataBatch -->
-<g id="edge29" class="edge"><title>ViralLoadData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M330.936,-573.977C313.888,-578.158 295.114,-583.764 278.682,-591 259.728,-599.346 240.226,-611.783 224.882,-622.618"/>
-<polygon fill="black" stroke="black" points="222.422,-620.077 216.364,-628.769 226.52,-625.752 222.422,-620.077"/>
 </g>
 <!-- ViralLoadData&#45;&gt;Person -->
-<g id="edge30" class="edge"><title>ViralLoadData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M321.874,-568.239C294.773,-570.119 263.515,-572.287 238.878,-573.997"/>
-<polygon fill="black" stroke="black" points="238.489,-570.515 228.756,-574.699 238.974,-577.498 238.489,-570.515"/>
+<g id="edge25" class="edge"><title>ViralLoadData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M321.953,-775.672C306.013,-771.728 290.116,-764.838 278.682,-753 227.44,-699.95 286.4,-650.403 242.682,-591 239.618,-586.837 235.705,-583.219 231.448,-580.102"/>
+<polygon fill="black" stroke="black" points="233.288,-577.124 222.97,-574.718 229.535,-583.033 233.288,-577.124"/>
 </g>
-<!-- TreatmentMedicationData -->
-<g id="node25" class="node"><title>TreatmentMedicationData</title>
-<g id="a_node25"><a xlink:href="/#treatmentmedicationdata" xlink:title="How much and what kind of medications were included in a treatment regimen" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-390" rx="104.782" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-386.3" font-family="Times,serif" font-size="14.00">TreatmentMedicationData</text>
+<!-- ViralLoadData&#45;&gt;DataBatch -->
+<g id="edge26" class="edge"><title>ViralLoadData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M324.826,-773.147C308.755,-769.166 292.071,-762.89 278.682,-753 241.688,-725.675 217.583,-676.499 205.304,-645.643"/>
+<polygon fill="black" stroke="black" points="208.433,-644.028 201.591,-635.939 201.895,-646.53 208.433,-644.028"/>
+</g>
+<!-- CauseOfDeath -->
+<g id="node25" class="node"><title>CauseOfDeath</title>
+<g id="a_node25"><a xlink:href="/#causeofdeath" xlink:title="Primary cause of death and other underlying conditions" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-618" rx="62.2891" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-614.3" font-family="Times,serif" font-size="14.00">CauseOfDeath</text>
 </a>
 </g>
 </g>
-<!-- TreatmentMedicationData&#45;&gt;TreatmentData -->
-<g id="edge32" class="edge"><title>TreatmentMedicationData&#45;&gt;TreatmentData</title>
-<path fill="none" stroke="black" d="M546.617,-400.996C538.527,-404.957 531.15,-410.169 525.263,-417 427.213,-530.766 587.4,-639.309 489.263,-753 480.644,-762.985 468.86,-769.517 456.307,-773.742"/>
-<polygon fill="black" stroke="black" points="455.237,-770.408 446.598,-776.542 457.177,-777.134 455.237,-770.408"/>
+<!-- CauseOfDeath&#45;&gt;DeathAndLastFollowup -->
+<g id="edge27" class="edge"><title>CauseOfDeath&#45;&gt;DeathAndLastFollowup</title>
+<path fill="none" stroke="black" d="M567.35,-618C543.821,-618 516.281,-618 489.834,-618"/>
+<polygon fill="black" stroke="black" points="489.763,-614.5 479.763,-618 489.763,-621.5 489.763,-614.5"/>
 </g>
-<!-- TreatmentMedicationData&#45;&gt;Medication -->
-<g id="edge33" class="edge"><title>TreatmentMedicationData&#45;&gt;Medication</title>
-<path fill="none" stroke="black" d="M555.385,-377.342C518.518,-370.994 474.598,-363.432 440.58,-357.574"/>
-<polygon fill="black" stroke="black" points="440.808,-354.062 430.359,-355.815 439.62,-360.961 440.808,-354.062"/>
-</g>
-<!-- GeneticData -->
-<g id="node26" class="node"><title>GeneticData</title>
-<g id="a_node26"><a xlink:href="/#geneticdata" xlink:title="Records relevant genetic data about participants (e.g. IL28B)" target="_parent">
-<ellipse fill="none" stroke="black" cx="383.972" cy="-510" rx="54.6905" ry="18"/>
-<text text-anchor="middle" x="383.972" y="-506.3" font-family="Times,serif" font-size="14.00">GeneticData</text>
+<!-- ClinicalData -->
+<g id="node26" class="node"><title>ClinicalData</title>
+<g id="a_node26"><a xlink:href="/#clinicaldata" xlink:title="Diagnostic information about a participant" target="_parent">
+<ellipse fill="none" stroke="black" cx="383.972" cy="-726" rx="55.4913" ry="18"/>
+<text text-anchor="middle" x="383.972" y="-722.3" font-family="Times,serif" font-size="14.00">ClinicalData</text>
 </a>
 </g>
 </g>
-<!-- GeneticData&#45;&gt;DataBatch -->
-<g id="edge34" class="edge"><title>GeneticData&#45;&gt;DataBatch</title>
-<path fill="none" stroke="black" d="M331.181,-514.824C313.1,-518.607 293.614,-525.278 278.682,-537 252.092,-557.873 263.773,-577.583 242.682,-604 237.545,-610.433 231.312,-616.657 225.085,-622.231"/>
-<polygon fill="black" stroke="black" points="222.604,-619.747 217.283,-628.908 227.156,-625.065 222.604,-619.747"/>
+<!-- ClinicalData&#45;&gt;Person -->
+<g id="edge31" class="edge"><title>ClinicalData&#45;&gt;Person</title>
+<path fill="none" stroke="black" d="M329.756,-722.471C311.634,-718.815 292.488,-711.893 278.682,-699 241.702,-664.468 274.732,-630.151 242.682,-591 239.407,-587 235.375,-583.475 231.059,-580.405"/>
+<polygon fill="black" stroke="black" points="232.865,-577.407 222.534,-575.056 229.144,-583.336 232.865,-577.407"/>
 </g>
-<!-- GeneticData&#45;&gt;Person -->
-<g id="edge35" class="edge"><title>GeneticData&#45;&gt;Person</title>
-<path fill="none" stroke="black" d="M337.724,-519.675C319.175,-524.165 297.649,-530.055 278.682,-537 261.5,-543.291 243.099,-551.937 227.991,-559.581"/>
-<polygon fill="black" stroke="black" points="226.341,-556.494 219.05,-564.181 229.544,-562.718 226.341,-556.494"/>
+<!-- ClinicalData&#45;&gt;DataBatch -->
+<g id="edge32" class="edge"><title>ClinicalData&#45;&gt;DataBatch</title>
+<path fill="none" stroke="black" d="M333.466,-718.667C315.431,-714.611 295.385,-708.408 278.682,-699 253.566,-684.853 230.566,-661.215 215.164,-643.116"/>
+<polygon fill="black" stroke="black" points="217.717,-640.712 208.642,-635.244 212.327,-645.178 217.717,-640.712"/>
 </g>
-<!-- MedicationAbbreviations -->
-<g id="node27" class="node"><title>MedicationAbbreviations</title>
-<g id="a_node27"><a xlink:href="/#medicationabbreviations" xlink:title="Common abbreviations for medications" target="_parent">
-<ellipse fill="none" stroke="black" cx="629.904" cy="-336" rx="100.983" ry="18"/>
-<text text-anchor="middle" x="629.904" y="-332.3" font-family="Times,serif" font-size="14.00">MedicationAbbreviations</text>
+<!-- SequenceSubstitution -->
+<g id="node27" class="node"><title>SequenceSubstitution</title>
+<g id="a_node27"><a xlink:href="/#sequencesubstitution" xlink:title="Indicates that the attached sequence has the attached substitution" target="_parent">
+<ellipse fill="none" stroke="black" cx="629.904" cy="-41" rx="87.1846" ry="18"/>
+<text text-anchor="middle" x="629.904" y="-37.3" font-family="Times,serif" font-size="14.00">SequenceSubstitution</text>
 </a>
 </g>
 </g>
-<!-- MedicationAbbreviations&#45;&gt;Medication -->
-<g id="edge40" class="edge"><title>MedicationAbbreviations&#45;&gt;Medication</title>
-<path fill="none" stroke="black" d="M532.496,-340.743C503.105,-342.189 471.64,-343.736 445.352,-345.03"/>
-<polygon fill="black" stroke="black" points="444.989,-341.543 435.173,-345.53 445.333,-348.535 444.989,-341.543"/>
+<!-- SequenceSubstitution&#45;&gt;Sequence -->
+<g id="edge33" class="edge"><title>SequenceSubstitution&#45;&gt;Sequence</title>
+<path fill="none" stroke="black" d="M600.999,-58.0823C580.028,-71.0213 550.666,-89.3521 525.263,-106 487.01,-131.069 443.661,-160.966 415.403,-180.659"/>
+<polygon fill="black" stroke="black" points="413.337,-177.833 407.14,-186.427 417.344,-183.573 413.337,-177.833"/>
+</g>
+<!-- SequenceSubstitution&#45;&gt;Substitution -->
+<g id="edge34" class="edge"><title>SequenceSubstitution&#45;&gt;Substitution</title>
+<path fill="none" stroke="black" d="M550.38,-33.5961C516.448,-30.3966 477.355,-26.7107 445.697,-23.7257"/>
+<polygon fill="black" stroke="black" points="445.98,-20.2369 435.696,-22.7826 445.323,-27.206 445.98,-20.2369"/>
 </g>
 </g>
 </svg>
