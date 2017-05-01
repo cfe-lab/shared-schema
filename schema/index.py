@@ -11,14 +11,14 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="http://neganp.github.io/shared-schema/style.css" rel="stylesheet">
+        <link href="https://neganp.github.io/shared-schema/style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
         <title>$title</title>
     </head>
     <body>
         <a name="top"></a>
         <h1>SHARED Schema</h1>
-        <p>Draft (alpha1 version as of $date)</p>
+        <p>Draft (alpha2 version as of $date)</p>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>
@@ -55,7 +55,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
             </tr>
             <tr>
                 <td>bool</td>
-                <td>True or False.</td>
+                <td>True,False, or Null (for unknown).</td>
             </tr>
             <tr>
                 <td>enum (...)</td>
