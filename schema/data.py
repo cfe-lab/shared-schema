@@ -169,7 +169,7 @@ schema_data = Schema([
          field("batch_id", "foreign key (DataBatch)", "The study or trial that includes this information"),
          field("collaborator_id", "foreign key (Collaborator)", "The collaborator who provided the data"),
          field("date_collected", "date", "The date this data was collected"),
-         field("sexual_orientation", "enum (heterosexual, non-heterosexual)",
+         field("sexual_orientation", "enum (heterosexual,non-heterosexual)",
                "Participant's sexual orientation"),
          field("gender", "enum (cis-male, cis-female, trans-male, trans-female, intersex, other)", ""),
          field("region", "string", "The participant's region of residence"),
@@ -183,7 +183,7 @@ schema_data = Schema([
          field("opioid_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
                "Recall period for 'opioid'"),
 
-         field("prison", "bool", "Has the participant been in prison (evern)?"),
+         field("prison", "bool", "Has the participant been in prison (ever)?"),
 
          field("opioid_pharm", "bool", "Has the participant recently had opioid substitution therapy?"),
         ]),
@@ -335,7 +335,7 @@ schema_data = Schema([
          field("nt-end", "integer", "The end position of the nucleotide sequence (with respect to the reference)"),
          field("nucleotides", "string", "The sequence's raw nucleotide sequence"),
          field("aa_start", "integer", "The starting position of the amino acid sequence (with respect to the reference)"),
-         field("aa_end", "integer", "The end position of the amino acid sequence (with respeect to the reference)"),
+         field("aa_end", "integer", "The end position of the amino acid sequence (with respect to the reference)"),
          field("aa_derived", "bool", "Was the amino-acid sequence derived from the nucleotide sequence?"),
          field("amino_acids", "string", "The sequence's raw amino-acid sequence"),
         ]),
