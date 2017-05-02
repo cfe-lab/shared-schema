@@ -92,15 +92,8 @@ schema_data = Schema([
         [field("id", "uuid", "Unique identifier"),
          field("short_name", "string", "The medication's three-letter abbreviation"),
          field("full_name", "string", "The medication's name"),
-         # BLOCKED(nknight): Pharmaco-economics code
+         # BLOCKED(nknight): Pharmaco-economics code?
         ]),
-
-    entity("MedicationAbbreviations",
-           "Common abbreviations for medications",
-           [field("medication_id", "foreign key (Medication)",
-                  "The medication this abbreviation is applied to"),
-            field("abbreviation", "string", ""),
-           ]),
 
     entity(
         "ClinicalData",
