@@ -18,7 +18,7 @@ class TestSchema(unittest.TestCase):
             schema_data = schema.data.Schema(bad_data)
 
     def test_find_relations(self):
-        sd = schema.data.Schemab(test.example_data.entities)
+        sd = schema.data.Schema(test.example_data.entities)
         rels = sd.relationships
         expected_rels = {("baz", "foo")}
         self.assertEqual(

@@ -149,6 +149,7 @@ schema_data = Schema([
          field("date_collected", "date", "The date these survey responses were given"),
          field("year_of_birth", "date", "Participant's year of birth"),
          field("country_of_birth", "string", ""),
+         field("gender_at_birth", "enum(male, female, other)", ""),
          # QUESTION(nknight): field for enthnicity
          field("ethnicity", "enum (...)", ""),
         ]),
@@ -162,7 +163,6 @@ schema_data = Schema([
          field("date_collected", "date", "The date this data was collected"),
          field("sexual_orientation", "enum (heterosexual,non-heterosexual)",
                "Participant's sexual orientation"),
-         field("gender", "enum (cis-male, cis-female, trans-male, trans-female, intersex, other)", ""),
          field("region", "string", "The participant's region of residence"),
 
          field("idu", "bool", "Injection drug use (narcotic)? (ever)"),
@@ -288,9 +288,8 @@ schema_data = Schema([
          field("genbank_id", "string", "GenBank ID (if applicable)"),
          field("genotype", "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)", "The genotype of the isolate"),
          field("subgenotype", "enum(a,b,c,d,e,f,g,h,i,j)", ""),
+         field("strain", "string", "The strain of the isolate"),
         ]),
-
-
 
     entity(
         "ClinicalIsolate",
