@@ -20,4 +20,4 @@ static: $(STATIC_FILES)
 	cp static/* docs/
 
 docs/index.html: $(SCRIPTS)
-	python -m schema index > docs/index.html
+	python3 -m schema index > docs/index.html
