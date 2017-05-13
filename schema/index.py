@@ -18,7 +18,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
     <body>
         <a name="top"></a>
         <h1>SHARED Schema</h1>
-        <p>Draft (alpha2 version as of $date)</p>
+        <p>Draft ($date, version alpha3)</p>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>

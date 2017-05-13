@@ -4,6 +4,7 @@ import collections
 
 import schema.util as util
 
+
 # Data Parsing
 
 entity = collections.namedtuple("entity", ["name", "description", "fields"])
@@ -56,6 +57,16 @@ class Schema(object):
 schema_data = Schema([
 
     entity(
+        "Medication",
+        "Anti-HCV drugs. Phenotypic resistance tests and treatment records reference this table.",
+        [field("full_name", "string", "The medication's name"),
+         field("short_name", "string", "The medication's three-letter abbreviation"),
+        ]),
+
+    # ==================================================
+    # Collaborator and Study/Trial data
+
+    entity(
         "Collaborator",
         "A collaborating site (provides participant data)",
         [field("id", "uuid", "Unique identifier"),
@@ -64,94 +75,32 @@ schema_data = Schema([
         ]),
 
     entity(
-        "DataBatch",
+        "SourceStudy",
         "A study, trial, or other batch of data from a collaborator",
-        [field("id", "uuid", "Unique identifier"),
-         field("collaborator", "foreign key (Collaborator)", "The collaborator providing the data"),
+        [field("collaborator", "foreign key (Collaborator)", "The collaborator providing the data"),
          field("name", "string", "The name of the study or trial"),
          field("collection_start", "date", "The beginning of data collection"),
          field("collection_end", "date", "The end of data collection (if applicable)"),
+         field("notes", "string", "Notes on data from this project"),
         ]),
 
 
     # ==================================================
-    # Participant Data
+    # Participant Data (demographic, clinical, behavioral, treatment)
 
     entity(
         "Person",
         "A study participant",
         [field("id", "uuid", "Unique identifier"),
          field("date_entered", "date", "Date the participant entered the study"),
-         field("region", "enum(america, europe, asia, africa, other)",
-               "Country or region of origin"),
-        ]),
-
-    entity(
-        "Medication",
-        "",
-        [field("id", "uuid", "Unique identifier"),
-         field("short_name", "string", "The medication's three-letter abbreviation"),
-         field("full_name", "string", "The medication's name"),
-         # BLOCKED(nknight): Pharmaco-economics code?
-        ]),
-
-    entity(
-        "ClinicalData",
-        "Diagnostic information about a participant",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The source of the data"),
-         field("bmi", "float", "The participant's body mass index"),
-         field("meld", "float", "MELD score"),
-         field("ctp", "float", "Child-Turcotte-Pugh score"),
-         field("ishak", "float", "Ishak fibrosis score"),
-         field("infection_duration", "integer", "Days since likely infection"),
-        ]),
-
-    entity("ViralLoadData",
-           "",
-           [field("id", "uuid", "A unique identifier"),
-            field("person_id", "foreign key (Person)", "The participant this data pertains to"),
-            field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-            field("assay", "enum(...)", "The assay used to measure viral load"),
-            field("detectable", "bool", "Was a detectable viral load present?"),
-            field("viral_load", "float", "The measured viral load (if quantifiable) (units? count/mL/ IUs?)"),
-           ]),
-
-    entity(
-        "TestResult",
-        "The outcome of a test result (e.g. bilirubin, alt, CD4)",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", ""),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-         field("name", "string", "Name of the test"),
-         field("unit", "string", "Unit of the test result (e.g. ppm)"),
-         field("result", "float", "The value of the test result"),
-         field("date", "date", "Date the test was performed"),
-        ]),
-
-    entity(
-        "EventsAndProceduresData",
-        "Significant clinical events and/or procedures (e.g. diagnosed comorbid conditions, surgeries, transplants, etc.)",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "Participant this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-         # QUESTION(nknight): standard events and procedures coding system
-         field("event_code", "string", "Standardised event coding system"),
-        ]),
-
-    entity(
-        "DemographicData",
-        "Demographic information about a participant",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-         field("date_collected", "date", "The date these survey responses were given"),
+         field("country", "string", "The country where the person participated in the study"),
+         field("city", "string", "The city where the person participated in the study"),
          field("year_of_birth", "date", "Participant's year of birth"),
-         field("country_of_birth", "string", ""),
-         field("gender_at_birth", "enum(male, female, other)", ""),
-         # QUESTION(nknight): field for enthnicity
-         field("ethnicity", "enum (...)", ""),
+         field("sex", "enum(male, female, other)", "The participant's sex at birth"),
+         field("ethnicity",
+               "enum(black, caucasian, latino, native-north-american,"
+               "east-asian, south-asian, southeast-asian)",
+               "The participant's ethnicity"),
         ]),
 
     entity(
@@ -159,44 +108,40 @@ schema_data = Schema([
         "Behavioral information about a participant",
         [field("id", "uuid", "Unique identifier"),
          field("person_id", "foreign key (Person)", "The participant this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial that includes this information"),
+         field(
+             "study_id",
+             "foreign key (SourceStudy)",
+             "The study or trial that includes this information"),
          field("date_collected", "date", "The date this data was collected"),
-         field("sexual_orientation", "enum (heterosexual,non-heterosexual)",
+         field("sexual_orientation", "enum (heterosexual, homosexual, bisexual, other)",
                "Participant's sexual orientation"),
          field("region", "string", "The participant's region of residence"),
-
-         field("idu", "bool", "Injection drug use (narcotic)? (ever)"),
-         field("idu_recent", "bool", "Recent injection drug use?"),
-         field("idu_period", "enum(1month, 3months, 6months, 12months, other, unknown)",
-               "Period of recall for 'idu_recent'"),
-
-         field("opioid", "bool", "Recent opioid use (Morphine, Oxycodone, Methadone, Buprenorphine, etc."),
-         field("opioid_period", "enum(1month, 3months, 6months, 12months, unknown, other)",
-               "Recall period for 'opioid'"),
-
+         field("idu", "bool", "Injection drug use? (ever)"),
+         field("ndu", "bool", "Non-injection drug use? (ever)"),
+         field("idu_recent", "bool", "Injection drug use in the past 6 months?"),
+         field("ndu_recent", "bool", "None-injection drug use in the past 6 months?"),
          field("prison", "bool", "Has the participant been in prison (ever)?"),
-
-         field("opioid_pharm", "bool", "Has the participant recently had opioid substitution therapy?"),
         ]),
 
     entity(
-        "NarcoticsUse",
-        "Detailed data on narcotics use",
-        [field("id", "uuid", "Unique identifier"),
-         field("behaviourdata_id", "foreign key (BehaviorData)",
-               "The behaviour data this usage was recorded with"),
-         field("name", "string", "Name of the narcotic (e.g. heroin, cocaine, amphetamine"),
-         field("injected", "bool", "Was the narcotic used by injection?"),
-         field("prescribed", "bool", "Was the narcotic prescribed?"),
+        "ClinicalTest",
+        "Meta-data for clinical tests (e.g. viral-load assays, fibroscans, etc.)",
+        [field("kind", "string", "The test's name"),
+         field("unit", "string", "The unit the test's results are reported in"),
+         field("detection_limit", "float", "The assay's detection limit"),
+         field("notes", "string", "Additional notes regarding this test"),
         ]),
 
     entity(
-        "GeneticData",
-        "Records relevant genetic data about participants (e.g. IL28B)",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "Person this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-         field("il28b", "enum(cc, non-cc, ct, tt)", "The participant's IL28B genotype"),
+        "TestResult",
+        "Results of a participant's clinical tests",
+        [field("person_id", "foreign key(Person)", "The participant the test was performed on"),
+         field("study_id", "foreign key(SourceStudy)", "The study or trial that provided this data"),
+         field("kind",
+               "foreign key(ClinicalTest)",
+               "The kind of test performed (e.g. viral-load assay, CTP assessment)"),
+         field("date", "date", "The date of the test. For lab tests, the date the sample was taken"),
+         field("result", "float", "The test's result"),
         ]),
 
     entity(
@@ -204,76 +149,89 @@ schema_data = Schema([
         "Information about a participant's treatment",
         [field("id", "uuid", "Unique identifier"),
          field("person_id", "foreign key (Person)", "The participant that this data pertains to"),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
+         field("study_id", "foreign key (SourceStudy)", "The study or trial this data comes from"),
          field("first_treatment", "bool", "Is this the first treatment "),
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt_sch", "date", "Scheduled treatment end date"),
          field("duration_sch", "float", "Schedule treatment duration (weeks)"),
          field("end_dt_act", "date", "Actual treatment end date"),
-         field("end_dt_bound", "enum(<, >, =)", "Uncertainty on 'end_dt'"),
-        ]),
-
-    entity(
-        "TreatmentOutcome",
-        "Outcome of a participant's treatment",
-        [field("id", "uuid", "Unique identifier"),
-         field("treatment_id", "foreign key (TreatmentData)", "The treatment whose outcome is being described"),
-         field("outcome", "enum(full-svr, partial-svr,vbt,no-response)",
-               "Whether treatment caused sustained viral response(svr), virological breakthrough (vbt), or no response"),
-         field("early_stop", "bool", "Did the participant discontinue treatment earlier than intended?"),
-         field("stop_reason", "string", "Reason for dropping out"),
+         field("end_dt_bound", "enum(<, >, =)", "Uncertainty on 'end_dt_act'"),
+         field(
+             "pi",
+             "bool",
+             ("Has the participant ever been treated with pegylated interferon "
+              "drugs before?")),
+         field(
+             "daa1",
+             "bool",
+             ("Has the participant ever been treated with first-line "
+              "direct-acting antivirals drugs before?")),
+         field(
+             "daa2",
+             "bool",
+             ("Has the participant ever been treated with second-line "
+              "direct-acting antiviral drugs before?")),
         ]),
 
     entity(
         "TreatmentMedicationData",
         "How much and what kind of medications were included in a treatment regimen",
-        [field("treatment_id", "foreign key (TreatmentData)", "Which treatment this prescription was included in"),
+        [field(
+            "treatment_id",
+            "foreign key (TreatmentData)",
+            "Which treatment this prescription was included in"),
          field("medication_id", "foreign key (Medication)", "Which medication was prescribed"),
-         field("dosage", "float", "Dosage of the medication prescribed (in mg)"),
+         field("dose", "float", "Dosage of the medication prescribed (in mg)"),
          field("dose_number", "float", "Number of doses taken per dose_period"),
          field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
+         field("start_dt",
+               "date",
+               "Start date for this drug (if different than treatment regimen"),
+         field("end_dt_sch",
+               "date",
+               "Scheduled end date (if different than the treatment regimen"),
+         field("end_dt_act",
+               "date",
+               "Actual end date (if different than the treatment regimen"),
+         field("end_dt_bound",
+               "enum(<,=,>)",
+               "Uncertainty on 'end_dt_act'"),
+        ]),
+
+    entity(
+        "TreatmentOutcome",
+        "Outcome of a participant's treatment",
+        [field(
+             "treatment_id",
+             "foreign key (TreatmentData)",
+             "The treatment whose outcome is being described"),
+         field("svr", "bool", "Sustained Viral Response (undetectable viral load at 12 weeks)"),
+         field(
+             "etr",
+             "bool",
+             "End-of-Treatment Response (undetectable viral load at end-of-treatment)"),
+         field("early_stop", "bool", "Was the treatment stopped early?"),
+         field(
+             "stop_reason",
+             "string",
+             "Reason for stopping treatment (blank if treatment ended on schedule)"),
+         field("notes", "string", "Additional notes (if applicable)"),
         ]),
 
     entity(
         "DeathAndLastFollowup",
-        "Records data about  leaving the study",
+        "Records data about participants leaving the study",
         [field("person_id", "foreign key (Person)", ""),
-         field("batch_id", "foreign key (DataBatch)", "The study or trial this data comes from"),
-         field("drop", "bool", "Did the participant dropped out?"),
-         field("drop_dt", "date", "Date the participant dropped out"),
-         field("drop_reason", "string", "Reason for dropping out (if applicable)"),
+         field("study_id", "foreign key (SourceStudy)", "The study or trial this data comes from"),
+         field("ltfu_dt", "date", "Date the participant was lost to follow-up"),
+         field(
+             "ltfu_reason",
+             "string",
+             "Reason the participant was lost to follow-up (if applicable)"),
          field("died", "bool", "Is the participant deceased?"),
          field("died_dt", "date", "The participant's date of death"),
-         field("autopsy", "bool", "Was an autopsy performed?"),
-         field("cause_of_death", "string", "Cause of death (e.g. ICD-10 code)"),
+         field("cod", "string", "Cause of death (e.g. ICD-10 code)"),
         ]),
-
-    entity(
-        "CauseOfDeath",
-        "Primary cause of death and other underlying conditions",
-        [field("ltfu_id", "foreign key (DeathAndLastFollowup)",
-               "The death record this data pertains to"),
-         field("cause", "enum(...)", "A code for the cause of death"),
-         field("importance", "bool",
-               "Was this a primary cause of death?"),
-        ]),
-
-
-    # ==================================================
-    # References
-
-    entity(
-        "Reference",
-        "A reference to a publication",
-        [field("id", "uuid", "Unique id"),
-         field("author", "string", ""),
-         field("title", "string", ""),
-         field("journal", "string", ""),
-         field("url", "string", "URL to the reference online"),
-         field("publication_dt", "date", "Null for unpublished results"),
-         field("pubmed_id", "string", ""),
-        ]),
-
 
     # ==================================================
     # Isolates & Sequences
@@ -282,35 +240,12 @@ schema_data = Schema([
         "Isolate",
         "Virus isolate (from an individual or used in a lab experiment)",
         [field("id", "uuid", "Unique id"),
-         field("isolation_date", "date", "Date the virus was isolated"),
-         field("type", "enum (clinical, lab)", "The kind of isolate. (extra data available depending on kind "),
+         field("type", "enum (clinical, lab)", "The kind of isolate. (additional data is available depending on kind "),
          field("entered_date", "date", "Date the isolate was entered into the database"),
          field("genbank_id", "string", "GenBank ID (if applicable)"),
-         field("genotype", "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)", "The genotype of the isolate"),
-         field("subgenotype", "enum(a,b,c,d,e,f,g,h,i,j)", ""),
-         field("strain", "string", "The strain of the isolate"),
-        ]),
-
-    entity(
-        "ClinicalIsolate",
-        "Isolate information",
-        [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
-         field("person_id", "foreign key (Person)", "The participant who gave the isolate"),
-         field("replicon", "bool", "Was the isolate cultured before sequencing?"),
-        ]),
-
-    entity(
-        "LabIsolate",
-        "Isolates created in the lab",
-        [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
-         field("mutations", "string", "A list of the mutations applied to the isolate"),
-         field("sdm", "bool", "Was site-directed mutagenesis applied to the isolate?"),
-
-         field("parent_sequence", "foreign key (Sequence)", "The sequence from which this isolate is derived"),
-         field("kind", "enum(full-virus, full-replicon, stable-subgenomic, transient-subgenomic)",
-               "The kind of isolate created (full synthetic genome, transient subgenomic replicon,"
-               "or stable subgenomic cell-line)"),
-         field("replicon_passage", "integer", "The passage number (for sub-cultured isolates)"),
+         field("genotype", "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)", "The isolate's genotype"),
+         field("subgenotype", "string", "The isolate's sub-genotype"),
+         field("strain", "string", "The isolate's strain (if applicable/known)"),
         ]),
 
     entity(
@@ -318,16 +253,96 @@ schema_data = Schema([
         "Sequences and data needed for rapid alignment",
         [field("id", "uuid", "Unique identifier"),
          field("isolate_id", "foreign key (Isolate)", "Isolate the sequence was obtained from"),
-         field("seq", "string", "nucleotide sequence"),
-         field("reference", "string", "The reference genome this sequence is described with respect to"),
-         field("nt_start", "integer", "The starting position of the nucleotide sequence (with respect to the reference)"),
-         field("nt-end", "integer", "The end position of the nucleotide sequence (with respect to the reference)"),
-         field("nucleotides", "string", "The sequence's raw nucleotide sequence"),
-         field("aa_start", "integer", "The starting position of the amino acid sequence (with respect to the reference)"),
-         field("aa_end", "integer", "The end position of the amino acid sequence (with respect to the reference)"),
-         field("aa_derived", "bool", "Was the amino-acid sequence derived from the nucleotide sequence?"),
-         field("amino_acids", "string", "The sequence's raw amino-acid sequence"),
+         field("nt_seq", "string", "Raw nucleotide sequence (if available)"),
+         field(
+             "nt_start",
+             "integer",
+             "The starting position of the nucleotide sequence (with respect to the reference)"),
+         field(
+             "nt_end",
+             "integer",
+             "The end position of the nucleotide sequence (with respect to the reference)"),
+         field("aa_seq", "string", "The sequence's raw amino-acid sequence"),
+         field("aa_start",
+               "integer",
+               "The starting position of the amino acid sequence (with respect to the reference)"),
+         field(
+             "aa_end",
+             "integer",
+             "The end position of the amino acid sequence (with respect to the reference)"),
+         field(
+             "aa_derived",
+             "bool",
+             "Was the amino-acid sequence derived from the nucleotide sequence?"),
+         field(
+             "reference",
+             "string",
+             "The reference genome this sequence is described with respect to"),
+         field("notes", "string", "Additional notes on this sequence (if applicable)"),
         ]),
+
+    entity(
+        "ClinicalIsolate",
+        "Isolate information",
+        [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
+         field("person_id", "foreign key (Person)", "The participant who gave the isolate"),
+         field("study_id", "foreign key (SourceStudy)", "The study that provided this isolate"),
+         field("isolation_date", "date", "Date the virus was isolated"),
+        ]),
+
+    entity(
+        "LabIsolate",
+        "Isolates created in the lab",
+        [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
+         field("ref_id", "foreign key (Reference)", "A reference describing this lab isolate"),
+         field("parent_sequence", "string", "The sequence from which this isolate is derived"),
+         field("parent_gt",
+               "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)",
+               "The parent sequence's genotype"),
+         field("parent_sgt",
+               "string",
+               "The parent sequence's subgenotype"),
+         field(
+             "kind",
+             "enum(full-virus, full-replicon, stable-subgenomic, transient-subgenomic)",
+             ("The kind of isolate created (full synthetic genome, transient subgenomic replicon, "
+              "or stable subgenomic cell-line)")),
+         field(
+             "ins",
+             "foreign key (Sequence)",
+             "A sequence inserted into this isolate's parent sequence"),
+         field(
+             "ins_src_start",
+             "integer",
+             ("Start position of the inserted section of the source sequence "
+              "(0 if the whole sequence was inserted))")),
+         field(
+             "ins_src_end",
+             "integer",
+             "End position of the inserted section of the source sequence"),
+         field(
+             "ins_pos_start",
+             "integer",
+             "Inserted sequence's start position"),
+         field(
+             "ins_pos_end",
+             "integer",
+             "Inserted sequence's end position in the constructed sequence"),
+         field("ins_gene", "string", "Name of the inserted sequence's gene"),
+         field(
+             "ins_gt",
+             "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)",
+             "The inserted sequence's genotype"),
+         field(
+             "ins_sgt",
+             "string",
+             "The inserted sequence's subgenotype"),
+         field("mutations", "string", "A list of site-directed mutations applied to the isolate"),
+        ]),
+
+
+    # ==================================================
+    # Substitution tags
 
     entity(
         "Substitution",
@@ -353,13 +368,16 @@ schema_data = Schema([
     # Susceptibility results
 
     entity(
-        "SusceptibilityResult",
+        "Susceptibility",
         "Susceptibility test results",
         [field("id", "uuid", "Unique id"),
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
+         field(
+             "method_id",
+             "foreign key (SusceptibilityMethod)",
+             "Method used to measure susceptibility"),
          field("medication_id", "foreign key (Medication)", "The medication being tested"),
-         field("method_id", "foreign key (SusceptibilityMethod)", "Name of the susceptibility test method"),
          field("result", "float", "Concentration of medication required for inhibition (in nM)"),
          field("result_bound", "enum (<, =, >)", ""),
          field("IC", "enum (50, 90, 95)", "% inhibition"),
@@ -374,6 +392,18 @@ schema_data = Schema([
          field("name", "string", "Name of the method"),
          field("reference_id", "foreign key (Reference)", "Reference describing the method"),
          field("notes", "string", "Free-text notes about the testing method"),
+        ]),
+
+    entity(
+        "Reference",
+        "A reference to a publication",
+        [field("id", "uuid", "Unique id"),
+         field("author", "string", ""),
+         field("title", "string", ""),
+         field("journal", "string", ""),
+         field("url", "string", "URL to the reference online"),
+         field("publication_dt", "date", "Null for unpublished results"),
+         field("pubmed_id", "string", ""),
         ]),
 
 ])
