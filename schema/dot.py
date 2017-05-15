@@ -1,12 +1,24 @@
 '''Convert the schema data into a .dot source file.
 '''
 
+def nodecolor(tags):
+    if 'managed' in tags:
+        return 'grey'
+    elif 'clinical' in tags:
+        return 'lightblue'
+    elif 'phenotypic' in tags:
+        return 'green'
+    else:
+        return 'transparent'
+
+
 def node(entity):
     name = entity.name
     tooltip = entity.description
+    tags = entity.tags
     href = "#{}".format(entity.name.lower())
-    tmpl = '''{name} [href="/{href}", tooltip="{tooltip}", target="_parent"];'''
-    return tmpl.format(name=name, tooltip=tooltip, href=href)
+    tmpl = '''{name} [href="/{href}", tooltip="{tooltip}", target="_parent", style="filled", fillcolor="{bgcolor}"];'''
+    return tmpl.format(name=name, tooltip=tooltip, href=href, bgcolor=nodecolor(tags))
 
 
 def edge(relation):
@@ -26,6 +38,12 @@ def edges(schema_data):
 
 
 dot_template = '''digraph "{title}" {{
+subgraph cluster_Legend {{
+  Managed [style="filled", fillcolor="grey"];
+  Clinical [style="filled", fillcolor="lightblue"];
+  Phenotypic [style="filled", fillcolor="green"];
+}}
+
 overlap=false;
 root=Person;
 ratio=compress;

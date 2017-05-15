@@ -11,7 +11,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://neganp.github.io/shared-schema/style.css" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
         <title>$title</title>
     </head>
@@ -22,7 +22,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>
-            <p><a href="http://neganp.github.io/shared-schema/schema.svg" target="_blank">bigger</a></p>
+            <p><a href="schema.svg" target="_blank">bigger</a></p>
         </div>
         <h2>Data Dictionary</h2>
         <p>The fields in each table are described below. The data-types are used are:</p>
@@ -65,6 +65,16 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
                 <td>foreign key (tbl_name)</td>
                 <td>Indicates a link to a different table. For example, viral isolate's record might include a 'foreign key (Person)' field to link the isolate to the participant who gave it.</td>
             </tr>
+
+            <tr class='required'>
+                <td></td>
+                <td>Required fields are marked by italics</td>
+            </tr>
+            <tr class='managed'>
+                <td></td>
+                <td>Managed fields (that the database or database maintainers will handle) are written in grey</td>
+            </tr>
+
         </table>
 
         <hr/>

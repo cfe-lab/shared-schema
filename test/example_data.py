@@ -1,12 +1,12 @@
-from schema.data import entity, field
+from schema.data import Entity, field
 
 entities = [
-    entity("foo",
+    Entity.make("foo",
            "A foo",
            [field("foo1",
                   "integer",
                   "The first field of foo")]),
-    entity("bar",
+    Entity.make("bar",
             "A bar",
             [field("bar1",
                    "string",
@@ -14,7 +14,7 @@ entities = [
              field("bar2",
                    "date",
                    "The second field of a bar")]),
-    entity("baz",
+    Entity.make("baz",
            "A baz",
            [field("baz1",
                   "foreign key(foo)",

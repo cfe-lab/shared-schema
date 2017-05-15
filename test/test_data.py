@@ -1,7 +1,7 @@
 import unittest
 
 import schema.data
-from schema.data import entity
+from schema.data import Entity
 
 import test.example_data
 
@@ -11,8 +11,8 @@ class TestSchema(unittest.TestCase):
 
     def test_no_duplicate_keys(self):
         bad_data = [
-            entity("a", "", []),
-            entity("a", "", []),
+            Entity.make("a", "", []),
+            Entity.make("a", "", []),
         ]
         with self.assertRaises(AssertionError):
             schema_data = schema.data.Schema(bad_data)

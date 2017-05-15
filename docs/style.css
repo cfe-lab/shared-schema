@@ -37,3 +37,11 @@ h3 a {
 div.entity:target {
     background-color: lightgray;
 }
+
+.managed {
+    color: grey;
+}
+
+.required {
+    font-style: italic;
+}

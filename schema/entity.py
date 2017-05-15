@@ -4,6 +4,11 @@ import string
 import schema.util as util
 
 
+def classes(tags):
+    possible_tags = ['managed', 'required']
+    return ' '.join(filter(lambda t: t in tags, possible_tags))
+
+
 fk_link_tmpl = string.Template(
     '''<a href="#$fk_anchor">$fk_name</a>'''
 )
@@ -16,7 +21,7 @@ def fk_link(fk_name):
 
 
 fk_field_tmpl = string.Template(
-    '''<tr> <td>$name</td> <td>foreign key ($link)</td></tr>'''
+    '''<tr class="$fclass"> <td>$name</td> <td>foreign key ($link)</td></tr>'''
 )
 
 def fk_field_row(field):
@@ -26,11 +31,11 @@ def fk_field_row(field):
         name=field.name,
         fk_target=fk_target,
         link=link,
+        fclass=classes(field.tags)
     )
 
-
 field_tmpl = string.Template(
-    '''<tr> <td>$name</td> <td>$type</td> <td>$description</td> </tr>'''
+    '''<tr class="$fclass"> <td>$name</td> <td>$type</td> <td>$description</td> </tr>'''
 )
 
 def field_row(field):
@@ -38,7 +43,10 @@ def field_row(field):
         return fk_field_row(field)
     else:
         fs = field._asdict()
-        return field_tmpl.substitute(**fs)
+        return field_tmpl.substitute(
+            fclass=classes(field.tags),
+            **fs,
+        )
 
 
 fields_tmpl = string.Template('''
@@ -55,7 +63,7 @@ def fields_table(fields):
 
 #<a class="to-top" href="#top">back to top</a>
 entity_tmpl = string.Template('''
-<div class="entity" id="$anchor_name">
+<div class="$class" id="$anchor_name">
   <a name="$anchor_name"></a>
   <h3>$name <a href="#$anchor_name">🔗</a> <a href="#top">🠉</a></h3>
   <p>$description</p>
@@ -63,10 +71,12 @@ entity_tmpl = string.Template('''
 </div>''')
 
 def entry(entity):
+    eclass = "entity " + classes(entity.tags)
     tmpl_data = {
         "anchor_name": entity.name.lower(),
         "name": entity.name,
         "description": entity.description,
         "fields_table": fields_table(entity.fields),
+        "class": eclass
     }
     return entity_tmpl.substitute(**tmpl_data)

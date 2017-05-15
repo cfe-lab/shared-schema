@@ -7,8 +7,32 @@ import schema.util as util
 
 # Data Parsing
 
-entity = collections.namedtuple("entity", ["name", "description", "fields"])
-field = collections.namedtuple("field", ["name", "type", "description"])
+
+_entity = collections.namedtuple(
+    "entity",
+    ["name", "description", "fields", "tags"],
+)
+
+class Entity(_entity):
+    @classmethod
+    def make(cls, name, description, fields, tags=None):
+        if tags is None:
+            tags = set()
+        return cls(name, description, fields, tags)
+
+_field = collections.namedtuple(
+    "field",
+    ["name", "type", "description", "tags"],
+)
+
+class Field(_field):
+    @classmethod
+    def make(cls, name, type, description, tags=None):
+        if tags is None:
+            tags = set()
+        return cls(name, type, description, tags)
+
+field = Field.make
 
 
 class Schema(object):
@@ -56,42 +80,63 @@ class Schema(object):
 
 schema_data = Schema([
 
-    entity(
+    Entity.make(
         "Medication",
         "Anti-HCV drugs. Phenotypic resistance tests and treatment records reference this table.",
-        [field("full_name", "string", "The medication's name"),
-         field("short_name", "string", "The medication's three-letter abbreviation"),
-        ]),
+        [field(
+            "full_name",
+            "string",
+            "The medication's name",
+            tags={'required'},
+        ),
+         field(
+             "short_name",
+             "string",
+             "The medication's three-letter abbreviation",
+         ),
+        ],
+        tags={'managed'},
+    ),
 
     # ==================================================
     # Collaborator and Study/Trial data
 
-    entity(
+    Entity.make(
         "Collaborator",
         "A collaborating site (provides participant data)",
-        [field("id", "uuid", "Unique identifier"),
-         field("name", "string", "Name of the collaborating entity"),
+        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
+         field("name", "string", "Name of the collaborating entity", tags={'required'}),
          field("country", "string", "The collaborator's physical location (country)"),
-        ]),
+        ],
+        tags={'managed'},
+    ),
 
-    entity(
+    Entity.make(
         "SourceStudy",
         "A study, trial, or other batch of data from a collaborator",
-        [field("collaborator", "foreign key (Collaborator)", "The collaborator providing the data"),
+        [field(
+            "collaborator",
+            "foreign key (Collaborator)",
+            "The collaborator providing the data",
+            tags={'required'},
+        ),
+         field("ref_id", "foreign key (Reference)", "Publication describing this study (if applicable)"),
          field("name", "string", "The name of the study or trial"),
          field("collection_start", "date", "The beginning of data collection"),
          field("collection_end", "date", "The end of data collection (if applicable)"),
          field("notes", "string", "Notes on data from this project"),
-        ]),
+        ],
+        tags={'managed'},
+    ),
 
 
     # ==================================================
     # Participant Data (demographic, clinical, behavioral, treatment)
 
-    entity(
+    Entity.make(
         "Person",
         "A study participant",
-        [field("id", "uuid", "Unique identifier"),
+        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
          field("date_entered", "date", "Date the participant entered the study"),
          field("country", "string", "The country where the person participated in the study"),
          field("city", "string", "The city where the person participated in the study"),
@@ -101,17 +146,26 @@ schema_data = Schema([
                "enum(black, caucasian, latino, native-north-american,"
                "east-asian, south-asian, southeast-asian)",
                "The participant's ethnicity"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "BehaviorData",
         "Behavioral information about a participant",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant this data pertains to"),
+        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
+         field(
+             "person_id",
+             "foreign key (Person)",
+             "The participant this data pertains to",
+             tags={'required'},
+         ),
          field(
              "study_id",
              "foreign key (SourceStudy)",
-             "The study or trial that includes this information"),
+             "The study or trial that includes this information",
+             tags={'required', 'managed'},
+         ),
          field("date_collected", "date", "The date this data was collected"),
          field("sexual_orientation", "enum (heterosexual, homosexual, bisexual, other)",
                "Participant's sexual orientation"),
@@ -121,35 +175,61 @@ schema_data = Schema([
          field("idu_recent", "bool", "Injection drug use in the past 6 months?"),
          field("ndu_recent", "bool", "None-injection drug use in the past 6 months?"),
          field("prison", "bool", "Has the participant been in prison (ever)?"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "ClinicalTest",
         "Meta-data for clinical tests (e.g. viral-load assays, fibroscans, etc.)",
         [field("kind", "string", "The test's name"),
          field("unit", "string", "The unit the test's results are reported in"),
          field("detection_limit", "float", "The assay's detection limit"),
          field("notes", "string", "Additional notes regarding this test"),
-        ]),
+        ],
+        tags={'clinical', 'managed'},
+    ),
 
-    entity(
+    Entity.make(
         "TestResult",
         "Results of a participant's clinical tests",
-        [field("person_id", "foreign key(Person)", "The participant the test was performed on"),
-         field("study_id", "foreign key(SourceStudy)", "The study or trial that provided this data"),
+        [field(
+            "person_id",
+            "foreign key(Person)",
+            "The participant the test was performed on",
+            tags={'required'},
+        ),
+         field(
+             "study_id",
+             "foreign key(SourceStudy)",
+             "The study or trial that provided this data",
+             tags={'managed', 'required'},
+         ),
          field("kind",
                "foreign key(ClinicalTest)",
                "The kind of test performed (e.g. viral-load assay, CTP assessment)"),
          field("date", "date", "The date of the test. For lab tests, the date the sample was taken"),
          field("result", "float", "The test's result"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "TreatmentData",
         "Information about a participant's treatment",
-        [field("id", "uuid", "Unique identifier"),
-         field("person_id", "foreign key (Person)", "The participant that this data pertains to"),
-         field("study_id", "foreign key (SourceStudy)", "The study or trial this data comes from"),
+        [field("id", "uuid", "Unique identifier", tags={'managed'}),
+         field(
+             "person_id",
+             "foreign key (Person)",
+             "The participant that this data pertains to",
+             tags={'required'},
+         ),
+         field(
+             "study_id",
+             "foreign key (SourceStudy)",
+             "The study or trial this data comes from",
+             tags={'managed', 'required'},
+         ),
          field("first_treatment", "bool", "Is this the first treatment "),
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt_sch", "date", "Scheduled treatment end date"),
@@ -157,7 +237,7 @@ schema_data = Schema([
          field("end_dt_act", "date", "Actual treatment end date"),
          field("end_dt_bound", "enum(<, >, =)", "Uncertainty on 'end_dt_act'"),
          field(
-             "pi",
+             "int",
              "bool",
              ("Has the participant ever been treated with pegylated interferon "
               "drugs before?")),
@@ -171,16 +251,25 @@ schema_data = Schema([
              "bool",
              ("Has the participant ever been treated with second-line "
               "direct-acting antiviral drugs before?")),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "TreatmentMedicationData",
         "How much and what kind of medications were included in a treatment regimen",
         [field(
             "treatment_id",
             "foreign key (TreatmentData)",
-            "Which treatment this prescription was included in"),
-         field("medication_id", "foreign key (Medication)", "Which medication was prescribed"),
+            "Which treatment this prescription was included in",
+            tags={'required'},
+        ),
+         field(
+             "medication_id",
+             "foreign key (Medication)",
+             "Which medication was prescribed",
+             tags={'required'},
+         ),
          field("dose", "float", "Dosage of the medication prescribed (in mg)"),
          field("dose_number", "float", "Number of doses taken per dose_period"),
          field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
@@ -196,16 +285,23 @@ schema_data = Schema([
          field("end_dt_bound",
                "enum(<,=,>)",
                "Uncertainty on 'end_dt_act'"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "TreatmentOutcome",
         "Outcome of a participant's treatment",
         [field(
              "treatment_id",
              "foreign key (TreatmentData)",
-             "The treatment whose outcome is being described"),
-         field("svr", "bool", "Sustained Viral Response (undetectable viral load at 12 weeks)"),
+             "The treatment whose outcome is being described",
+            tags={'required', 'managed'},
+        ),
+         field(
+             "svr",
+             "bool",
+             "Sustained Viral Response (undetectable viral load at 12 weeks)"),
          field(
              "etr",
              "bool",
@@ -216,13 +312,25 @@ schema_data = Schema([
              "string",
              "Reason for stopping treatment (blank if treatment ended on schedule)"),
          field("notes", "string", "Additional notes (if applicable)"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "DeathAndLastFollowup",
         "Records data about participants leaving the study",
-        [field("person_id", "foreign key (Person)", ""),
-         field("study_id", "foreign key (SourceStudy)", "The study or trial this data comes from"),
+        [field(
+            "person_id",
+            "foreign key (Person)",
+            "",
+            tags={'required'},
+        ),
+         field(
+             "study_id",
+             "foreign key (SourceStudy)",
+             "The study or trial this data comes from",
+             tags={'managed', 'required'},
+         ),
          field("ltfu_dt", "date", "Date the participant was lost to follow-up"),
          field(
              "ltfu_reason",
@@ -231,16 +339,23 @@ schema_data = Schema([
          field("died", "bool", "Is the participant deceased?"),
          field("died_dt", "date", "The participant's date of death"),
          field("cod", "string", "Cause of death (e.g. ICD-10 code)"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
     # ==================================================
     # Isolates & Sequences
 
-    entity(
+    Entity.make(
         "Isolate",
         "Virus isolate (from an individual or used in a lab experiment)",
-        [field("id", "uuid", "Unique id"),
-         field("type", "enum (clinical, lab)", "The kind of isolate. (additional data is available depending on kind "),
+        [field("id", "uuid", "Unique id", tags={'managed', 'required'}),
+         field(
+             "type",
+             "enum (clinical, lab)",
+             "The kind of isolate. (additional data is available depending on kind)",
+             tags={'required', 'managed'},
+         ),
          field("entered_date", "date", "Date the isolate was entered into the database"),
          field("genbank_id", "string", "GenBank ID (if applicable)"),
          field("genotype", "enum(1,2,3,4,5,6,mixed,recombinant,indeterminate)", "The isolate's genotype"),
@@ -248,10 +363,10 @@ schema_data = Schema([
          field("strain", "string", "The isolate's strain (if applicable/known)"),
         ]),
 
-    entity(
+    Entity.make(
         "Sequence",
         "Sequences and data needed for rapid alignment",
-        [field("id", "uuid", "Unique identifier"),
+        [field("id", "uuid", "Unique identifier", tags={'managed'}),
          field("isolate_id", "foreign key (Isolate)", "Isolate the sequence was obtained from"),
          field("nt_seq", "string", "Raw nucleotide sequence (if available)"),
          field(
@@ -281,16 +396,33 @@ schema_data = Schema([
          field("notes", "string", "Additional notes on this sequence (if applicable)"),
         ]),
 
-    entity(
+    Entity.make(
         "ClinicalIsolate",
         "Isolate information",
-        [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
-         field("person_id", "foreign key (Person)", "The participant who gave the isolate"),
-         field("study_id", "foreign key (SourceStudy)", "The study that provided this isolate"),
+        [field(
+            "isolate_id",
+            "foreign key (Isolate)",
+            "The isolate this data pertains to",
+            tags={'required', 'managed'},
+        ),
+         field(
+             "person_id",
+             "foreign key (Person)",
+             "The participant who gave the isolate",
+             tags={'required'}
+         ),
+         field(
+             "study_id",
+             "foreign key (SourceStudy)",
+             "The study that provided this isolate",
+             tags={'managed', 'required'},
+         ),
          field("isolation_date", "date", "Date the virus was isolated"),
-        ]),
+        ],
+        tags={'clinical'},
+    ),
 
-    entity(
+    Entity.make(
         "LabIsolate",
         "Isolates created in the lab",
         [field("isolate_id", "foreign key (Isolate)", "The isolate this data pertains to"),
@@ -338,39 +470,45 @@ schema_data = Schema([
              "string",
              "The inserted sequence's subgenotype"),
          field("mutations", "string", "A list of site-directed mutations applied to the isolate"),
-        ]),
+        ],
+        tags={'phenotypic'},
+    ),
 
 
     # ==================================================
     # Substitution tags
 
-    entity(
+    Entity.make(
         "Substitution",
         "A substitution, insertion, or deletion in an RNA sequence",
-        [field("id", "uuid", "Unique identifier"),
+        [field("id", "uuid", "Unique identifier", tags={'managed'}),
          field("name", "string", "Name of the substitution"),
          field("reference_sequence", "string", "Name of the consensus wild-type reference sequence"),
          field("position", "integer", "Nucleotide position (with respect to the reference sequence)"),
          field("length", "integer", "Length of the substitution"),
          field("content", "string", "The nucleotide content of the substitution"),
          field("resistance_associated", "bool", "Is this a resistance associated substitution observed in virologic failures in the clinic?"),
-        ]),
+        ],
+        tags={'managed'},
+    ),
 
-    entity(
+    Entity.make(
         "SequenceSubstitution",
         "Indicates that the attached sequence has the attached substitution",
         [field("sequence_id", "foreign key (Sequence)", "The sequence being tagged"),
          field("substitution_id", "foreign key (Substitution)", "The substitution identified in the tagged sequence"),
-        ]),
+        ],
+        tags={'managed'},
+    ),
 
 
     # ==================================================
     # Susceptibility results
 
-    entity(
+    Entity.make(
         "Susceptibility",
         "Susceptibility test results",
-        [field("id", "uuid", "Unique id"),
+        [field("id", "uuid", "Unique id", tags={'managed'}),
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
          field(
@@ -383,21 +521,25 @@ schema_data = Schema([
          field("IC", "enum (50, 90, 95)", "% inhibition"),
          field("fold", "float", "Fold-change compared to wild type"),
          field("fold_bound", "enum (<, =, >)", "Represents uncertainty in the fold-change measurement"),
-        ]),
+        ],
+        tags={'phenotypic'},
+    ),
 
-    entity(
+    Entity.make(
         "SusceptibilityMethod",
         "Susceptibility testing methods",
-        [field("id", "uuid", "Unique id"),
+        [field("id", "uuid", "Unique id", tags={'managed'}),
          field("name", "string", "Name of the method"),
          field("reference_id", "foreign key (Reference)", "Reference describing the method"),
          field("notes", "string", "Free-text notes about the testing method"),
-        ]),
+        ],
+        tags={'phenotypic', 'managed'},
+    ),
 
-    entity(
+    Entity.make(
         "Reference",
         "A reference to a publication",
-        [field("id", "uuid", "Unique id"),
+        [field("id", "uuid", "Unique id", tags={'managed'}),
          field("author", "string", ""),
          field("title", "string", ""),
          field("journal", "string", ""),

@@ -1,6 +1,6 @@
 import unittest
 
-from schema.data import entity, field
+from schema.data import Entity, field
 import schema.entity
 from test.example_data import *
 
