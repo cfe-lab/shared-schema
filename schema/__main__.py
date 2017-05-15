@@ -1,5 +1,6 @@
 import sys
 
+import schema
 import schema.csv as csv
 import schema.dot as dot
 import schema.data as data
@@ -14,7 +15,7 @@ def generate():
         print(out)
         sys.exit(0)
     elif cmd == "index":
-        out = index.make(data.schema_data)
+        out = index.make(data.schema_data, schema.__version__)
         print(out)
         sys.exit(0)
     elif cmd == "csv":

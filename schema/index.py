@@ -18,7 +18,7 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
     <body>
         <a name="top"></a>
         <h1>SHARED Schema</h1>
-        <p>Draft ($date, version alpha3)</p>
+        <p>Draft version $version ($date) </p>
         <h2>Schema</h2>
         <div id="schema">
             <embed type="image/svg+xml" src="schema.svg"></embed>
@@ -74,9 +74,14 @@ html5_tmpl = string.Template('''<!DOCTYPE html>
 </html>''')
 
 
-def index(title, entities):
+def index(title, entities, version):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
-    return html5_tmpl.substitute(title=title, entities=entities, date=date)
+    return html5_tmpl.substitute(
+        title=title,
+        entities=entities,
+        date=date,
+        version=version,
+    )
 
 
 # Create entries
@@ -88,5 +93,5 @@ def entity_tables(schema_data):
     return "\n".join(entries)
 
 
-def make(schema_data, title="SHARED Schema (draft)"):
-    return index(title, entity_tables(schema_data))
+def make(schema_data, version, title="SHARED Schema (draft)"):
+    return index(title, entity_tables(schema_data), version)
