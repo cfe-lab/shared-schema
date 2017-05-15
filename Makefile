@@ -1,7 +1,7 @@
 SCRIPTS=$(shell find . -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
-all: docs/schema.svg docs/index.html static docs/fields.csv
+all: docs/schema.svg docs/index.html static docs/schema.csv
 
 clean:
 	find docs/ -mindepth 1 -delete
@@ -13,7 +13,7 @@ test:
 docs/schema.svg: schema/dot.py schema/data.py
 	python3 -m schema dot  | unflatten | dot -Tsvg > docs/schema.svg
 
-docs/fields.csv: schema/csv.py schema/data.py
+docs/schema.csv: schema/csv.py schema/data.py
 	python3 -m schema csv > docs/schema.csv
 
 static: $(STATIC_FILES)
