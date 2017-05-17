@@ -6,6 +6,9 @@ all: docs/schema.svg docs/index.html static docs/schema.csv
 clean:
 	find docs/ -mindepth 1 -delete
 	find . -name '*.pyc' -delete
+	find . -name '*.aux' -delete
+	find . -name '*.log' -delete
+	find tmp/ -mindepth 1 -delete
 
 test:
 	python3 -m unittest
