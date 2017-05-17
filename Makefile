@@ -1,7 +1,7 @@
 SCRIPTS=$(shell find . -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
-all: docs/schema.svg docs/index.html static docs/schema.csv
+all: docs/schema.svg docs/index.html static docs/schema.csv $(GUIDES) docs/schema.pdf
 
 clean:
 	find docs/ -mindepth 1 -delete
@@ -24,3 +24,14 @@ static: $(STATIC_FILES)
 
 docs/index.html: $(SCRIPTS)
 	python3 -m schema index > docs/index.html
+# Schema document
+docs/schema.pdf: tmp/schema.tex
+	pdflatex -output-directory tmp tmp/schema.tex
+	pdflatex -output-directory tmp tmp/schema.tex
+	cp tmp/schema.pdf docs/schema.pdf
+
+tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png
+	python -m schema tex > tmp/schema.tex
+
+tmp/schema.png: docs/schema.svg
+	convert docs/schema.svg tmp/schema.png

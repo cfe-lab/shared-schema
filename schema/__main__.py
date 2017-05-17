@@ -5,23 +5,25 @@ import schema.csv as csv
 import schema.dot as dot
 import schema.data as data
 import schema.index as index
+import schema.tex as tex
 
+
+def do_make(maker, *args):
+    out = maker(*args)
+    print(out)
+    sys.exit()
 
 def generate():
     cmd = sys.argv[1]
 
-    if cmd == "dot":
-        out = dot.make(data.schema_data, "SHARED Schema")
-        print(out)
-        sys.exit(0)
-    elif cmd == "index":
-        out = index.make(data.schema_data, schema.__version__)
-        print(out)
-        sys.exit(0)
-    elif cmd == "csv":
-        out = csv.make(data.schema_data)
-        print(out)
-        sys.exit(0)
+    if cmd == 'dot':
+        do_make(dot.make, data.schema_data, "SHARED Schema")
+    elif cmd == 'index':
+        do_make(index.make, data.schema_data, schema.__version__)
+    elif cmd == 'csv':
+        do_make(csv.make, data.schema_data)
+    elif cmd == 'tex':
+        do_make(tex.make, data.schema_data, schema.__version__)
     else:
         print("Unknown command '{}'".format(cmd))
         sys.exit(1)
