@@ -45,7 +45,7 @@ def field_row(field):
         fs = field._asdict()
         return field_tmpl.substitute(
             fclass=classes(field.tags),
-            **fs,
+            **fs
         )
 
 
