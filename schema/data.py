@@ -106,7 +106,6 @@ schema_data = Schema([
         "A collaborating site (provides participant data)",
         [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
          field("name", "string", "Name of the collaborating entity", tags={'required'}),
-         field("country", "string", "The collaborator's physical location (country)"),
         ],
         tags={'managed'},
     ),
@@ -169,7 +168,6 @@ schema_data = Schema([
          field("date_collected", "date", "The date this data was collected"),
          field("sexual_orientation", "enum (heterosexual, homosexual, bisexual, other)",
                "Participant's sexual orientation"),
-         field("region", "string", "The participant's region of residence"),
          field("idu", "bool", "Injection drug use? (ever)"),
          field("ndu", "bool", "Non-injection drug use? (ever)"),
          field("idu_recent", "bool", "Injection drug use in the past 6 months?"),
@@ -209,7 +207,8 @@ schema_data = Schema([
                "foreign key(ClinicalTest)",
                "The kind of test performed (e.g. viral-load assay, CTP assessment)"),
          field("date", "date", "The date of the test. For lab tests, the date the sample was taken"),
-         field("result", "float", "The test's result"),
+         field("result", "float", "The test's result (for numeric results)"),
+         field("result_str", "string", "The test's result (for textual results)"),
         ],
         tags={'clinical'},
     ),
@@ -288,6 +287,8 @@ schema_data = Schema([
         tags={'clinical'},
     ),
 
+
+    # TODO(nknight): merge with treatment data?
     Entity.make(
         "TreatmentOutcome",
         "Outcome of a participant's treatment",
@@ -305,11 +306,6 @@ schema_data = Schema([
              "etr",
              "bool",
              "End-of-Treatment Response (undetectable viral load at end-of-treatment)"),
-         field("early_stop", "bool", "Was the treatment stopped early?"),
-         field(
-             "stop_reason",
-             "string",
-             "Reason for stopping treatment (blank if treatment ended on schedule)"),
          field("notes", "string", "Additional notes (if applicable)"),
         ],
         tags={'clinical'},
@@ -336,7 +332,6 @@ schema_data = Schema([
              "string",
              "Reason the participant was lost to follow-up (if applicable)"),
          field("died", "bool", "Is the participant deceased?"),
-         field("died_dt", "date", "The participant's date of death"),
          field("cod", "string", "Cause of death (e.g. ICD-10 code)"),
         ],
         tags={'clinical'},

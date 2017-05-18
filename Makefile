@@ -1,7 +1,7 @@
 SCRIPTS=$(shell find . -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
-all: docs/schema.svg docs/index.html static docs/schema.csv $(GUIDES) docs/schema.pdf
+all: docs/schema.svg docs/index.html static docs/schema.csv $(GUIDES) docs/schema.pdf docs/shared_clinical_guide.pdf
 
 clean:
 	find docs/ -mindepth 1 -delete
@@ -16,7 +16,7 @@ test:
 docs/schema.svg: schema/dot.py schema/data.py
 	python3 -m schema dot  | unflatten | dot -Tsvg > docs/schema.svg
 
-docs/schema.csv: schema/csv.py schema/data.py
+docs/schema.csv: $(SCRIPTS)
 	python3 -m schema csv > docs/schema.csv
 
 static: $(STATIC_FILES)
@@ -24,13 +24,25 @@ static: $(STATIC_FILES)
 
 docs/index.html: $(SCRIPTS)
 	python3 -m schema index > docs/index.html
+
+
+# Contributor/Analyst Guides
+docs/shared_clinical_guide.pdf: guides/clinical.tex tmp/clinical_relationships.png
+	pdflatex -output-directory tmp guides/clinical.tex
+	pdflatex -output-directory tmp guides/clinical.tex
+	cp tmp/clinical.pdf docs/shared_clinical_guide.pdf
+
+tmp/clinical_relationships.png: guides/clinical_relationships.dot
+	dot -Tpng guides/clinical_relationships.dot > tmp/clinical_relationships.png
+
+
 # Schema document
 docs/schema.pdf: tmp/schema.tex
 	pdflatex -output-directory tmp tmp/schema.tex
 	pdflatex -output-directory tmp tmp/schema.tex
 	cp tmp/schema.pdf docs/schema.pdf
 
-tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png
+tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png  # limit to tex and data bc. slow
 	python -m schema tex > tmp/schema.tex
 
 tmp/schema.png: docs/schema.svg

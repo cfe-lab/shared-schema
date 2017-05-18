@@ -1,0 +1,20 @@
+digraph ClinicalRelationships{
+    compound=true;
+    node [fontname="monospace"];
+    
+    "participants.csv";
+    "clinical.csv" -> "participants.csv";
+    "behavior.csv" -> "participants.csv";
+    "ltfu.csv" -> "participants.csv";
+    "isolates.csv" -> "participants.csv";
+    "treatment.csv" -> "participants.csv";
+
+
+    subgraph cluster_FASTAFiles {
+    
+        "seq1.fastsa";
+        "seq2.fasta";
+    }
+
+    "seq2.fasta" -> "isolates.csv" [ltail=cluster_FASTAFiles];
+}

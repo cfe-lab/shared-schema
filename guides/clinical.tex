@@ -1,0 +1,317 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{pbox}
+\usepackage{pmboxdraw}
+
+\author{Nathaniel Knight}
+\date{\today}
+
+\title{SHARED Contributor Guide for Clinical Data}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  This document has information about the format for
+  \textbf{submitting clinical data} to the SHARED collaboration and
+  instructions on how to prepare, check, encrypt, and securely submit
+  your data.
+\end{abstract}
+
+\newpage
+
+\section{Using the data submission tool}
+
+With the \verb|squishd.py| utility you'll be able to 
+
+\begin{itemize}
+\item Check that your data is in the format we're expecting, and
+  highlight any differences.
+\item Encrypt your data with the SHARED project's public key.
+\item Securely transmit it to the the SHARED site in Vancouver to be merged into the database.
+\end{itemize}
+
+The tool isn't ready yet, but we expect to distribute it sometime in June 2017.
+
+
+\section{Data format}
+
+Before data can be submitted to the SHARED merge process it needs to
+be in a standard format: \textbf{CSV files} for participant clinical
+and behavioral data, and \textbf{FASTA files} for sequence data. The
+files it expects are listed in Table \ref{tbl:expectedfiles}, and
+described in detail below. The relationships between files is shown in
+Figure \ref{fig:relationships}. A read-to-check data-prep directory is
+shown in Figure \ref{fig:data-prep-dir}.
+
+The fields (and the data they can contain) in each file are described
+in the tables below.
+
+\begin{description}
+\item[number] A whole or decimal number. E.g: 1, 7.4, -12
+\item[text] A string of characters. If you need to include commas
+  (e.g. in free-form notes) you must enclose the field in
+  double-quotes. If you're using a program like Excel or a
+  CSV-specific software (like \texttt{csv} in the Python standard
+  library) this may be done automatically. E.g: 1a, sufosbuvir, ``The
+  truth, the whole truth, and nothing but the truth.''.
+\item[date] A date in the format YYYY-MM-DD. E.g: 2017-05-17, 1969-07-20, 1980-05-08.
+\end{description}
+
+Some fields can be left blank, indicating that the data is missing or
+unknown (they'll be represented as \texttt{NULL} in the
+database). Fields that are \textbf{required} are marked with a bullet
+(•) in the tables below.
+
+
+\begin{table}
+  \caption{SHARED submission data format}
+  \label{tbl:expectedfiles}
+  \begin{tabular}{rp{8cm}}
+    File Name (case insensitive) & Contents \\ \hline
+    \verb|partcipants.csv| & Participant ID codes and demographic data. \\
+    \verb|behavior.csv| &  Participants' behavioral risk factors. \\
+    \verb|clinical.csv| & Participants' test results and relevant clinical history. \\
+    \verb|ltfu.csv| & Records of loss-to-follow-up. \\
+    \verb|treatment.csv| &  Participants' treatment information. \\
+    \verb|isolates.csv| & Participants' viral isolate data (sequences stored separately). \\
+  \end{tabular}
+\end{table}
+
+\begin{figure}
+  \caption{Relationships between SHARED submission data files}
+  \label{fig:relationships}
+  \includegraphics[width=\textwidth]{tmp/clinical_relationships}
+\end{figure}
+
+The CSV files you provide should have \textbf{headers} containing the
+field name in each column, but the \textbf{order} of the columns
+doesn't matter, and any extra columns will be ignored (so you can add
+notes, references, etc.). You can also \textbf{omit} the columns for
+fields that aren't required if they don't apply to your study. The
+\textbf{case} of the filenames and header names also doesn't matter
+(they will all be converted to lower-case before they're checked and
+loaded).
+
+Sequence data is expected in a \textbf{sub-directory} called
+\texttt{sequences}, with file-names in the \texttt{isolates.csv}
+file. The names in the examples are just examples; you can use
+whatever naming convention is easiest for you, as long as the
+filenames in \texttt{isolates.csv} match the files in the
+\texttt{sequences/} directory.
+
+\begin{figure}
+  \caption{Layout of a SHARED submission data directory}
+  \label{fig:data-prep-dir}
+\begin{verbatim}
+ my_data_prep_directory/
+ ├── behavior.csv
+ ├── clinical.csv
+ ├── isolates.csv
+ ├── ltfu.csv
+ ├── partcipants.csv
+ ├── treatment.csv
+ └── sequences/
+     ├── seq1.fasta
+     ├── seq2.fasta
+     etc.
+\end{verbatim}
+\end{figure}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{participants.csv} file's fields}
+  \label{tbl:participants.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name            & Type      & Description & Possible Values\\ \hline
+    • & key             & text    &
+      The \textbf{anonymous ID} used for the participant in this
+      merge. It will be referred to in other CSV files to associate
+      other kinds of data to this participant. The exact format of
+      this field isn't particularly important as long as the keys in
+      the other files \textbf{match}; use whatever works best for you
+      (numbers, UUIDs, etc.). Note that keys are compared as
+      \textbf{text}, so $"01" \neq "1"$ and $"1" \neq "1.0"$. 
+      \\
+    • & date\_entered   & date      & The date the participant entered the study. \\
+      & country         & text    & The country where the person participated in the study. \\
+      & city            & text    & The city where the participant participated in the study. \\
+      & sex             & text    & The participant's sex at birth.  & male, female, other \\
+      & year\_of\_birth & integer   & The participant's year of birth. \\
+      & ethnicity       & text    & The participant's ethnicity. & black, caucasian, latino, native-american, east-asian, south-asian, southeast-asian \\
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{behavior.csv} file's fields}
+  \label{tbl:behavior.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name        & Type          & Description & Possible Values\\ \hline
+    • & person      & text        &
+    The key to a person in the \texttt{participants.csv}
+    file. \texttt{squishd.py} will check that all the participants in
+    this file are present in the participants file. \\
+      & date\_collected & date      & The date this data was collected. \\
+      & sex\_ori        & text    & The participant's sexual orientation & heterosexual, homosexual, bisexual, other \\
+      & idu             & bool      & Has the participant ever used injection drugs? \\
+      & ndu             & bool      & Has the participant ever used non-injection drugs? \\
+      & idu\_recent     & bool      & Has the participant used injection drugs in the past 6 months? \\
+      & ndu\_recent     & bool      & Has the participant used non-injection drugs in the past 6 months? \\    
+      & prison          & bool      & Has the participant ever been to prison? \\
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{clinical.csv} file's fields}
+  \label{tbl:clinical.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name        & Type      & Description & Possible Values\\ \hline
+    • & person      & text    & The key to a person in the \texttt{participants.csv}
+    file. \texttt{squishd.py} will check that all of the participants in this file
+    are present in the participants file. \\
+      & hiv         & bool      & Is the participant co-infected with HIV? &  \\
+      & ost         & bool      & Has the participant undergone opioid substitution therapy in the last six months? &  \\
+      & chir        & bool      & Does the participant have cirrhosis? & \\
+      & alt         & number    & Alanine aminotransferase level (in U/L). & \\
+      & ast         & number    & Aspartate aminotransferase level (in U/L). & \\
+      & crt         & number    & Creatinine level (in $\mu$M/L). & \\
+      & egfr        & number    & Estimated glomerular filtration rate (in mL/minBSAc). & \\
+      & prev\_tx    & text    & Prior treatments for HCV (include all that apply). & interferon, daa1, daa2 \\
+      & ctp         & number    & Child-Turcotte-Pugh score. & \\
+      & meld        & number    & MELD score. & \\
+      & ishak       & number    & Ishak score. & \\
+      & metavir     & text    & Metavir score. & \\
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{ltfu.csv} file's fields}
+  \label{tbl:ltfu.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name            & Type      & Description & Possible Values \\ \hline
+    • & person          & text    & The key to a person in the \texttt{participants.csv}
+    file. \texttt{squishd.py} will check that all of the participants in this file
+    are present in the participants file. & \\
+      & ltfu\_dt        & date      & The date the participant was lost to follow up. & \\
+      & ltfu\_reason    & text    & The reason the participant was lost to follow up (if applicable). & \\
+      & died            & bool      & Is the participant deceased? & \\
+      & cod             & text    & Cause of death (if applicable). & See Appendix \ref{apx:cod}.\\
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{treatment.csv} file's fields}
+  \label{tbl:treatment.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name                & Type      & Description   & Possible Values\\ \hline
+    • & person              & text    & The key to a person in the \texttt{participants.csv}
+    file. \texttt{squishd.py} will check that all of the participants in this file
+    are present in the participants file. & \\
+      & first\_treatment    & bool      & I this the participant's first treatment? & \\
+      & start\_dt           & date      & The treatment start date & \\
+      & end\_dt\_sch        & date      & Scheduled treatment end date & \\
+      & end\_dt\_act        & date      & Actual treatment end date (if different from scheduled). \\
+      & end\_dt\_bound      & text    &
+    Uncertainty on end\_dt\_bound (default is $=$). & $=, <, >$ \\
+      & int                 & bool      & Has the participant been treated with pegylated interferon drugs before? & \\
+      & daa1                & bool      & Has the participant been treated with first-line direct-acting antiviral drugs before? & \\
+      & daa2                & bool      & Has the participant been treated with second-line direct-acting antiviral drugs before? & \\
+      & regimen             & text    & What drug regimen was the participant taking? If taken in combination, list multiple regimens separated by spaces. & See Appendix \ref{apx:drug-regimens} \\
+      & eot                 & bool      & End-of-treatment response: did the participant have no detectable viral load at end of treatment? & \\
+      & svr                 & bool      & Sustained virologic response: did the participant have no detectable viral load 12 weeks after completing treatment? & \\
+      & notes               & text    & Additional notes (if required). & \\
+  \end{tabular}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \caption{The \texttt{isolates.csv} file's fields}
+  \label{tbl:isolates.csv}
+  \begin{tabular}{cllp{6cm}p{4cm}}
+    R & Name        & Type      & Description & Possible Values\\ \hline
+    • & person      & text    & The key to a person in the
+    \texttt{participants.csv} file, indicating who this isolate came
+    from. \texttt{squishd.py} will check that all of the participants
+    in this file are present in the participants file. & \\
+    
+    • & seq\_file   & text    & The name of a FASTA file in the
+    \texttt{sequences} folder containing the sequence data for this viral isolate. & \\ 
+      & genotype    & text    & The genotype of this viral isolate. &
+    1, 2, 3, 4, 5, 6, mixed, indeterminate, recombinant \\
+      & subgenotype & text    & The sub-genotype of this viral isolate. & \\
+      & strain      & text    & The strain of this viral isolate. & \\
+      & isln\_dt    & date      & The date this virus was isolated. & \\
+    
+  \end{tabular}
+\end{table}
+
+
+\section{Going deeper}
+
+This guide describes the simplest way to load data into SHARED, but
+the database can store more detailed information. It can also change
+in future to accommodate useful data that we haven't foreseen. More
+detailed data formats are described below. For more detailed schema
+information or to request additions to the schema, contact Project
+Coordinator Anita Howe (\texttt{ahowe@cfenet.ubc.ca}) or Software
+Developer Nat Knight (\texttt{nknight@cfenet.ubc.ca}).
+
+
+\newpage
+\appendix
+
+\section{Detailed drug regimen information}
+\label{apx:drug-regimens}
+
+Incomplete.
+
+We're currently getting this information from the virology experts to
+the publishing person. Updates will be forthcoming! Because different
+regimens are approved in different jurisdictions, we expect to have to
+update this table fairly frequently as we merge our first few
+datasets.
+
+
+\section{Cause of Death codes}
+\label{apx:cod}
+
+\begin{table}[h]
+  \centering
+  \caption{Cause of Death Codes}
+  \label{tbl:cod}
+  \begin{tabular}{lc}
+    Cause                           & Code  \\ \hline
+    Acute HCV                       & \texttt{hcv}   \\
+    Acute HIV                       & \texttt{hiv}   \\
+    Liver-disease, no-alcohol       & \texttt{liv}   \\
+    Liver-disease, alcohol          & liv-\texttt{a} \\
+    Liver-cancer                    & liv-\texttt{c} \\
+    Cancer, other than liver cancer & \texttt{canc}  \\
+    Circulatory                     & \texttt{circ}  \\
+    Respiratory                     & \texttt{resp}  \\
+    Diabetes                        & \texttt{diab}  \\
+    Injuries/trauma                 & \texttt{injr}  \\
+    Digestive(extrahipatic)         & \texttt{dgst}  \\
+    Other                           & \texttt{other} \\
+  \end{tabular}
+\end{table}
+
+
+\end{document}
+%% TODO(nknight): references
+% - https://academic.oup.com/cid/article/58/8/1055/357542/Mortality-Among-Persons-in-Care-With-Hepatitis-C
+% - Jason's sheet
+% etc.
