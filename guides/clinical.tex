@@ -61,10 +61,14 @@ in the tables below.
 \item[date] A date in the format YYYY-MM-DD. E.g: 2017-05-17, 1969-07-20, 1980-05-08.
 \end{description}
 
-Some fields can be left blank, indicating that the data is missing or
-unknown (they'll be represented as \texttt{NULL} in the
-database). Fields that are \textbf{required} are marked with a bullet
-(•) in the tables below.
+Fields that are \textbf{required} are marked with a bullet (•) in the
+tables below.  Many fields can be left blank out, indicating that the
+data wasn't collected or is unknown (they'll be represented as
+\texttt{NULL} in the database).
+
+The clinical data file in particular has many fields; we don't expect
+that anyone will use them all. If you don't collect a particular kind
+of data, you should ommit the column.
 
 
 \begin{table}
@@ -128,7 +132,7 @@ filenames in \texttt{isolates.csv} match the files in the
   \label{tbl:participants.csv}
   \begin{tabular}{cllp{6cm}p{4cm}}
     R & Name            & Type      & Description & Possible Values\\ \hline
-    • & key             & text    &
+    • & person          & text    &
       The \textbf{anonymous ID} used for the participant in this
       merge. It will be referred to in other CSV files to associate
       other kinds of data to this participant. The exact format of
@@ -137,12 +141,11 @@ filenames in \texttt{isolates.csv} match the files in the
       (numbers, UUIDs, etc.). Note that keys are compared as
       \textbf{text}, so $"01" \neq "1"$ and $"1" \neq "1.0"$. 
       \\
-    • & date\_entered   & date      & The date the participant entered the study. \\
       & country         & text    & The country where the person participated in the study. \\
       & city            & text    & The city where the participant participated in the study. \\
       & sex             & text    & The participant's sex at birth.  & male, female, other \\
       & year\_of\_birth & integer   & The participant's year of birth. \\
-      & ethnicity       & text    & The participant's ethnicity. & black, caucasian, latino, native-american, east-asian, south-asian, southeast-asian \\
+      & ethnicity       & text    & The participant's ethnicity. & am-nat, asian, black, hisp, pa-isl, white \\
   \end{tabular}
 \end{table}
 
@@ -174,21 +177,37 @@ filenames in \texttt{isolates.csv} match the files in the
   \label{tbl:clinical.csv}
   \begin{tabular}{cllp{6cm}p{4cm}}
     R & Name        & Type      & Description & Possible Values\\ \hline
-    • & person      & text    & The key to a person in the \texttt{participants.csv}
+  • & person      & text    & The key to a person in the \texttt{participants.csv}
     file. \texttt{squishd.py} will check that all of the participants in this file
     are present in the participants file. \\
-      & hiv         & bool      & Is the participant co-infected with HIV? &  \\
-      & ost         & bool      & Has the participant undergone opioid substitution therapy in the last six months? &  \\
-      & chir        & bool      & Does the participant have cirrhosis? & \\
-      & alt         & number    & Alanine aminotransferase level (in U/L). & \\
-      & ast         & number    & Aspartate aminotransferase level (in U/L). & \\
-      & crt         & number    & Creatinine level (in $\mu$M/L). & \\
-      & egfr        & number    & Estimated glomerular filtration rate (in mL/minBSAc). & \\
-      & prev\_tx    & text    & Prior treatments for HCV (include all that apply). & interferon, daa1, daa2 \\
-      & ctp         & number    & Child-Turcotte-Pugh score. & \\
-      & meld        & number    & MELD score. & \\
-      & ishak       & number    & Ishak score. & \\
-      & metavir     & text    & Metavir score. & \\
+    & hiv           & bool      & Is the participant co-infected with HIV? & \\
+    & hbv           & bool      & Is the participant co-infected with HBV? & \\
+    & ost           & bool      & Has the participant undergone opioid substitution therapy in the last six months? &  \\
+    & chir          & bool      & Does the participant have cirrhosis? & \\
+    & metavir       & text      & Metavir score. & A0, A1, A2, A3, F0, F1, F2, F3, F4 \\
+    & metavir\_by   & text      & Method used to determine metavir score. & Fibroscan, Biopsy, Clinical, Other \\
+    & stiff         & number    & Liver stiffness (in kPa). & \\
+    & alt           & number    & Alanine aminotransferase level (in U/L). & \\
+    & ast           & number    & Aspartate aminotransferase level (in U/L). & \\
+    & crt           & number    & Creatinine level (in $\mu$M/L). & \\
+    & egfr          & number    & Estimated glomerular filtration rate (in mL/minBSAc). & \\
+    & ctp           & number    & Child-Turcotte-Pugh score. & \\
+    & meld          & number    & MELD score. & \\
+    & ishak         & number    & Ishak score. & \\
+    & bil           & number    & Bilirubin test result, in mg/dL. & \\
+    & hemo          & number    & Hemoglobin test result, in g/dL. & \\
+    & alb           & number    & Albumin test result, in g/dL. & \\
+    & inr           & number    & International Normalized Ratio test result. & \\
+    & phos          & number    & Phosphate test result, in mg/dL. & \\
+    & urea          & number    & Urea test result, in ng/dL. & \\
+    & plate         & number    & Platelet count, in cells/mm$^3$. & \\
+    & CD4           & number    & CD4 count, in cells/mm$^3$. & \\
+    & crp           & number    & C-Reactive Protein test result, in mg/L. & \\
+    & il28b         & string    & The participant's IL28B-rs12979860 genotype. & TT, TC, CC \\
+    & asc           & bool      & Did the participant have ascites before or during treatment? & \\
+    & var\_bleed    & bool      & Did the participant have variceal bleeding before or during treatment? & \\
+    & hep\_car      & bool      & Did the participant have hepatocellular carcinoma before or during treatment? & \\
+    & transpl       & bool      & Has the participant had a liver transplant? & \\
   \end{tabular}
 \end{table}
 
@@ -199,11 +218,11 @@ filenames in \texttt{isolates.csv} match the files in the
   \label{tbl:ltfu.csv}
   \begin{tabular}{cllp{6cm}p{4cm}}
     R & Name            & Type      & Description & Possible Values \\ \hline
-    • & person          & text    & The key to a person in the \texttt{participants.csv}
+    • & person          & text      & The key to a person in the \texttt{participants.csv}
     file. \texttt{squishd.py} will check that all of the participants in this file
     are present in the participants file. & \\
       & ltfu\_dt        & date      & The date the participant was lost to follow up. & \\
-      & ltfu\_reason    & text    & The reason the participant was lost to follow up (if applicable). & \\
+      & ltfu\_reason    & text      & The reason the participant was lost to follow up (if applicable). & \\
       & died            & bool      & Is the participant deceased? & \\
       & cod             & text    & Cause of death (if applicable). & See Appendix \ref{apx:cod}.\\
   \end{tabular}
@@ -219,18 +238,19 @@ filenames in \texttt{isolates.csv} match the files in the
     • & person              & text    & The key to a person in the \texttt{participants.csv}
     file. \texttt{squishd.py} will check that all of the participants in this file
     are present in the participants file. & \\
-      & first\_treatment    & bool      & I this the participant's first treatment? & \\
+      & first\_treatment    & bool      & Is this the participant's first treatment? & \\
       & start\_dt           & date      & The treatment start date & \\
       & end\_dt\_sch        & date      & Scheduled treatment end date & \\
       & end\_dt\_act        & date      & Actual treatment end date (if different from scheduled). \\
       & end\_dt\_bound      & text    &
     Uncertainty on end\_dt\_bound (default is $=$). & $=, <, >$ \\
-      & int                 & bool      & Has the participant been treated with pegylated interferon drugs before? & \\
+      & pr                  & bool      & Has the participant been treated with pegylated interferon with or without ribavirin before? & \\
       & daa1                & bool      & Has the participant been treated with first-line direct-acting antiviral drugs before? & \\
       & daa2                & bool      & Has the participant been treated with second-line direct-acting antiviral drugs before? & \\
-      & regimen             & text    & What drug regimen was the participant taking? If taken in combination, list multiple regimens separated by spaces. & See Appendix \ref{apx:drug-regimens} \\
-      & eot                 & bool      & End-of-treatment response: did the participant have no detectable viral load at end of treatment? & \\
-      & svr                 & bool      & Sustained virologic response: did the participant have no detectable viral load 12 weeks after completing treatment? & \\
+      & regimen             & text      & What drug regimen was the participant taking? & See Appendix \ref{apx:drug-regimens} \\
+      & prev\_regimen       & text      & If the participant has been treated before, what treatment regimen were they take previously?  & See appendix \ref{apx:drug-regimens}. \\
+      & pprev\_regimen      & text      & If the participant has had two previous treatments, what regimen were they taking before-last? & \ref{apx:drug-regimens}. \\
+      & response            & text      & How did the participant respond to treatment? & See Appendix \ref{apx:response} \\
       & notes               & text    & Additional notes (if required). & \\
   \end{tabular}
 \end{table}
@@ -246,14 +266,16 @@ filenames in \texttt{isolates.csv} match the files in the
     \texttt{participants.csv} file, indicating who this isolate came
     from. \texttt{squishd.py} will check that all of the participants
     in this file are present in the participants file. & \\
-    
     • & seq\_file   & text    & The name of a FASTA file in the
-    \texttt{sequences} folder containing the sequence data for this viral isolate. & \\ 
-      & genotype    & text    & The genotype of this viral isolate. &
+    \texttt{sequences} folder containing the concensus sequence data for this viral isolate. & \\ 
+    • & method      & text    & The sequencing method used. & sanger, ngs \\
+    • & cutoff      & number  & The cutoff value used to create the concensus sequence, as a percentage. & \\
+    • & kind        & text    & Whether the sequence is from a baseline sample, an end-of-treatment sample, or a follow-up sample 4, 12, or 24 weeks after treatment. & bl, eot, fw4, fw12, fw24 \\
+    & genotype    & text    & The genotype of this viral isolate. &
     1, 2, 3, 4, 5, 6, mixed, indeterminate, recombinant \\
-      & subgenotype & text    & The sub-genotype of this viral isolate. & \\
-      & strain      & text    & The strain of this viral isolate. & \\
-      & isln\_dt    & date      & The date this virus was isolated. & \\
+    & subgenotype & text    & The sub-genotype of this viral isolate. & \\
+    & strain      & text    & The strain of this viral isolate. & \\
+    & isln\_dt    & date      & The date this virus was isolated. & \\
     
   \end{tabular}
 \end{table}
@@ -287,27 +309,12 @@ datasets.
 
 \section{Cause of Death codes}
 \label{apx:cod}
+\input{guides/cod_table}
 
-\begin{table}[h]
-  \centering
-  \caption{Cause of Death Codes}
-  \label{tbl:cod}
-  \begin{tabular}{lc}
-    Cause                           & Code  \\ \hline
-    Acute HCV                       & \texttt{hcv}   \\
-    Acute HIV                       & \texttt{hiv}   \\
-    Liver-disease, no-alcohol       & \texttt{liv}   \\
-    Liver-disease, alcohol          & liv-\texttt{a} \\
-    Liver-cancer                    & liv-\texttt{c} \\
-    Cancer, other than liver cancer & \texttt{canc}  \\
-    Circulatory                     & \texttt{circ}  \\
-    Respiratory                     & \texttt{resp}  \\
-    Diabetes                        & \texttt{diab}  \\
-    Injuries/trauma                 & \texttt{injr}  \\
-    Digestive(extrahipatic)         & \texttt{dgst}  \\
-    Other                           & \texttt{other} \\
-  \end{tabular}
-\end{table}
+
+\section{Treatment Response Codes}
+\label{apx:response}
+\input{guides/response_table}
 
 
 \end{document}
