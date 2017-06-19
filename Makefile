@@ -1,6 +1,8 @@
 SCRIPTS=$(shell find . -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
+TEX_TABLES=$(shell find guides/ -name '*_table.tex')
+
 all: docs/schema.svg docs/index.html static docs/schema.csv $(GUIDES) docs/schema.pdf docs/shared_clinical_guide.pdf
 
 clean:
@@ -27,7 +29,7 @@ docs/index.html: $(SCRIPTS)
 
 
 # Contributor/Analyst Guides
-docs/shared_clinical_guide.pdf: guides/clinical.tex tmp/clinical_relationships.png
+docs/shared_clinical_guide.pdf: guides/clinical.tex $(TEX_TABLES) tmp/clinical_relationships.png
 	pdflatex -output-directory tmp guides/clinical.tex
 	pdflatex -output-directory tmp guides/clinical.tex
 	cp tmp/clinical.pdf docs/shared_clinical_guide.pdf

@@ -3,6 +3,8 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{pmboxdraw}
+\usepackage[titletoc,title]{appendix}
+\usepackage{placeins}
 
 \author{Nathaniel Knight}
 \date{\today}
@@ -70,7 +72,7 @@ that anyone will use them all. If you don't collect a particular kind
 of data, you should ommit the column.
 
 
-\begin{table}
+\begin{table}[h!]
   \caption{SHARED submission data format}
   \label{tbl:expectedfiles}
   \begin{tabular}{rp{8cm}}
@@ -125,7 +127,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{figure}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{participants.csv} file's fields}
   \label{tbl:participants.csv}
@@ -149,7 +151,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{behavior.csv} file's fields}
   \label{tbl:behavior.csv}
@@ -170,7 +172,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{clinical.csv} file's fields}
   \label{tbl:clinical.csv}
@@ -211,7 +213,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{ltfu.csv} file's fields}
   \label{tbl:ltfu.csv}
@@ -228,7 +230,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{treatment.csv} file's fields}
   \label{tbl:treatment.csv}
@@ -255,7 +257,7 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{The \texttt{isolates.csv} file's fields}
   \label{tbl:isolates.csv}
@@ -291,9 +293,10 @@ Coordinator Anita Howe (\texttt{ahowe@cfenet.ubc.ca}) or Software
 Developer Nat Knight (\texttt{nknight@cfenet.ubc.ca}).
 
 
-\newpage
-\appendix
+\FloatBarrier
+\begin{appendices}
 
+\newpage
 \section{Detailed drug regimen information}
 \label{apx:drug-regimens}
 
@@ -306,14 +309,18 @@ update this table fairly frequently as we merge our first few
 datasets.
 
 
+\newpage
 \section{Cause of Death codes}
 \label{apx:cod}
 \input{guides/cod_table}
 
 
+\newpage
 \section{Treatment Response Codes}
 \label{apx:response}
 \input{guides/response_table}
+
+\end{appendices}
 
 
 \end{document}
