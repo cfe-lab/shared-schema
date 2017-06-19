@@ -68,6 +68,7 @@ tex_tmpl = string.Template('''%
 \\usepackage[margin=1in]{geometry}
 \\usepackage{graphicx}
 \\usepackage{lscape}
+\\usepackage[T1]{fontenc}
 
 \\author{SHARED Collaboration}
 \\date{\\today}
