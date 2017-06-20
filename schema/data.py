@@ -136,15 +136,21 @@ schema_data = Schema([
         "Person",
         "A study participant",
         [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
-         field("date_entered", "date", "Date the participant entered the study"),
+         field(
+             "study_id",
+             "foreign key (SourceStudy)",
+             "The study the participant entered the database with",
+         ),
          field("country", "string", "The country where the person participated in the study"),
          field("city", "string", "The city where the person participated in the study"),
          field("year_of_birth", "date", "Participant's year of birth"),
          field("sex", "enum(male, female, other)", "The participant's sex at birth"),
          field("ethnicity",
-               "enum(black, caucasian, latino, native-american, "
-               "east-asian, south-asian, southeast-asian)",
-               "The participant's ethnicity"),
+               "enum(am-nat, asian, black, hisp, pa-isl, white)",
+               ("The participant's ethnicity: American Native, Asian, "
+                "Black/African American, Hispanic/Latino, Pacific Islander, "
+                "or White")
+         ),
         ],
         tags={'clinical'},
     ),
@@ -158,12 +164,6 @@ schema_data = Schema([
              "foreign key (Person)",
              "The participant this data pertains to",
              tags={'required'},
-         ),
-         field(
-             "study_id",
-             "foreign key (SourceStudy)",
-             "The study or trial that includes this information",
-             tags={'required', 'managed'},
          ),
          field("date_collected", "date", "The date this data was collected"),
          field("sexual_orientation", "enum (heterosexual, homosexual, bisexual, other)",
@@ -222,12 +222,6 @@ schema_data = Schema([
              "foreign key (Person)",
              "The participant that this data pertains to",
              tags={'required'},
-         ),
-         field(
-             "study_id",
-             "foreign key (SourceStudy)",
-             "The study or trial this data comes from",
-             tags={'managed', 'required'},
          ),
          field("first_treatment", "bool", "Is this the participant's first treatment "),
          field("start_dt", "date", "Schedule treatment start date"),
@@ -293,19 +287,18 @@ schema_data = Schema([
         "TreatmentOutcome",
         "Outcome of a participant's treatment",
         [field(
-             "treatment_id",
-             "foreign key (TreatmentData)",
-             "The treatment whose outcome is being described",
+            "treatment_id",
+            "foreign key (TreatmentData)",
+            "The treatment whose outcome is being described",
             tags={'required', 'managed'},
         ),
          field(
-             "svr",
-             "bool",
-             "Sustained Viral Response (undetectable viral load at 12 weeks)"),
-         field(
-             "etr",
-             "bool",
-             "End-of-Treatment Response (undetectable viral load at end-of-treatment)"),
+             "viral_response",
+             "enum(svr, nr, eot, bt, rl, ri)",
+             ("Viral response: sustained, non-responsive, detectable viral "
+              "load at end-of-treatment, viral-breakthrough during treatment,"
+              "eventual relapse, eventual reinfection).")
+         ),
          field("notes", "string", "Additional notes (if applicable)"),
         ],
         tags={'clinical'},
@@ -320,12 +313,6 @@ schema_data = Schema([
             "",
             tags={'required'},
         ),
-         field(
-             "study_id",
-             "foreign key (SourceStudy)",
-             "The study or trial this data comes from",
-             tags={'managed', 'required'},
-         ),
          field("ltfu_dt", "date", "Date the participant was lost to follow-up"),
          field(
              "ltfu_reason",
@@ -412,12 +399,6 @@ schema_data = Schema([
              "foreign key (Person)",
              "The participant who gave the isolate",
              tags={'required'}
-         ),
-         field(
-             "study_id",
-             "foreign key (SourceStudy)",
-             "The study that provided this isolate",
-             tags={'managed', 'required'},
          ),
          field("isolation_date", "date", "Date the virus was isolated"),
         ],
