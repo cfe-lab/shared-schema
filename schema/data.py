@@ -314,12 +314,12 @@ schema_data = Schema([
             tags={'required'},
         ),
          field("ltfu_dt", "date", "Date the participant was lost to follow-up"),
-         field(
-             "ltfu_reason",
-             "string",
-             "Reason the participant was lost to follow-up (if applicable)"),
          field("died", "bool", "Is the participant deceased?"),
-         field("cod", "string", "Cause of death (e.g. ICD-10 code)"),
+         field(
+             "cod",
+             "enum(liv, aid, odo, can, cir, res, dia, gen, tra, cer, dig, oth)",
+             "Cause of death (if applicable)"
+         ),
         ],
         tags={'clinical'},
     ),
