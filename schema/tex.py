@@ -28,7 +28,7 @@ field_tmpl = string.Template('''
 
 def render_field(field):
     escaped_desc = escape_description(field.description)
-    if escaped_desc:
+    if escaped_desc and (escaped_desc[-1] not in "?.!"):
         escaped_desc = escaped_desc + '.'
     return field_tmpl.substitute(
         name=field.name,
