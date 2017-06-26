@@ -264,7 +264,7 @@ schema_data = Schema([
     ),
 
     Entity.make(
-        "TreatmentMedicationData",
+        "Regimen",
         "How much and what kind of medications were included in a treatment regimen",
         [field(
             "treatment_id",
@@ -298,7 +298,7 @@ schema_data = Schema([
     ),
 
     Entity.make(
-        "DeathAndLastFollowup",
+        "LossToFollowUp",
         "Records data about participants leaving the study",
         [field(
             "person_id",
