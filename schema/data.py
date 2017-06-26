@@ -143,7 +143,6 @@ schema_data = Schema([
          ),
          field("country", "string", "The country where the person participated in the study"),
          field("city", "string", "The city where the person participated in the study"),
-         field("year_of_birth", "date", "Participant's year of birth"),
          field("sex", "enum(male, female, other)", "The participant's sex at birth"),
          field("ethnicity",
                "enum(am-nat, asian, black, hisp, pa-isl, white)",
@@ -151,6 +150,7 @@ schema_data = Schema([
                 "Black/African American, Hispanic/Latino, Pacific Islander, "
                 "or White")
          ),
+         field("year_of_birth", "date", "Participant's year of birth"),
         ],
         tags={'clinical'},
     ),
@@ -166,7 +166,7 @@ schema_data = Schema([
              tags={'required'},
          ),
          field("date_collected", "date", "The date this data was collected"),
-         field("sexual_orientation", "enum (heterosexual, homosexual, bisexual, other)",
+         field("sex_ori", "enum (heterosexual, homosexual, bisexual, other)",
                "Participant's sexual orientation"),
          field("idu", "bool", "Injection drug use? (ever)"),
          field("ndu", "bool", "Non-injection drug use? (ever)"),
@@ -237,18 +237,6 @@ schema_data = Schema([
          field("end_dt_act", "date", "Actual treatment end date"),
          field("end_dt_bound", "enum(<, >, =)", "Uncertainty on `end_dt_act`"),
          field(
-             "int",
-             "bool",
-             ("Has the participant ever been treated with pegylated interferon "
-              "drugs before?")),
-         field(
-             "response",
-             "enum(svr, nr, eot, bt, rl, ri)",
-             ("Viral response: sustained, non-responsive, detectable viral "
-              "load at end-of-treatment, viral-breakthrough during treatment,"
-              "eventual relapse, eventual reinfection)")
-         ),
-         field(
              "regimen",
              "foreign key (Regimen)",
              "The drug regimen taken by the participant",
@@ -265,6 +253,13 @@ schema_data = Schema([
              "foreign key (Regimen)",
              ("If the participant has been treated before, what regimen were "
               "they on before-last?"),
+         ),
+         field(
+             "response",
+             "enum(svr, nr, eot, bt, rl, ri)",
+             ("Viral response: sustained, non-responsive, detectable viral "
+              "load at end-of-treatment, viral-breakthrough during treatment,"
+              "eventual relapse, eventual reinfection)")
          ),
          field("notes", "string", "Additional notes (if applicable)"),
         ],
@@ -345,6 +340,16 @@ schema_data = Schema([
          ),
          field("subgenotype", "string", "The isolate's sub-genotype"),
          field("strain", "string", "The isolate's strain (if applicable/known)"),
+         field(
+             "method",
+             "enum(sanger, ngs)",
+             "The sequencing method used on this isolate",
+         ),
+         field(
+             "cutoff",
+             "float",
+             "The cutoff-percentage used to generate a consensus sequence",
+         ),
         ]),
 
     Entity.make(
@@ -395,7 +400,14 @@ schema_data = Schema([
              "The participant who gave the isolate",
              tags={'required'}
          ),
-         field("isolation_date", "date", "Date the virus was isolated"),
+         field("isln_dt", "date", "Date the virus was isolated"),
+         field(
+             "kind",
+             "enum(bl, eot, fw4, fw12, fw23)",
+             ("Whether this isolate is from  a baseline sample, an end-of-"
+              "treatment-sample, or a follow up sample 4, 12, or 24 weeks "
+              "after end-of-treatment."),
+         ),
         ],
         tags={'clinical'},
     ),

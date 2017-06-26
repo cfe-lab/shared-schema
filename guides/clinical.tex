@@ -145,8 +145,8 @@ filenames in \texttt{isolates.csv} match the files in the
       & country         & text    & The country where the person participated in the study. \\
       & city            & text    & The city where the participant participated in the study. \\
       & sex             & text    & The participant's sex at birth.  & male, female, other \\
-      & year\_of\_birth & integer   & The participant's year of birth. \\
       & ethnicity       & text    & The participant's ethnicity. & am-nat, asian, black, hisp, pa-isl, white \\
+      & year\_of\_birth & integer   & The participant's year of birth. \\
   \end{tabular}
 \end{table}
 
@@ -265,13 +265,13 @@ filenames in \texttt{isolates.csv} match the files in the
     in this file are present in the participants file. & \\
     • & seq\_file   & text    & The name of a FASTA file in the
     \texttt{sequences} folder containing the concensus sequence data for this viral isolate. & \\ 
-    • & method      & text    & The sequencing method used. & sanger, ngs \\
-    • & cutoff      & number  & The cutoff value used to create the concensus sequence, as a percentage. & \\
-    • & kind        & text    & Whether the sequence is from a baseline sample, an end-of-treatment sample, or a follow-up sample 4, 12, or 24 weeks after treatment. & bl, eot, fw4, fw12, fw24 \\
     & genotype    & text    & The genotype of this viral isolate. &
     1, 2, 3, 4, 5, 6, mixed, indeterminate, recombinant \\
     & subgenotype & text    & The sub-genotype of this viral isolate. & \\
     & strain      & text    & The strain of this viral isolate. & \\
+    • & method      & text    & The sequencing method used. & sanger, ngs \\
+    • & cutoff      & number  & The cutoff value used to create the concensus sequence, as a percentage. & \\
+    • & kind        & text    & Whether the sequence is from a baseline sample, an end-of-treatment sample, or a follow-up sample 4, 12, or 24 weeks after treatment. & bl, eot, fw4, fw12, fw24 \\
     & isln\_dt    & date      & The date this virus was isolated. & \\
     
   \end{tabular}
