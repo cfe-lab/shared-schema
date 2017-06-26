@@ -234,15 +234,31 @@ schema_data = Schema([
              ("Has the participant ever been treated with pegylated interferon "
               "drugs before?")),
          field(
-             "daa1",
-             "bool",
-             ("Has the participant ever been treated with first-line "
-              "direct-acting antiviral drugs before?")),
+             "response",
+             "enum(svr, nr, eot, bt, rl, ri)",
+             ("Viral response: sustained, non-responsive, detectable viral "
+              "load at end-of-treatment, viral-breakthrough during treatment,"
+              "eventual relapse, eventual reinfection)")
+         ),
          field(
-             "daa2",
-             "bool",
-             ("Has the participant ever been treated with second-line "
-              "direct-acting antiviral drugs before?")),
+             "regimen",
+             "foreign key (Regimen)",
+             "The drug regimen taken by the participant",
+             tags={'required'},
+         ),
+         field(
+             "prev_regimen",
+             "foreign key (Regimen)",
+             ("If the participant has been treated before, what is the last "
+              "regimen they were on?"),
+         ),
+         field(
+             "pprev_regimen",
+             "foreign key (Regimen)",
+             ("If the participant has been treated before, what regimen were "
+              "they on before-last?"),
+         ),
+         field("notes", "string", "Additional notes (if applicable)"),
         ],
         tags={'clinical'},
     ),
@@ -277,29 +293,6 @@ schema_data = Schema([
          field("end_dt_bound",
                "enum(<, =, >)",
                "Uncertainty on `end_dt_act`"),
-        ],
-        tags={'clinical'},
-    ),
-
-
-    # TODO(nknight): merge with treatment data?
-    Entity.make(
-        "TreatmentOutcome",
-        "Outcome of a participant's treatment",
-        [field(
-            "treatment_id",
-            "foreign key (TreatmentData)",
-            "The treatment whose outcome is being described",
-            tags={'required', 'managed'},
-        ),
-         field(
-             "viral_response",
-             "enum(svr, nr, eot, bt, rl, ri)",
-             ("Viral response: sustained, non-responsive, detectable viral "
-              "load at end-of-treatment, viral-breakthrough during treatment,"
-              "eventual relapse, eventual reinfection).")
-         ),
-         field("notes", "string", "Additional notes (if applicable)"),
         ],
         tags={'clinical'},
     ),
