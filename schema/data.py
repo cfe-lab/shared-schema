@@ -503,9 +503,10 @@ schema_data = Schema([
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
          field(
-             "method_id",
-             "foreign key (SusceptibilityMethod)",
-             "Method used to measure susceptibility"),
+             "method",
+             "enum(luciferase, qpcr, bdna, beta-gal)",
+             "Method used to measure susceptibility",
+         ),
          field("medication_id", "foreign key (Medication)", "The medication being tested"),
          field("result", "float", "Concentration of medication required for inhibition (in nM)"),
          field("result_bound", "enum (<, =, >)", ""),
@@ -514,17 +515,6 @@ schema_data = Schema([
          field("fold_bound", "enum (<, =, >)", "Represents uncertainty in the fold-change measurement"),
         ],
         tags={'phenotypic'},
-    ),
-
-    Entity.make(
-        "SusceptibilityMethod",
-        "Susceptibility testing methods",
-        [field("id", "uuid", "Unique id", tags={'managed'}),
-         field("name", "string", "Name of the method"),
-         field("reference_id", "foreign key (Reference)", "Reference describing the method"),
-         field("notes", "string", "Free-text notes about the testing method"),
-        ],
-        tags={'phenotypic', 'managed'},
     ),
 
     Entity.make(
