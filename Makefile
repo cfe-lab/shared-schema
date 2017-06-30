@@ -5,7 +5,7 @@ STATIC_FILES=$(shell find static -type f)
 
 TEX_TABLES=$(shell find guides/ -name '*_table.tex')
 
-all: docs/schema.svg docs/index.html static docs/schema.csv $(GUIDES) docs/schema.pdf docs/shared_clinical_guide.pdf
+all: docs/schema.svg docs/index.html docs/style.css docs/schema.csv $(GUIDES) docs/schema.pdf docs/shared_clinical_guide.pdf
 
 clean:
 	find docs/ -mindepth 1 -delete
@@ -23,8 +23,8 @@ docs/schema.svg: schema/dot.py schema/data.py
 docs/schema.csv: $(SCRIPTS)
 	python3 -m schema csv > docs/schema.csv
 
-static: $(STATIC_FILES)
-	cp static/* docs/
+docs/style.css: static/style.css
+	cp static/style.css docs/
 
 docs/index.html: $(SCRIPTS) $(TEMPLATES)
 	python3 -m schema index > docs/index.html
