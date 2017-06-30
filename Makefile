@@ -1,4 +1,5 @@
 SCRIPTS=$(shell find . -name '*.py')
+TEMPLATES=$(shell find . -name '*.mustache')
 TESTS=$(shell find test -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
@@ -25,7 +26,7 @@ docs/schema.csv: $(SCRIPTS)
 static: $(STATIC_FILES)
 	cp static/* docs/
 
-docs/index.html: $(SCRIPTS)
+docs/index.html: $(SCRIPTS) $(TEMPLATES)
 	python3 -m schema index > docs/index.html
 
 
@@ -45,7 +46,7 @@ docs/schema.pdf: tmp/schema.tex
 	pdflatex -output-directory tmp tmp/schema.tex
 	cp tmp/schema.pdf docs/schema.pdf
 
-tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png  # limit to tex and data bc. slow
+tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png $(TEMPLATES)
 	python -m schema tex > tmp/schema.tex
 
 tmp/schema.png: docs/schema.svg
