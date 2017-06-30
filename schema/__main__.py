@@ -4,7 +4,7 @@ import schema
 import schema.csv as csv
 import schema.dot as dot
 import schema.data as data
-import schema.index as index
+import schema.html as html
 import schema.tex as tex
 
 
@@ -18,8 +18,8 @@ def generate():
 
     if cmd == 'dot':
         do_make(dot.make, data.schema_data, "SHARED Schema")
-    elif cmd == 'index':
-        do_make(index.make, data.schema_data, schema.__version__)
+    elif cmd == 'html':
+        do_make(html.make, data.schema_data, schema.__version__)
     elif cmd == 'csv':
         do_make(csv.make, data.schema_data)
     elif cmd == 'tex':
