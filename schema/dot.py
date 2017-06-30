@@ -1,5 +1,6 @@
 '''Convert the schema data into a .dot source file.
 '''
+import schema.templates as templates
 
 def nodecolor(tags):
     if 'managed' in tags:
@@ -37,26 +38,18 @@ def edges(schema_data):
         yield edge(rsp)
 
 
-dot_template = '''digraph "{title}" {{
-subgraph cluster_Legend {{
-  Managed [style="filled", fillcolor="grey"];
-  Clinical [style="filled", fillcolor="lightblue"];
-  Phenotypic [style="filled", fillcolor="green"];
-}}
-
-overlap=false;
-root=Person;
-ratio=compress;
-rankdir=RL;
-{edge_lines}
-{node_lines}
-}}'''
+templates.register(
+    'dot',
+    templates.load_file('dot.mustache'),
+)
 
 def make(schema_data, title="schema"):
     edge_lines = "\n".join(nodes(schema_data))
     node_lines = "\n".join(edges(schema_data))
-    return dot_template.format(
-        title=title,
-        edge_lines=edge_lines,
-        node_lines=node_lines,
+    return templates.render(
+        'dot',
+        { 'title': title,
+          'edge_lines': edge_lines,
+          'node_lines': node_lines,
+        },
     )

@@ -1,0 +1,14 @@
+digraph "{title}" {
+    subgraph cluster_Legend {
+      Managed [style="filled", fillcolor="grey"];
+      Clinical [style="filled", fillcolor="lightblue"];
+      Phenotypic [style="filled", fillcolor="green"];
+    }
+
+    overlap=false;
+    root=Person;
+    ratio=compress;
+    rankdir=RL;
+    {{{edge_lines}}}
+    {{{node_lines}}}
+}
