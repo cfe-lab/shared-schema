@@ -26,7 +26,3 @@ class TestSchema(unittest.TestCase):
             expected_rels,
             "Relationships not as expected",
         )
-
-    
-        
-        
