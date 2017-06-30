@@ -26,6 +26,12 @@ def generate():
         do_make(tex.make, data.schema_data, schema.__version__)
     else:
         print("Unknown command '{}'".format(cmd))
+        print()
+        print("Usage: python -m schema <command>")
+        print("Commands:")
+        for cmd in ["csv", "dot", "html", "tex"]:
+            print(" - {}".format(cmd))
+        print()
         sys.exit(1)
 
 
