@@ -1,4 +1,5 @@
 SCRIPTS=$(shell find . -name '*.py')
+TESTS=$(shell find test -name '*.py')
 STATIC_FILES=$(shell find static -type f)
 
 TEX_TABLES=$(shell find guides/ -name '*_table.tex')
@@ -12,8 +13,8 @@ clean:
 	find . -name '*.log' -delete
 	find tmp/ -mindepth 1 -delete
 
-test:
-	python3 -m unittest
+test: $(SCRIPTS) $(TESTS) FORCE
+	python3 -m unittest -b
 
 docs/schema.svg: schema/dot.py schema/data.py
 	python3 -m schema dot  | unflatten | dot -Tsvg > docs/schema.svg
@@ -49,3 +50,5 @@ tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png  # limit to tex and 
 
 tmp/schema.png: docs/schema.svg
 	convert docs/schema.svg tmp/schema.png
+
+FORCE:
