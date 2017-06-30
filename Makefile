@@ -27,7 +27,7 @@ docs/style.css: static/style.css
 	cp static/style.css docs/
 
 docs/index.html: $(SCRIPTS) $(TEMPLATES)
-	python3 -m schema index > docs/index.html
+	python3 -m schema html > docs/index.html
 
 
 # Contributor/Analyst Guides
