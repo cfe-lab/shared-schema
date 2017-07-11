@@ -1,107 +1,69 @@
+'''Create an HTML representation of the Schema
+'''
+
 import datetime
+import re
 import string
 
 import schema.data as data
-import schema.entity as entity
+import schema.templates as templates
+import schema.util as util
 
 
-html5_tmpl = string.Template('''<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="style.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
-        <title>$title</title>
-    </head>
-    <body>
-        <a name="top"></a>
-        <h1>SHARED Schema</h1>
-        <p>Draft version $version ($date) </p>
-        <h2>Schema</h2>
-        <div id="schema">
-            <embed type="image/svg+xml" src="schema.svg"></embed>
-            <p><a href="schema.svg" target="_blank">bigger</a></p>
-        </div>
-        <h2>Data Dictionary</h2>
-        <p>The fields in each table are described below. The data-types are used are:</p>
+def classes(tags):
+    possible_tags = ['managed', 'required']
+    return ' '.join(filter(lambda t: t in tags, possible_tags))
 
-        <table>
-            <tr>
-                <th>Data Type</th>
-                <th>Description</th>
-            </tr>
 
-            <tr>
-                <td>integer</td>
-                <td>A whole number.</td>
-            </tr>
-            <tr>
-                <td>float</td>
-                <td>A decimal number.</td>
-            </tr>
-            <tr>
-                <td>string</td>
-                <td>A piece of text.</td>
-            </tr>
-            <tr>
-                <td>date</td>
-                <td>A calendar date (YYYY-MM-DD).</td>
-            </tr>
-            <tr>
-                <td>uuid</td>
-                <td>An arbitrary unique identifier (e.g: 'cf66f56d-5bd0-477c-bca9-0fb712cf8753').</td>
-            </tr>
-            <tr>
-                <td>bool</td>
-                <td>True,False, or Null (for unknown).</td>
-            </tr>
-            <tr>
-                <td>enum (...)</td>
-                <td>One of a set of values. For example, enthnicity might be represented by the data-type 'enum(caucasian, latino, asian, black, indigenous-american)'. An '...' indicates that the allowed values are to-be-determined.</td>
-            </tr>
-            <tr>
-                <td>foreign key (tbl_name)</td>
-                <td>Indicates a link to a different table. For example, viral isolate's record might include a 'foreign key (Person)' field to link the isolate to the participant who gave it.</td>
-            </tr>
+def fmt_fk_type(field):
+    target = util.foreign_key_target(field.type)
+    anchor = target.lower()
+    link = '<a href="#{}">{}</a>'.format(anchor, target)
+    return "foreign key ({})".format(link)
 
-            <tr class='required'>
-                <td></td>
-                <td>Required fields are marked by italics</td>
-            </tr>
-            <tr class='managed'>
-                <td></td>
-                <td>Managed fields (that the database or database maintainers will handle) are written in grey</td>
-            </tr>
 
-        </table>
+def field_data(field):
+    if 'foreign key' in field.type:
+        ftype = fmt_fk_type(field)
+    else:
+        ftype = field.type
+    return {
+        'fclass': classes(field.tags),
+        'name': field.name,
+        'type': ftype ,
+        'description': field.description,
+    }
 
-        <hr/>
 
-        $entities
-    </body>
-</html>''')
+def entity_data(entity):
+    fields_data = [field_data(f) for f in entity.fields]
+    return {
+        'anchor_name': entity.name.lower(),
+       'name': entity.name,
+        'description': entity.description,
+        'fields': fields_data,
+    }
+
+
+templates.register(
+    'html',
+    templates.load_file('html.mustache'),
+)
 
 
 def index(title, entities, version):
     date = datetime.datetime.now().strftime("%Y-%m-%d")
-    return html5_tmpl.substitute(
-        title=title,
-        entities=entities,
-        date=date,
-        version=version,
+    entities_data = [entity_data(e) for e in entities]
+    return templates.render(
+        'html',
+        { 'title': title,
+          'entities': entities_data,
+          'date': date,
+          'version': version,
+        }
     )
 
 
-# Create entries
-
-def entity_tables(schema_data):
-    raw_entities = schema_data.entities.values()
-    entities = sorted(raw_entities, key=lambda e: e.name)
-    entries = (entity.entry(e) for e in entities)
-    return "\n".join(entries)
-
-
 def make(schema_data, version, title="SHARED Schema (draft)"):
-    return index(title, entity_tables(schema_data), version)
+    entities = schema_data.raw_entities
+    return index(title, entities, version)
