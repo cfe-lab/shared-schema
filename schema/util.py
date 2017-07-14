@@ -3,5 +3,10 @@ import re
 
 def foreign_key_target(field_type):
     '''What entity does a foreign key target?'''
-    matches = re.findall("\((.+)\)", field_type)
+    matches = re.findall(r"foreign key\s*\((.+)\)", field_type)
     return matches[0]
+
+
+def enum_members(field_type):
+    matches = re.findall(r"enum\s*\((.+)\)", field_type)
+    return (member.strip() for member in matches[0].split(","))
