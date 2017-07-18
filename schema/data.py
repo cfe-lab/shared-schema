@@ -65,8 +65,8 @@ class Schema(object):
     @classmethod
     def type_is_valid(cls, t, entities):
         known_type = t in cls.types
-        fk = "foreign key" in t
-        enum = "enum" in t
+        fk = t.lstrip().startswith("foreign key")
+        enum = t.lstrip().startswith("enum")
         if not (known_type or fk or enum):
             return False
         elif fk:
@@ -235,7 +235,7 @@ schema_data = Schema([
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt_sch", "date", "Scheduled treatment end date"),
          field("end_dt_act", "date", "Actual treatment end date"),
-         field("end_dt_bound", "enum(<, >, =)", "Uncertainty on `end_dt_act`"),
+         field("end_dt_bound", "enum(<, =, >)", "Uncertainty on `end_dt_act`"),
          field(
              "regimen",
              "foreign key (Regimen)",
@@ -341,7 +341,7 @@ schema_data = Schema([
          field("subgenotype", "string", "The isolate's sub-genotype"),
          field("strain", "string", "The isolate's strain (if applicable/known)"),
          field(
-             "method",
+             "seq_method",
              "enum(sanger, ngs)",
              "The sequencing method used on this isolate",
          ),
@@ -402,7 +402,7 @@ schema_data = Schema([
          ),
          field("isln_dt", "date", "Date the virus was isolated"),
          field(
-             "kind",
+             "sample_kind",
              "enum(bl, eot, fw4, fw12, fw23)",
              ("Whether this isolate is from  a baseline sample, an end-of-"
               "treatment-sample, or a follow up sample 4, 12, or 24 weeks "
@@ -426,7 +426,7 @@ schema_data = Schema([
                "string",
                "The parent sequence's subgenotype"),
          field(
-             "kind",
+             "islt_kind",
              "enum(full-virus, full-replicon, stable-subgenomic, transient-subgenomic)",
              ("The kind of isolate created (full synthetic genome, transient subgenomic replicon, "
               "or stable subgenomic cell-line)")),
@@ -503,7 +503,7 @@ schema_data = Schema([
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
          field(
-             "method",
+             "susc_method",
              "enum(luciferase, qpcr, bdna, beta-gal)",
              "Method used to measure susceptibility",
          ),
