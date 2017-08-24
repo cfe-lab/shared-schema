@@ -1,3 +1,11 @@
+%% This document (intended for clinicians) describes the data format
+%% and submission process. With its contents, a contributor should be
+%% able to
+%%
+%%  - Understand the data format being requested
+%%  - Put their data in the desired format
+%%  - Securely submit their data to SHARED
+
 \documentclass{article}
 
 \usepackage{graphicx}
@@ -11,78 +19,137 @@
 
 \title{SHARED Contributor Guide for Clinical Data}
 
+
+
 \begin{document}
 
 \maketitle
 
+
 \begin{abstract}
-  This document has information about the format for
-  \textbf{submitting clinical data} to the SHARED collaboration and
-  instructions on how to prepare, check, encrypt, and securely submit
-  your data.
+  This document has information about \textbf{submitting clinical
+    data} to the SHARED collaboration, including what to submit, how to
+  format your data, and how to send it securely.
 \end{abstract}
 
 \newpage
 
-\section{Using the data submission tool}
+\section{What SHARED Collects}
 
-With the \verb|squishd.py| utility you'll be able to 
+The SHARED database collects the demographic information, treatment
+histories, clinical outcomes, and viral sequences of participants. In
+very simple cases, where there is only \textbf{one record per
+  participant}, these can be submitted as a single spreadsheet (this
+arrangement is called the \textit{flat scheme}). For most cases, where
+there might be \textbf{more than one} treatment record or viral
+sequencing result for each participant, the data should be submitted
+as multiple tables (this is called the \textit{multi-table schem}).
 
-\begin{itemize}
-\item Check that your data is in the format we're expecting, and
-  highlight any differences.
-\item Encrypt your data with the SHARED project's public key.
-\item Securely transmit it to the the SHARED site in Vancouver to be merged into the database.
-\end{itemize}
-
-The tool isn't ready yet, but we expect to distribute it sometime in June 2017.
-
-
-\section{Data format}
-
-Before data can be submitted to the SHARED merge process it needs to
-be in a standard format: \textbf{CSV files} for participant clinical
-and behavioral data, and \textbf{FASTA files} for sequence data. The
-files it expects are listed in Table \ref{tbl:expectedfiles}, and
-described in detail below. The relationships between files is shown in
-Figure \ref{fig:relationships}. A read-to-check data-prep directory is
-shown in Figure \ref{fig:data-prep-dir}.
-
-The fields (and the data they can contain) in each file are described
-in the tables below.
+Each field in the submitted data will be either a number, a date, or a
+string, which we descibe here for consistency:
 
 \begin{description}
 \item[number] A whole or decimal number. E.g: 1, 7.4, -12
+\item[date] A date in the format YYYY-MM-DD. E.g: 2017-05-17,
+  1969-07-20, 1980-05-08.
 \item[text] A string of characters. If you need to include commas
   (e.g. in free-form notes) you must enclose the field in
   double-quotes. If you're using a program like Excel or a
   CSV-specific software (like \texttt{csv} in the Python standard
-  library) this may be done automatically. E.g: 1a, sufosbuvir, ``The
-  truth, the whole truth, and nothing but the truth.''.
-\item[date] A date in the format YYYY-MM-DD. E.g: 2017-05-17, 1969-07-20, 1980-05-08.
+  library) this will probably be done automatically. E.g: 1a,
+  sufosbuvir, ``The truth, the whole truth, and nothing but the
+  truth.''.
 \end{description}
 
 Fields that are \textbf{required} are marked with a bullet (•) in the
-tables below.  Many fields can be left blank out, indicating that the
-data wasn't collected or is unknown (they'll be represented as
-\texttt{NULL} in the database).
+descriptions below.  Other fields can be left out, indicating that the
+data wasn't collected or is unknown (they'll be stored as
+\texttt{NULL} in the database). The \textbf{clinical data table} in
+particular has many columns; we don't expect that anyone will have
+them all. If you don't collect a particular kind of data, you should
+\textbf{omit} the column.
 
-The clinical data file in particular has many fields; we don't expect
-that anyone will use them all. If you don't collect a particular kind
-of data, you should ommit the column.
+Each column of your data table should have a \textbf{header} with the
+column name. The \textbf{order} of the columns doesn't matter, and any
+extra columns will be ignored. The \textbf{case} of the filenames and
+header names also doesn't matter (they will all be converted to
+lower-case before they're checked and loaded).
+
+Genetic sequence data is expected in a \textbf{sub-directory} called
+\texttt{sequences}. The FASTA file names in the examples are just
+examples; you can use whatever naming convention is easiest for you,
+as long as the filenames in \texttt{isolates.csv} match the files in
+the \texttt{sequences/} directory.
+
+Whichever scheme you use, your CSV/Excel and FASTA files should be
+stored in a ZIP archive and sent via the SHARED project's website,
+where it will be transmitted over an encrypted connection, reviewed,
+and merged into the SHARED database. \textbf{DO NOT SUBMIT YOUR DATA
+  VIA EMAIL}; we cannot guarantee that emails are always enrypted
+while in transit.
+
+
+
+\section{Flat Scheme}
+
+If each participant has only a single clinical, behavior, and
+treatment record, the flat scheme can be used. This is a single CSV
+file or MS Excel sheet with the columns described in table
+\ref{tbl:flat-scheme}. Required fields are marked with a bullt (•). We
+don't expect anybody to have collected the data for every field;
+fields that don't apply to your study can be omitted.
+
+The file containing participant data should be called
+\texttt{data}. Sequence data should be included as FASTA files in a
+\textbf{sub-directory} called \texttt{sequences}. The layout of an
+example data directory is shown in figure
+\ref{fig:example-flat-directory}.
+
+\begin{figure}
+  \caption{Flat-Scheme Expected Files}
+  \label{fig:flat-scheme-expected-files}
+\begin{verbatim}
+my_flat_data_prep_directory/
+ ├── data.csv OR data.xls OR data.xlsx
+ └── sequences/
+     ├── seq1.fasta
+     ├── seq2.fasta
+     etc.
+\end{verbatim}
+\end{figure}
+
+The fields expected in a flat scheme data file are as follows:
+
+%% TODO(nknight): flat scheme table
+\begin{table}
+  \caption{Flat-Scheme Table Fields}
+  \label{tbl:flat-scheme}
+  coming soon
+\end{table}
+
+
+\section{Multi-Table Scheme}
+
+If there are multiple clinical, behavior, or treatment records for a
+single participant, the data can be recorded using the multi-table
+scheme. Data in this scheme can be submitted as \textbf{separate CSV
+  files} or as \textbf{sheets in an MS Excel} file. The expected
+tables are listed in table \ref{tbl:multi-table-expected-tables}. The
+relationships between these files are shown in figure
+\ref{fig:relationships}.
 
 
 \begin{table}[h!]
-  \caption{SHARED submission data format}
-  \label{tbl:expectedfiles}
+  \caption{The Multi-Table Scheme's Expected Tables}
+  \label{tbl:multi-table-expected-tables}
   \begin{tabular}{rp{8cm}}
-    File Name (case insensitive) & Contents \\ \hline
-    \verb|partcipants.csv| & Participant ID codes and demographic data. \\
-    \verb|behavior.csv| &  Participants' behavioral risk factors. \\
-    \verb|clinical.csv| & Participants' test results and relevant clinical history. \\
-    \verb|ltfu.csv| & Records of loss-to-follow-up. \\
-    \verb|treatment.csv| &  Participants' treatment information. \\
-    \verb|isolates.csv| & Participants' viral isolate data (sequences stored separately). \\
+    Name (case insensitive) & Contents \\ \hline
+    \verb|partcipants| & Participant ID codes and demographic data. \\
+    \verb|behavior| &  Participants' behavioral risk factors. \\
+    \verb|clinical| & Participants' test results and relevant clinical history. \\
+    \verb|ltfu| & Records of loss-to-follow-up. \\
+    \verb|treatment| &  Participants' treatment information. \\
+    \verb|isolates| & Participants' viral isolate data (sequences stored separately). \\
   \end{tabular}
 \end{table}
 
@@ -92,21 +159,18 @@ of data, you should ommit the column.
   \includegraphics[width=\textwidth]{tmp/clinical_relationships}
 \end{figure}
 
-The CSV files you provide should have \textbf{headers} containing the
-field name in each column, but the \textbf{order} of the columns
-doesn't matter, and any extra columns will be ignored (so you can add
-notes, references, etc.). You can also \textbf{omit} the columns for
-fields that aren't required if they don't apply to your study. The
-\textbf{case} of the filenames and header names also doesn't matter
-(they will all be converted to lower-case before they're checked and
-loaded).
 
-Sequence data is expected in a \textbf{sub-directory} called
-\texttt{sequences}, with file-names in the \texttt{isolates.csv}
-file. The names in the examples are just examples; you can use
-whatever naming convention is easiest for you, as long as the
-filenames in \texttt{isolates.csv} match the files in the
-\texttt{sequences/} directory.
+The expected contents of each table are described below.
+
+
+%% TODO(nknight): multi-scheme tables
+
+
+
+\section{Submitting Data}
+
+%% TODO(nknight): howto zipfiles footnote
+
 
 \begin{figure}
   \caption{Layout of a SHARED submission data directory}
@@ -278,16 +342,13 @@ filenames in \texttt{isolates.csv} match the files in the
 \end{table}
 
 
-\section{Going deeper}
 
-This guide describes the simplest way to load data into SHARED, but
-the database can store more detailed information. It can also change
-in future to accommodate useful data that we haven't foreseen. More
-detailed data formats are described below. For more detailed schema
-information or to request additions to the schema, contact Project
-Coordinator Anita Howe (\texttt{ahowe@cfenet.ubc.ca}) or Software
-Developer Nat Knight (\texttt{nknight@cfenet.ubc.ca}).
+\section{Submitting Data}
 
+
+%% TODO(nknight): walkthrough and screenshots of submission process
+%% (why token, get token, use token)
+%% TODO(nknight): footnotes on how to zipfiles
 
 \FloatBarrier
 \begin{appendices}
@@ -320,7 +381,3 @@ datasets.
 
 
 \end{document}
-%% TODO(nknight): references
-% - https://academic.oup.com/cid/article/58/8/1055/357542/Mortality-Among-Persons-in-Care-With-Hepatitis-C
-% - Jason's sheet
-% etc.
