@@ -10,27 +10,38 @@ import schema.util as util
 
 _entity = collections.namedtuple(
     "entity",
-    ["name", "description", "fields", "tags"],
+    ["name", "description", "fields", "meta"],
 )
 
 class Entity(_entity):
     @classmethod
-    def make(cls, name, description, fields, tags=None):
-        if tags is None:
-            tags = set()
-        return cls(name, description, fields, tags)
+    def make(cls, name, description, fields, meta=None):
+        if meta is None:
+            raise UserWarning("Metadata is required (for primary key)")
+        if 'primary key' not in meta:
+            raise UserWarning("Primary key is required in meta")
+        return cls(name, description, fields, meta)
+
+    @property
+    def tags(self):
+        return self.meta.get('tags', {})
+
 
 _field = collections.namedtuple(
     "field",
-    ["name", "type", "description", "tags"],
+    ["name", "type", "description", "meta"],
 )
 
 class Field(_field):
     @classmethod
-    def make(cls, name, type, description, tags=None):
-        if tags is None:
-            tags = set()
-        return cls(name, type, description, tags)
+    def make(cls, name, type, description, meta=None):
+        if meta is None:
+            meta = dict()
+        return cls(name, type, description, meta)
+
+    @property
+    def tags(self):
+        return self.meta.get('tags', {})
 
 field = Field.make
 
@@ -87,7 +98,7 @@ schema_data = Schema([
             "full_name",
             "string",
             "The medication's name",
-            tags={'required'},
+            meta={'tags': {'required'}},
         ),
          field(
              "short_name",
@@ -95,7 +106,7 @@ schema_data = Schema([
              "The medication's three-letter abbreviation",
          ),
         ],
-        tags={'managed'},
+        meta={'tags': {'managed'}, 'primary key': 'full_name'},
     ),
 
     # ==================================================
@@ -104,10 +115,10 @@ schema_data = Schema([
     Entity.make(
         "Collaborator",
         "A collaborating site (provides participant data)",
-        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
-         field("name", "string", "Name of the collaborating entity", tags={'required'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
+         field("name", "string", "Name of the collaborating entity", meta={'tags': {'required'}}),
         ],
-        tags={'managed'},
+        meta={'tags': {'managed'}, 'primary key': 'id'},
     ),
 
     Entity.make(
@@ -117,7 +128,7 @@ schema_data = Schema([
             "collaborator",
             "foreign key (Collaborator)",
             "The collaborator providing the data",
-            tags={'required'},
+            meta={'tags': {'required'}},
         ),
          field("ref_id", "foreign key (Reference)", "Publication describing this study (if applicable)"),
          field("name", "string", "The name of the study or trial"),
@@ -125,7 +136,7 @@ schema_data = Schema([
          field("collection_end", "date", "The end of data collection (if applicable)"),
          field("notes", "string", "Notes on data from this project"),
         ],
-        tags={'managed'},
+        meta={'tags': {'managed'}, 'primary key': 'name'},
     ),
 
 
@@ -135,7 +146,7 @@ schema_data = Schema([
     Entity.make(
         "Person",
         "A study participant",
-        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
          field(
              "study_id",
              "foreign key (SourceStudy)",
@@ -152,18 +163,18 @@ schema_data = Schema([
          ),
          field("year_of_birth", "date", "Participant's year of birth"),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
 
     Entity.make(
         "BehaviorData",
         "Behavioral information about a participant",
-        [field("id", "uuid", "Unique identifier", tags={'managed', 'required'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
          field(
              "person_id",
              "foreign key (Person)",
              "The participant this data pertains to",
-             tags={'required'},
+             meta={'tags': {'required'}},
          ),
          field("date_collected", "date", "The date this data was collected"),
          field("sex_ori", "enum (heterosexual, homosexual, bisexual, other)",
@@ -174,13 +185,14 @@ schema_data = Schema([
          field("ndu_recent", "bool", "None-injection drug use in the past 6 months?"),
          field("prison", "bool", "Has the participant been in prison (ever)?"),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
 
     Entity.make(
         "ClinicalData",
         "Participants' test results and relevant medical history",
-        [field("person_id", "foreign key(Person)", "The person to whom this data pertains"),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
+         field("person_id", "foreign key(Person)", "The person to whom this data pertains"),
          field("hiv", "bool", "Is the participant co-infected with HIV?"),
          field("hbv", "bool", "Is the participant co-infected with HBV?"),
          field("ost", "bool", "Has the participant undergone opioid substitution therapy in the last six months?"),
@@ -218,18 +230,18 @@ schema_data = Schema([
          field("hep_car", "bool", "Did the participant have hepatocellular carcinoma before or during treatment?"),
          field("transpl", "bool", "Has the participant had a liver transplant?"),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
 
     Entity.make(
         "TreatmentData",
         "Information about a participant's treatment",
-        [field("id", "uuid", "Unique identifier", tags={'managed'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
          field(
              "person_id",
              "foreign key (Person)",
              "The participant that this data pertains to",
-             tags={'required'},
+             meta={'tags': {'required'}},
          ),
          field("first_treatment", "bool", "Is this the participant's first treatment "),
          field("start_dt", "date", "Schedule treatment start date"),
@@ -240,7 +252,7 @@ schema_data = Schema([
              "regimen",
              "foreign key (Regimen)",
              "The drug regimen taken by the participant",
-             tags={'required'},
+             meta={'tags': {'required'}},
          ),
          field(
              "prev_regimen",
@@ -263,21 +275,13 @@ schema_data = Schema([
          ),
          field("notes", "string", "Additional notes (if applicable)"),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
 
     Entity.make(
         "Regimen",
-        "How much and what kind of medications were included in a treatment regimen",
-        [field(
-             "medication_id",
-             "foreign key (Medication)",
-             "Which medication was prescribed",
-             tags={'required'},
-         ),
-         field("dose", "float", "Dosage of the medication prescribed (in mg)"),
-         field("dose_number", "float", "Number of doses taken per `dose_period`"),
-         field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
+        "How much and what kinds of medication were included in a treatment regimen",
+        [field('id', 'uuid', 'Unique identifier', meta={'tags': {'required', 'managed'}}),
          field("start_dt",
                "date",
                "Start date for this drug (if different than treatment regimen"),
@@ -291,8 +295,21 @@ schema_data = Schema([
                "enum(<, =, >)",
                "Uncertainty on `end_dt_act`"),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
+
+    Entity.make(
+        'RegimenDrugInclusion',
+        'Links regimens to the drugs they include',
+        [field('medication_id', 'foreign key(Medication)', ''),
+         field('regimen_id', 'foreign key(Regimen)', ''),
+         field("dose", "float", "Dosage of the medication prescribed (in mg)"),
+         field("dose_number", "float", "Number of doses taken per `dose_period`"),
+         field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
+        ],
+        meta={'primary key': ['medication_id', 'regimen_id']},
+    ),
+
 
     Entity.make(
         "LossToFollowUp",
@@ -301,7 +318,7 @@ schema_data = Schema([
             "person_id",
             "foreign key (Person)",
             "",
-            tags={'required'},
+            meta={'tags': {'required'}},
         ),
          field("ltfu_dt", "date", "Date the participant was lost to follow-up"),
          field("died", "bool", "Is the participant deceased?"),
@@ -311,7 +328,7 @@ schema_data = Schema([
              "Cause of death (if applicable)"
          ),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'person_id'},
     ),
 
     # ==================================================
@@ -320,18 +337,18 @@ schema_data = Schema([
     Entity.make(
         "Isolate",
         "Virus isolate (from an individual or used in a lab experiment)",
-        [field("id", "uuid", "Unique id", tags={'managed', 'required'}),
+        [field("id", "uuid", "Unique id", meta={'tags': {'managed', 'required'}}),
          field(
              "type",
              "enum (clinical, lab)",
              "The kind of isolate. (additional data is available depending on kind)",
-             tags={'required', 'managed'},
+             meta={'tags': {'required', 'managed'}},
          ),
          field(
              "entered_date",
              "date",
              "Date the isolate was entered into the database",
-             tags={'managed'},
+             meta={'tags': {'managed'}},
          ),
          field(
              "genotype",
@@ -350,12 +367,14 @@ schema_data = Schema([
              "float",
              "The cutoff-percentage used to generate a consensus sequence",
          ),
-        ]),
+        ],
+        meta={'primary key': 'id'},
+        ),
 
     Entity.make(
         "Sequence",
         "Sequences and data needed for rapid alignment",
-        [field("id", "uuid", "Unique identifier", tags={'managed'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed'}}),
          field("isolate_id", "foreign key (Isolate)", "Isolate the sequence was obtained from"),
          field("nt_seq", "string", "Raw nucleotide sequence (if available)"),
          field(
@@ -383,7 +402,9 @@ schema_data = Schema([
              "string",
              "The reference genome this sequence is described with respect to"),
          field("notes", "string", "Additional notes on this sequence (if applicable)"),
-        ]),
+        ],
+        meta={'primary key': 'id'},
+        ),
 
     Entity.make(
         "ClinicalIsolate",
@@ -392,13 +413,13 @@ schema_data = Schema([
             "isolate_id",
             "foreign key (Isolate)",
             "The isolate this data pertains to",
-            tags={'required', 'managed'},
+            meta={'tags': {'required', 'managed'}},
         ),
          field(
              "person_id",
              "foreign key (Person)",
              "The participant who gave the isolate",
-             tags={'required'}
+             meta={'tags': {'required'}},
          ),
          field("isln_dt", "date", "Date the virus was isolated"),
          field(
@@ -409,7 +430,7 @@ schema_data = Schema([
               "after end-of-treatment."),
          ),
         ],
-        tags={'clinical'},
+        meta={'tags': {'clinical'}, 'primary key': 'isolate_id'},
     ),
 
     Entity.make(
@@ -462,7 +483,7 @@ schema_data = Schema([
              "The inserted sequence's subgenotype"),
          field("mutations", "string", "A list of site-directed mutations applied to the isolate"),
         ],
-        tags={'phenotypic'},
+        meta={'tags': {'phenotypic'}, 'primary key': 'isolate_id'},
     ),
 
 
@@ -472,7 +493,7 @@ schema_data = Schema([
     Entity.make(
         "Substitution",
         "A substitution, insertion, or deletion in an RNA sequence",
-        [field("id", "uuid", "Unique identifier", tags={'managed'}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed'}}),
          field("name", "string", "Name of the substitution"),
          field("reference_sequence", "string", "Name of the consensus wild-type reference sequence"),
          field("position", "integer", "Nucleotide position (with respect to the reference sequence)"),
@@ -480,7 +501,7 @@ schema_data = Schema([
          field("content", "string", "The nucleotide content of the substitution"),
          field("resistance_associated", "bool", "Is this a resistance associated substitution observed in virologic failures in the clinic?"),
         ],
-        tags={'managed'},
+        meta={'tags': {'managed'}, 'primary key': 'id'},
     ),
 
     Entity.make(
@@ -489,7 +510,7 @@ schema_data = Schema([
         [field("sequence_id", "foreign key (Sequence)", "The sequence being tagged"),
          field("substitution_id", "foreign key (Substitution)", "The substitution identified in the tagged sequence"),
         ],
-        tags={'managed'},
+        meta={'tags': {'managed'}, 'primary key': ['sequence_id', 'substitution_id']},
     ),
 
 
@@ -499,7 +520,7 @@ schema_data = Schema([
     Entity.make(
         "Susceptibility",
         "Susceptibility test results",
-        [field("id", "uuid", "Unique id", tags={'managed'}),
+        [field("id", "uuid", "Unique id", meta={'tags': {'managed'}}),
          field("isolate_id", "foreign key (Isolate)", "The isolate being tested"),
          field("reference_id", "foreign key (Reference)", "Source (if applicable)"),
          field(
@@ -514,19 +535,21 @@ schema_data = Schema([
          field("fold", "float", "Fold-change compared to wild type"),
          field("fold_bound", "enum (<, =, >)", "Represents uncertainty in the fold-change measurement"),
         ],
-        tags={'phenotypic'},
+        meta={'tags': {'phenotypic'}, 'primary key': 'id'},
     ),
 
     Entity.make(
         "Reference",
         "A reference to a publication",
-        [field("id", "uuid", "Unique id", tags={'managed'}),
+        [field("id", "uuid", "Unique id", meta={'tags': {'managed'}}),
          field("author", "string", ""),
          field("title", "string", ""),
          field("journal", "string", ""),
          field("url", "string", "URL to the reference online"),
          field("publication_dt", "date", "Null for unpublished results"),
          field("pubmed_id", "string", ""),
-        ]),
+        ],
+        meta={'primary key': 'id'},
+        ),
 
 ])
