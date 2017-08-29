@@ -1,8 +1,10 @@
 .gitignore
 
+build/
+dist/
 __pycache__/
 tmp/
 venv/
 
+*.egg-info/
 *.pyc
-

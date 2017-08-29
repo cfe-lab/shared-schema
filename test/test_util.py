@@ -1,6 +1,6 @@
 import unittest
 
-from schema import util
+from shared_schema import util
 
 
 class TestFunctions(unittest.TestCase):

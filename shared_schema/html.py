@@ -5,9 +5,9 @@ import datetime
 import re
 import string
 
-import schema.data as data
-import schema.templates as templates
-import schema.util as util
+import shared_schema.data as data
+import shared_schema.templates as templates
+import shared_schema.util as util
 
 
 def classes(tags):

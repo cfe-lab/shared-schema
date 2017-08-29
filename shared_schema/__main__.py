@@ -1,11 +1,11 @@
 import sys
 
-import schema
-import schema.csv as csv
-import schema.dot as dot
-import schema.data as data
-import schema.html as html
-import schema.tex as tex
+import shared_schema
+import shared_schema.csv as csv
+import shared_schema.dot as dot
+import shared_schema.data as data
+import shared_schema.html as html
+import shared_schema.tex as tex
 
 
 def do_make(maker, *args):
@@ -27,7 +27,7 @@ def generate():
     else:
         print("Unknown command '{}'".format(cmd))
         print()
-        print("Usage: python -m schema <command>")
+        print("Usage: python -m shared_schema <command>")
         print("Commands:")
         for cmd in ["csv", "dot", "html", "tex"]:
             print(" - {}".format(cmd))

@@ -18,16 +18,16 @@ test: $(SCRIPTS) $(TESTS) FORCE
 	python3 -m unittest -b
 
 docs/schema.svg: schema/dot.py schema/data.py
-	python3 -m schema dot  | unflatten | dot -Tsvg > docs/schema.svg
+	python3 -m shared_schema dot  | unflatten | dot -Tsvg > docs/schema.svg
 
 docs/schema.csv: $(SCRIPTS)
-	python3 -m schema csv > docs/schema.csv
+	python3 -m shared_schema csv > docs/schema.csv
 
 docs/style.css: static/style.css
 	cp static/style.css docs/
 
 docs/index.html: $(SCRIPTS) $(TEMPLATES)
-	python3 -m schema html > docs/index.html
+	python3 -m shared_schema html > docs/index.html
 
 
 # Contributor/Analyst Guides
@@ -47,7 +47,7 @@ docs/schema.pdf: tmp/schema.tex
 	cp tmp/schema.pdf docs/schema.pdf
 
 tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png $(TEMPLATES)
-	python -m schema tex > tmp/schema.tex
+	python -m shared_schema tex > tmp/schema.tex
 
 tmp/schema.png: docs/schema.svg
 	convert docs/schema.svg tmp/schema.png

@@ -1,6 +1,6 @@
 '''Convert the schema data into a .dot source file.
 '''
-import schema.templates as templates
+import shared_schema.templates as templates
 
 def nodecolor(tags):
     if 'managed' in tags:

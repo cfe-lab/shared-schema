@@ -15,7 +15,7 @@ issues were encountered during development and might come up in the future:
 import re
 import string
 
-import schema.templates as templates
+import shared_schema.templates as templates
 
 def escaped_description(desc):
     return re.sub(r'`(.+)`', r'\\verb|\1|', desc)

@@ -1,7 +1,7 @@
 import unittest
 
-from schema import dot
-from schema import data
+from shared_schema import dot
+from shared_schema import data
 
 from test.example_data import *
 

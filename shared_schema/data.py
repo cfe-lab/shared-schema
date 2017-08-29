@@ -2,7 +2,7 @@
 
 import collections
 
-import schema.util as util
+import shared_schema.util as util
 
 
 # Data Parsing
