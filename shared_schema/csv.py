@@ -25,7 +25,7 @@ def entity_fields(entities):
             yield row
 
 
-def make(schema_data):
+def make(schema_data, **kwargs):
     entities = sorted(schema_data.raw_entities, key=lambda e: e.name)
     outbuffer = io.StringIO()
     out = csv.DictWriter(outbuffer, COLUMNS)

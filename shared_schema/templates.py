@@ -16,6 +16,7 @@ TEMPLATE_ROOT = os.path.join(
     "templates",
 )
 
+
 def load_file(fname):
     fpath = os.path.join(TEMPLATE_ROOT, fname)
     with open(fpath, 'r') as infile:
@@ -36,7 +37,7 @@ def render(key, tpl_data):
         tpl_lines = ("  - {}".format(k) for k in TEMPLATES.keys())
         tpl_block = "\n".join(tpl_lines)
         print("-" * 80)
-        print("  '{}' isn't a registered template.".format(key))
+        print("  '{}' isn't a registered template.".format(k))
         print("  Registered templates are:")
         print(tpl_block)
         print("-" * 80)

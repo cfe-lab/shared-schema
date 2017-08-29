@@ -2,10 +2,7 @@
 '''
 
 import datetime
-import re
-import string
 
-import shared_schema.data as data
 import shared_schema.templates as templates
 import shared_schema.util as util
 
@@ -30,7 +27,7 @@ def field_data(field):
     return {
         'fclass': classes(field.tags),
         'name': field.name,
-        'type': ftype ,
+        'type': ftype,
         'description': field.description,
     }
 
@@ -39,7 +36,7 @@ def entity_data(entity):
     fields_data = [field_data(f) for f in entity.fields]
     return {
         'anchor_name': entity.name.lower(),
-       'name': entity.name,
+        'name': entity.name,
         'description': entity.description,
         'fields': fields_data,
     }
@@ -56,10 +53,11 @@ def index(title, entities, version):
     entities_data = [entity_data(e) for e in entities]
     return templates.render(
         'html',
-        { 'title': title,
-          'entities': entities_data,
-          'date': date,
-          'version': version,
+        {
+            'title': title,
+            'entities': entities_data,
+            'date': date,
+            'version': version,
         }
     )
 

@@ -13,9 +13,9 @@ issues were encountered during development and might come up in the future:
 '''
 
 import re
-import string
 
 import shared_schema.templates as templates
+
 
 def escaped_description(desc):
     return re.sub(r'`(.+)`', r'\\verb|\1|', desc)
@@ -40,6 +40,7 @@ def entity_data(entity):
         "fields": fields,
     }
 
+
 templates.register(
     'tex',
     templates.load_file('tex.mustache'),
@@ -52,12 +53,13 @@ def render_tmpl(schema_data, version):
     entities = [entity_data(e) for e in schema_data.raw_entities]
     return templates.render(
         'tex',
-        { 'disclaimer': disclaimer,
-          'version': version,
-          'entities': entities,
+        {
+            'disclaimer': disclaimer,
+            'version': version,
+            'entities': entities,
         }
     )
 
 
-def make(schema_data, version):
+def make(schema_data, version, **kwargs):
     return render_tmpl(schema_data, version)

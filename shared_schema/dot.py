@@ -2,6 +2,7 @@
 '''
 import shared_schema.templates as templates
 
+
 def nodecolor(tags):
     if 'managed' in tags:
         return 'grey'
@@ -18,8 +19,17 @@ def node(entity):
     tooltip = entity.description
     tags = entity.tags
     href = "#{}".format(entity.name.lower())
-    tmpl = '''{name} [href="/{href}", tooltip="{tooltip}", target="_parent", style="filled", fillcolor="{bgcolor}"];'''
-    return tmpl.format(name=name, tooltip=tooltip, href=href, bgcolor=nodecolor(tags))
+    tmpl = ('{name} [href="/{href}", '
+            'tooltip="{tooltip}", '
+            'target="_parent", '
+            'style="filled", '
+            'fillcolor="{bgcolor}"];')
+    return tmpl.format(
+        name=name,
+        tooltip=tooltip,
+        href=href,
+        bgcolor=nodecolor(tags)
+    )
 
 
 def edge(relation):
@@ -43,13 +53,15 @@ templates.register(
     templates.load_file('dot.mustache'),
 )
 
-def make(schema_data, title="schema"):
+
+def make(schema_data, title="SHARED Schema"):
     edge_lines = "\n".join(nodes(schema_data))
     node_lines = "\n".join(edges(schema_data))
     return templates.render(
         'dot',
-        { 'title': title,
-          'edge_lines': edge_lines,
-          'node_lines': node_lines,
+        {
+            'title': title,
+            'edge_lines': edge_lines,
+            'node_lines': node_lines,
         },
     )
