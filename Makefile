@@ -16,6 +16,7 @@ clean:
 
 test: $(SCRIPTS) $(TESTS) FORCE
 	python3 -m unittest -b
+	pep8 shared_schema
 
 docs/schema.svg: schema/dot.py schema/data.py
 	python3 -m shared_schema dot  | unflatten | dot -Tsvg > docs/schema.svg
