@@ -17,14 +17,14 @@ FORMATS = {
 
 
 parser = argparse.ArgumentParser(
-    prog='exporter',
+    prog='python -m shared_schema',
     description='Print shared schema in various formats',
 )
 parser.add_argument(
     'format',
     choices=FORMATS.keys(),
     help='The format to export the schema in'
-    )
+)
 
 
 def main():
