@@ -18,7 +18,7 @@ test: $(SCRIPTS) $(TESTS) FORCE
 	python3 -m unittest -b
 	pep8 shared_schema
 
-docs/schema.svg: schema/dot.py schema/data.py
+docs/schema.svg: shared_schema/dot.py shared_schema/data.py
 	python3 -m shared_schema dot  | unflatten | dot -Tsvg > docs/schema.svg
 
 docs/schema.csv: $(SCRIPTS)
@@ -47,7 +47,7 @@ docs/schema.pdf: tmp/schema.tex
 	pdflatex -output-directory tmp tmp/schema.tex
 	cp tmp/schema.pdf docs/schema.pdf
 
-tmp/schema.tex: schema/tex.py schema/data.py tmp/schema.png $(TEMPLATES)
+tmp/schema.tex: shared_schema/tex.py shared_schema/data.py tmp/schema.png $(TEMPLATES)
 	python -m shared_schema tex > tmp/schema.tex
 
 tmp/schema.png: docs/schema.svg

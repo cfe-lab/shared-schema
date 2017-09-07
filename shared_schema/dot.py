@@ -54,7 +54,7 @@ templates.register(
 )
 
 
-def make(schema_data, title="SHARED Schema"):
+def make(schema_data, title="SHARED Schema", **kwargs):
     edge_lines = "\n".join(nodes(schema_data))
     node_lines = "\n".join(edges(schema_data))
     return templates.render(

@@ -88,8 +88,7 @@ class Schema(object):
         elif fk:
             fk_target = util.foreign_key_target(t)
             err_msg = "invalid foreign key target: {}".format(fk_target)
-            assert  fk_target in entities, err_msg
+            assert fk_target in entities, err_msg
             return True
         else:
             return True
-
