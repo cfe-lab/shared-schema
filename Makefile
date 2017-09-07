@@ -9,6 +9,7 @@ all: docs/schema.svg docs/index.html docs/style.css docs/schema.csv $(GUIDES) do
 
 clean:
 	find docs/ -mindepth 1 -delete
+	git checkout docs/
 	find . -name '*.pyc' -delete
 	find . -name '*.aux' -delete
 	find . -name '*.log' -delete
