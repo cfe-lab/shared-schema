@@ -16,19 +16,7 @@ FORMATS = {
 }
 
 
-parser = argparse.ArgumentParser(
-    prog='python -m shared_schema',
-    description='Print shared schema in various formats',
-)
-parser.add_argument(
-    'format',
-    choices=FORMATS.keys(),
-    help='The format to export the schema in'
-)
-
-
-def main():
-    args = parser.parse_args()
+def handler(args):
     maker = FORMATS[args.format]
     outp = maker(
         schema_data=data.schema_data,
