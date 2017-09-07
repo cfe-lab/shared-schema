@@ -24,7 +24,7 @@ exporter = subparsers.add_parser(
 exporter.add_argument(
     'format',
     choices=shared_schema.exporter.FORMATS.keys(),
-    help='The format to print the schema in ({})',
+    help='The format to print the schema in',
 )
 exporter.set_defaults(handler=shared_schema.exporter.handler)
 
