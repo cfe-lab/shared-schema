@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+# TODO(nknight): include template tiles
+
 setup(
     name="shared_schema",
     version="0.1",
@@ -7,4 +9,8 @@ setup(
     author_email="nknight@cfenet.ubc.ca",
     url="https://github.com/neganp/shared-schema",
     packages=find_packages(),
+    install_requires=[
+        "pystache >=0.5.4, <0.6",
+        "setuptools >=36.1.1, <37.0",
+    ],
 )
