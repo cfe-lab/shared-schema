@@ -162,7 +162,7 @@ schema_data = Schema([
          field("start_dt", "date", "Schedule treatment start date"),
          field("end_dt_sch", "date", "Scheduled treatment end date"),
          field("end_dt_act", "date", "Actual treatment end date"),
-         field("end_dt_bound", "enum(<, =, >)", "Uncertainty on `end_dt_act`"),
+         field("end_dt_bound", "enum(<, =, >)", "Uncertainty on ``end_dt_act``"),
          field(
              "regimen",
              "foreign key (Regimen)",
@@ -219,7 +219,7 @@ schema_data = Schema([
         [field('medication_id', 'foreign key(Medication)', ''),
          field('regimen_id', 'foreign key(Regimen)', ''),
          field("dose", "float", "Dosage of the medication prescribed (in mg)"),
-         field("dose_number", "float", "Number of doses taken per `dose_period`"),
+         field("dose_number", "float", "Number of doses taken per ``dose_period``"),
          field("dose_period", "enum(day, week, course)", "Period over which dosage is measured"),
         ],
         meta={'primary key': ['medication_id', 'regimen_id']},
@@ -240,7 +240,7 @@ schema_data = Schema([
          field(
              "cod",
              "enum(liv, aid, odo, can, cir, res, dia, gen, tra, cer, dig, oth)",
-             "Cause of death (if applicable)"
+             "Cause of death (if applicable; blank otherwise)"
          ),
         ],
         meta={'tags': {'clinical'}, 'primary key': 'person_id'},
