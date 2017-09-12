@@ -5,9 +5,9 @@ values for enum fields.
 
 from typing import List
 
-
 from shared_schema import tables
 from shared_schema import util
+
 
 def _possible_values(schema_field_type: str) -> List[str]:
     """The possible values of a schema field's corresponding submission
@@ -50,4 +50,3 @@ class SubmissionSchemeFieldType(object):
     @property
     def possible_values(self) -> List[str]:
         return _possible_values(self._schema_field_type)
-        
