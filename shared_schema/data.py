@@ -289,7 +289,7 @@ schema_data = Schema([
     Entity.make(
         "Sequence",
         "Sequences and data needed for rapid alignment",
-        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed'}}),
+        [field("id", "uuid", "Unique identifier", meta={'tags': {'managed', 'required'}}),
          field("isolate_id", "foreign key (Isolate)", "Isolate the sequence was obtained from"),
          field("nt_seq", "string", "Raw nucleotide sequence (if available)"),
          field(

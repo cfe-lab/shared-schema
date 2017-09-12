@@ -1,0 +1,18 @@
+{{ #entities }}
+
+
+.. _{{ anchor_name }}:
+
+{{ name }}
+------------------------------
+
+{{{ description }}}
+
+.. csv-table::
+    :header: "Req'd", "Name", "Data Type", "Description"
+    :widths: auto
+
+    {{ #fields }}
+    "{{{ required }}}","``{{{ name }}}``","``{{{ type }}}``","{{{ description }}}"
+    {{ /fields }}
+{{ /entities }}
