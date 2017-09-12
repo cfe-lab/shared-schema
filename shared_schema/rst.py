@@ -20,6 +20,7 @@ def field_data(field):
         'required': reqd,
     }
 
+
 def entity_data(entity):
     fields_data = [field_data(f) for f in entity.fields]
     return {
@@ -32,8 +33,6 @@ def entity_data(entity):
 
 def entities_data(entities):
     return (entity_data(e) for e in entities)
-
-
 
 
 def make(schema_data=None, version=None):
