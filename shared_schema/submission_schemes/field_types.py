@@ -1,8 +1,8 @@
 '''This module contains functions for converting database schema field
 types to simpler submission scheme field types, and lists the possible
-values for 
-
+values for enum fields.
 '''
+
 from typing import List
 
 
