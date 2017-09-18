@@ -92,3 +92,15 @@ class Schema(object):
             return True
         else:
             return True
+
+    def find_field(self, entity_name, field_name):
+        entity = self.entities.get(entity_name)
+        if entity is None:
+            msg = "No entity called '{}' in schema"
+            raise KeyError(msg.format(entity_name))
+        field = next((f for f in entity.fields if f.name == field_name),
+                     None)
+        if field is None:
+            msg = "No field called '{}' on entity {}"
+            raise KeyError(msg.format(field_name, entity_name))
+        return field

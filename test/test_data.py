@@ -23,3 +23,19 @@ class TestSchema(unittest.TestCase):
             expected_rels,
             "Relationships not as expected",
         )
+
+    def test_find_field(self):
+        sd = tables.Schema(test.example_data.entities)
+
+        self.assertEqual(
+            sd.find_field('foo', 'foo1'),
+            tables.field('foo1', 'integer', 'The first field of foo'),
+        )
+        self.assertEqual(
+            sd.find_field('bar', 'bar2'),
+            tables.field('bar2', 'date', 'The second field of a bar'),
+        )
+        with self.assertRaises(KeyError):
+            sd.find_field('not a real entity', 'whatever')
+        with self.assertRaises(KeyError):
+            sd.find_field('foo', 'not a real field')
