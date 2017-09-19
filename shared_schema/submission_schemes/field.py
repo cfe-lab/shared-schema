@@ -45,26 +45,32 @@ def _get_scheme_field_type(schema_field_type: str) -> str:
 class Field(object):
     '''A field in a submission scheme entity'''
 
-    def __init__(self, name: str, schema_type: str=None,
-                 descr: str=None, req: bool=False) -> None:
+    def __init__(self, name: str, schema_type: str=None, descr: str=None,
+                 req: bool=False, possible_values: str=None) -> None:
         self._schema_field_type = schema_type
         self.name = name
         self.description = descr
+        self._possible_values = possible_values
+        self.required = req
 
     @property
     def type(self) -> str:
         return _get_scheme_field_type(self._schema_field_type)
 
     @property
-    def possible_values(self) -> List[str]:
-        return _possible_values(self._schema_field_type)
+    def possible_values(self) -> str:
+        if self._possible_values is None:
+            return ', '.join(_possible_values(self._schema_field_type))
+        else:
+            return self._possible_values
 
     @staticmethod
-    def from_schema_field(cls, schema_field, req=False, new_descr=None,
+    def from_schema_field(schema_field, req=False, new_descr=None,
                           new_name=None):
         return Field(
             (new_name if new_name is not None else schema_field.name),
             schema_field.type,
             req=req,
-            descr=(new_descr if new_descr is not None else schema_field.descr),
+            descr=(new_descr if new_descr is not None
+                   else schema_field.description),
         )
