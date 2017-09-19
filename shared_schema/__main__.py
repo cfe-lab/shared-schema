@@ -1,6 +1,7 @@
 import argparse
 
 import shared_schema.exporter
+import shared_schema.submission_schemes as submission_schemes
 
 
 DESC = '''Describe the SHARED project's database schema and related
@@ -28,6 +29,29 @@ exporter.add_argument(
 )
 exporter.set_defaults(handler=shared_schema.exporter.handler)
 
+
+submission_scheme_exporter = subparsers.add_parser(
+    name='sub-scm',
+    help='Export submission scheme data',
+)
+submission_scheme_exporter.add_argument(
+    'scheme',
+    choices=submission_schemes.SCHEMES.keys(),
+    help='The submission scheme to export',
+)
+submission_scheme_exporter.add_argument(
+    'dest',
+    help='The path to save scheme description files at',
+)
+submission_scheme_exporter.add_argument(
+    '-y',
+    action='store_true',
+    help='Skip confirmation prompt',
+)
+submission_scheme_exporter.set_defaults(handler=submission_schemes.handler)
+
+
+# TODO(nknight): add a `version` command (using argparse's version action)
 
 if __name__ == "__main__":
     args = parser.parse_args()
