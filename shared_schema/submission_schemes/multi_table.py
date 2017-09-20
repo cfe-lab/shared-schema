@@ -102,21 +102,21 @@ scheme = {
             'regimen',
             'string',
             descr="What drug regimens was the participant taking?",
-            possible_values="See `Treatment Regimens`_.",
+            possible_values="See :ref:`treatment_regimens`.",
         ),
         field(
             'prev_regimen',
             'string',
             descr=("If the participant has been treated before, what "
                    "treatment regimen were they taking previously?"),
-            possible_values="See `Treatment Regimens`_.",
+            possible_values="See :ref:`treatment_regimens`.",
         ),
         field(
             'pprev_regimen',
             'string',
             descr=("If the participant has had two previous treatments, "
                    "what regimen were they taking before-last?"),
-            possible_values="See `Treatment Regimens`_.",
+            possible_values="See :ref:`treatment_regimens`.",
         ),
         from_schema('TreatmentData', 'response'),
         from_schema('TreatmentData', 'notes'),
