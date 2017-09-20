@@ -24,13 +24,17 @@ def get_confirmation(resolved_path, files):
     for filename in files:
         print(" {}".format(filename))
     while True:
-        response = input('Proceed? (y/n)').lower()
-        if response == 'y':
-            return
-        elif response == 'n':
-            sys.exit("Aborting")
-        else:
-            print("Please enter 'y' or 'n'")
+        try:
+            response = input('Proceed? (y/n): ').lower()
+            if response == 'y':
+                return
+            elif response == 'n':
+                sys.exit('Aborting')
+            else:
+                print("Please enter 'y' or 'n'")
+        except:
+            print()
+            sys.exit('Aborting')
 
 
 def save_entity(path, ename, efields):
