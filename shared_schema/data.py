@@ -343,7 +343,7 @@ schema_data = Schema([
          field("isln_dt", "date", "Date the virus was isolated"),
          field(
              "sample_kind",
-             "enum(bl, eot, fw4, fw12, fw23)",
+             "enum(bl, eot, fw4, fw12, fw24)",
              ("Whether this isolate is from  a baseline sample, an end-of-"
               "treatment-sample, or a follow up sample 4, 12, or 24 weeks "
               "after end-of-treatment."),

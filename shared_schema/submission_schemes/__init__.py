@@ -7,10 +7,12 @@ schema so that names, types, and descriptions aren't duplicated.
 
 from . import exporter
 from . import multi_table
+from . import flat
 
 
 SCHEMES = {
     'multi-table': multi_table.scheme,
+    'flat': flat.scheme,
 }
 
 
