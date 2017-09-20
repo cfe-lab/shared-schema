@@ -163,4 +163,5 @@ class Regimen(pp.List):
     grammar = pp.csl(RegimenPart, separator=",")
 
 
-# TODO(nknight): plug in to pypeg2's parser and turn into structured data
+def parse(regimen):
+    return pp.parse(regimen, Regimen)
