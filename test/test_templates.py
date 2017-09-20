@@ -19,6 +19,3 @@ class TestTemplates(unittest.TestCase):
     def test_missing_template(self):
         with self.assertRaises(KeyError):
             templates.render("asdf", {})
-        
-    
-        

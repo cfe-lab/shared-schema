@@ -5,11 +5,14 @@ from shared_schema import data
 
 from test.example_data import *
 
+
 class TestElementRenderers(unittest.TestCase):
 
     def test_entity_node(self):
         foo_ent = entities[0]
-        expected = '''foo [href="/#foo", tooltip="A foo", target="_parent", style="filled", fillcolor="transparent"];'''
+        expected = ('foo [href="/#foo", tooltip="A foo", '
+                    'target="_parent", style="filled", '
+                    'fillcolor="transparent"];')
         calcd = dot.node(foo_ent)
         self.assertEqual(
             calcd,

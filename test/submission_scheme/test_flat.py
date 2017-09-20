@@ -3,6 +3,7 @@ import unittest
 from shared_schema.submission_schemes import field
 from shared_schema.submission_schemes import flat
 
+
 class TestFlatSubmissionScheme(unittest.TestCase):
 
     def test_construction_succeeded(self):
@@ -19,7 +20,7 @@ class TestFlatSubmissionScheme(unittest.TestCase):
             len(flat.scheme.values()),
             "More than one table in flat scheme",
         )
-        
+
     def test_unique_field_names(self):
         flat_fields = next(iter(flat.scheme.values()))
         names = [f.name for f in flat_fields]
@@ -31,6 +32,3 @@ class TestFlatSubmissionScheme(unittest.TestCase):
             len(set(names)),
             msg.format(duplicate_names),
         )
-            
-        
-        

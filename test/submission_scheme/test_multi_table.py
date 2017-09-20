@@ -18,7 +18,8 @@ class TestMultiTableSubmissionScheme(unittest.TestCase):
             fnames = [f.name for f in fields]
             msg = ("Non-unique field names in multi-table submission scheme:\n"
                    "Entity: {}  Duplicate fields: {}")
-            duplicate_fields = set(name for name in fnames if fnames.count(name) > 1)
+            duplicate_fields = set(name for name in fnames
+                                   if fnames.count(name) > 1)
             self.assertEqual(
                 len(fnames),
                 len(set(fnames)),
