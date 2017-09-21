@@ -22,6 +22,7 @@ def _print_table(keys, rows):
         sys.stdout,
         display_keys,
     )
+    writer.writeheader()
     for row in rows:
         writer.writerow(format_row(row))
 
@@ -29,6 +30,7 @@ def _print_table(keys, rows):
 TABLES = {
     'regimens': (standard._regimen_keys, standard.regimens),
     'compounds': (standard._compound_keys, standard.compounds),
+    'frequencies': (standard._freq_keys, standard.freqs),
 }
 
 
