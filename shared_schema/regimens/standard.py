@@ -12,7 +12,7 @@ _compounds = [
     ("ledipasvir", "LDV"),
     ("ombitasvir", "OMB"),
     ("paritaprevir", "PAR"),
-    ("pegylated interferon,PEG"),
+    ("pegylated interferon", "PEG"),
     ("pibrentasvir", "PIB"),
     ("ribavirin", "RBV"),
     ("ritonavir", "RIT"),

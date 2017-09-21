@@ -2,6 +2,7 @@ import argparse
 
 import shared_schema.exporter
 import shared_schema.submission_schemes as submission_schemes
+import shared_schema.regimens as regimens
 
 
 DESC = '''Describe the SHARED project's database schema and related
@@ -49,6 +50,18 @@ submission_scheme_exporter.add_argument(
     help='Skip confirmation prompt',
 )
 submission_scheme_exporter.set_defaults(handler=submission_schemes.handler)
+
+
+regimens_exporter = subparsers.add_parser(
+    name='regimens',
+    help='Export treatment regimens',
+)
+regimens_exporter.add_argument(
+    'table',
+    choices=regimens.TABLES.keys(),
+    help="The regimen data table to export",
+)
+regimens_exporter.set_defaults(handler=regimens.handler)
 
 
 # TODO(nknight): add a `version` command (using argparse's version action)
