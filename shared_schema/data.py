@@ -68,7 +68,6 @@ schema_data = Schema([
              "The study the participant entered the database with",
          ),
          field("country", "string", "The country where the person participated in the study"),
-         field("city", "string", "The city where the person participated in the study"),
          field("sex", "enum(male, female, other)", "The participant's sex at birth"),
          field("ethnicity",
                "enum(am-nat, asian, black, hisp, pa-isl, white)",

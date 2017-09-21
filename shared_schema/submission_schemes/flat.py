@@ -21,7 +21,6 @@ scheme = {
         field('id', 'string', req=True,
               descr="A participant's anonymous id"),
         from_schema('Person', 'country'),
-        from_schema('Person', 'city'),
         from_schema('Person', 'sex'),
         from_schema('Person', 'ethnicity'),
         from_schema('Person', 'year_of_birth'),
