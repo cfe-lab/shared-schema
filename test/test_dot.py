@@ -3,7 +3,7 @@ import unittest
 from shared_schema import dot
 from shared_schema import data
 
-from test.example_data import *
+from test.example_data import entities
 
 
 class TestElementRenderers(unittest.TestCase):

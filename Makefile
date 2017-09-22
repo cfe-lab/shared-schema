@@ -16,6 +16,10 @@ clean:
 	find tmp/ -mindepth 1 -delete
 
 test: $(PYTHON_SRC) $(TESTS) FORCE
+	pep8 shared_schema
+	pep8 test
+	pyflakes shared_schema
+	pyflakes test
 	python -m unittest -b
 
 check: $(PYTHON_SRC) $(TESTS) FORCE

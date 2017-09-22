@@ -12,7 +12,7 @@ class TestSchema(unittest.TestCase):
             tables.Entity.make("a", "", [], meta={'primary key': None}),
         ]
         with self.assertRaises(AssertionError):
-            schema_data = tables.Schema(bad_data)
+            tables.Schema(bad_data)
 
     def test_find_relations(self):
         sd = tables.Schema(test.example_data.entities)
