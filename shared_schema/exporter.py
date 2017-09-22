@@ -1,4 +1,10 @@
-import argparse
+'''An interface for expirting the schema in different formats
+
+Each module that knows how to export the schema (e.g. to
+ReSTructuredText, LaTeX, HTML, etc.) defines a function to do produce
+the output. This module lists the available functions and handles
+passing in the schema and doing any IO.
+'''
 
 import shared_schema
 import shared_schema.csv as csv

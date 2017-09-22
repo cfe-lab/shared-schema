@@ -5,7 +5,6 @@ exporter, and potentially  the HTML exporter.
 '''
 
 import shared_schema.templates as templates
-import shared_schema.tables as tables
 
 
 templates.register('rst', templates.load_file('rst.mustache'))

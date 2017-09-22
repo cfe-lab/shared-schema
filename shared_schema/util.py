@@ -1,3 +1,5 @@
+'''Common utility functions'''
+
 import re
 
 
@@ -8,5 +10,6 @@ def foreign_key_target(field_type):
 
 
 def enum_members(field_type):
+    "The members of an ENUM type field (from the field's type)"
     matches = re.findall(r"enum\s*\((.+)\)", field_type)
     return (member.strip() for member in matches[0].split(","))

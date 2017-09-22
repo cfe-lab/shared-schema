@@ -18,6 +18,8 @@ _entity = collections.namedtuple(
 
 
 class Entity(_entity):
+    "An entity in a database schema"
+
     @classmethod
     def make(cls, name, description, fields, meta=None):
         if meta is None:
@@ -38,6 +40,8 @@ _field = collections.namedtuple(
 
 
 class Field(_field):
+    "One feature of an entity (maps to a database column)"
+
     @classmethod
     def make(cls, name, type, description, meta=None):
         if meta is None:
@@ -52,6 +56,7 @@ field = Field.make
 
 
 class Schema(object):
+    "A collection of related Entitites with some validity checks"
 
     types = {"integer", "float", "string", "foreign key", "date",
              "uuid", "enum", "bool"}
