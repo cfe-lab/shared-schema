@@ -22,7 +22,7 @@ scheme = {
     'ltfu': [
         field('id', 'string', req=True,
               descr="The ID of a person in the ``participants`` file"),
-        from_schema('LossToFollowUp', 'ltfu_dt'),
+        from_schema('LossToFollowUp', 'ltfu_year'),
         from_schema('LossToFollowUp', 'died'),
         from_schema('LossToFollowUp', 'cod'),
     ],
@@ -37,7 +37,6 @@ scheme = {
     'behavior': [
         field('person', 'string', req=True,
               descr="The ID of a peson in the ``participants`` file"),
-        from_schema('BehaviorData', 'date_collected'),
         from_schema('BehaviorData', 'sex_ori'),
         from_schema('BehaviorData', 'idu'),
         from_schema('BehaviorData', 'idu_recent'),
@@ -87,16 +86,13 @@ scheme = {
         from_schema('Isolate', 'seq_method'),
         from_schema('Isolate', 'cutoff'),
         from_schema('ClinicalIsolate', 'sample_kind'),
-        from_schema('ClinicalIsolate', 'isln_dt'),
     ],
     'treatment': [
         field('id', 'string', req=True,
               descr="The ID of a person in the ``participants`` file"),
         from_schema('TreatmentData', 'first_treatment'),
-        from_schema('TreatmentData', 'start_dt'),
-        from_schema('TreatmentData', 'end_dt_sch'),
-        from_schema('TreatmentData', 'end_dt_act'),
-        from_schema('TreatmentData', 'end_dt_bound'),
+        from_schema('TreatmentData', 'duration_sch'),
+        from_schema('TreatmentData', 'duration_act'),
         field(
             'regimen',
             'string',
