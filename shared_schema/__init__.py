@@ -10,4 +10,4 @@ functions of the module.
 '''
 
 # PEP 440 compliant version
-__version__ = "0.0a5"
+__version__ = "0.0a5.dev"
