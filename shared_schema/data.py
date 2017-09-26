@@ -164,6 +164,13 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
+                "kind",
+                "enum(bl, eot, fw4, fw12, fw24, fw+)",
+                ("Whether this clinical data is baseline, end-of-treatment, "
+                 "or a follow up after at-most 4, 12, 24, or more weeks"),
+                meta={'tags': {'required'}},
+            ),
+            field(
                 "person_id",
                 "foreign key(Person)",
                 "The person to whom this data pertains",
@@ -422,7 +429,8 @@ schema_data = Schema([
             field(
                 "cutoff",
                 "float",
-                "The cutoff-percentage used to generate a consensus sequence",
+                ("The cutoff-fraction used to generate a consensus sequence; "
+                 "'5%' is stored as '0.05'"),
             ),
         ],
         meta={'primary key': 'id'},
