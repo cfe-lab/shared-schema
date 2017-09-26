@@ -60,7 +60,9 @@ class Field(object):
     @property
     def possible_values(self) -> str:
         if self._possible_values is None:
-            return ', '.join(_possible_values(self._schema_field_type))
+            vals = ["``{}``".format(v) for v in
+                      _possible_values(self._schema_field_type)]
+            return ', '.join(vals)
         else:
             return self._possible_values
 
