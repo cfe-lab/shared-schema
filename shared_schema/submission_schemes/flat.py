@@ -80,10 +80,22 @@ scheme = {
             descr="The baseline sample's subgenotype",
         ),
         field(
+            'bl_strain',
+            'string',
+            descr="The isolate's strain (if applicable/known)",
+        ),
+        field(
+            'bl_seq_method',
+            'string',
+            descr="The sequencing method used on the baseline isolate",
+            possible_values="``sanger``, ``ngs``",
+        ),
+        field(
             'bl_cutoff',
             'float',
             descr=("The cutoff percentage used to generate the baseline "
-                   "sample consensus sequence."),
+                   "sample consensus sequence; 5% should be entered as "
+                   "'5' or '5.0'."),
         ),
         field(
             'fu_seq_file',
@@ -93,9 +105,9 @@ scheme = {
         ),
         field(
             'fu_kind',
-            'enum(eot, fw4, fw12, fw23)',
+            'enum(eot, fw4, fw12, fw24, fw+)',
             descr=("The kind of follow up sample provided (end-of-treatment "
-                   "or up to 4, 12, or 24 weeks after end-of-treatment)."),
+                   "or up to 4, 12, 24, or weeks after end-of-treatment)."),
         ),
         field(
             'fu_genotype',
@@ -108,10 +120,22 @@ scheme = {
             descr="The follow-up sample's subgenotype",
         ),
         field(
-            'fu_cutoffb',
+            'fu_strain',
+            'string',
+            descr="The follow-up isolate's strain (if applicable/known)",
+        ),
+        field(
+            'fu_seq_method',
+            'string',
+            descr="The sequencing method used on the follow-up isolate",
+            possible_values="``sanger``, ``ngs``",
+        ),
+        field(
+            'fu_cutoff',
             'float',
             descr=("The cutoff percentage used to generate the follow-up "
-                   "sample consensus sequence."),
+                   "sample consensus sequence; 5% should be entered as "
+                   "'5' or '5.0'."),
         ),
         from_schema('TreatmentData', 'first_treatment'),
         from_schema('TreatmentData', 'duration_sch'),

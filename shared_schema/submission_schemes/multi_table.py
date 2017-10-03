@@ -47,6 +47,7 @@ scheme = {
     'clinical': [
         field('person', 'string', req=True,
               descr="The ID of a person in the ``participants`` file"),
+        from_schema('ClinicalData', 'kind'),
         from_schema("ClinicalData", "hiv"),
         from_schema("ClinicalData", "hbv"),
         from_schema("ClinicalData", "ost"),
@@ -84,6 +85,7 @@ scheme = {
         from_schema('Isolate', 'genotype'),
         from_schema('Isolate', 'subgenotype'),
         from_schema('Isolate', 'seq_method'),
+        from_schema('Isolate', 'strain'),
         from_schema('Isolate', 'cutoff'),
         from_schema('ClinicalIsolate', 'sample_kind'),
     ],
