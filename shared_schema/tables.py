@@ -109,3 +109,10 @@ class Schema(object):
             msg = "No field called '{}' on entity {}"
             raise KeyError(msg.format(field_name, entity_name))
         return field
+
+    def primary_key_of(self, entity_name):
+        entity = self.entities.get(entity_name)
+        if entity is None:
+            msg = "No entity called '{}' in schema"
+            raise KeyError(msg.format(entity_name))
+        return entity.meta['primary key']

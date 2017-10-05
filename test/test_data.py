@@ -39,3 +39,27 @@ class TestSchema(unittest.TestCase):
             sd.find_field('not a real entity', 'whatever')
         with self.assertRaises(KeyError):
             sd.find_field('foo', 'not a real field')
+
+    def test_find_entity(self):
+        sd = tables.Schema(test.example_data.entities)
+        self.assertEqual(
+            sd.find_field('foo', 'foo1'),
+            test.example_data.entities[0].fields[0],
+        )
+        with self.assertRaises(KeyError):
+            sd.find_field('asdf', 'jkl')
+        with self.assertRaises(KeyError):
+            sd.find_field('foo', 'jkl')
+
+    def test_get_primary_key(self):
+        sd = tables.Schema(test.example_data.entities)
+        self.assertEqual(
+            sd.primary_key_of('foo'),
+            'foo1',
+            )
+        self.assertEqual(
+            sd.primary_key_of('bar'),
+            'bar1',
+        )
+        with self.assertRaises(KeyError):
+            sd.find_primary_key_of('nonexistant_entity')
