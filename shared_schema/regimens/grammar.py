@@ -23,9 +23,9 @@ The grammar it parses is as follows:
 Example regimens:
 
     400mg SOF QD 12 weeks
-    200mg DAC + 100mg PEG TID 2 days
+    200mg DCV + 100mg PEG TID 2 days
     1000mg BOC QD 2 weeks, 100mg ASV 3 days
-    1mg SOF + 2mg SOF QID 3 weeks, 4mg DAC TID + 5mg BOC BID 6 weeks
+    1mg SOF + 2mg SOF QID 3 weeks, 4mg DCV TID + 5mg BOC BID 6 weeks
 '''
 
 import re
@@ -40,7 +40,7 @@ class Frequency(pp.Keyword):
     grammar = pp.Enum(*[pp.Keyword(f) for f in _freqs])
 
 
-_compounds = ["ASV", "BOC", "DAC", "DAS", "EBR", "GLP", "GZR", "LDV", "OMB",
+_compounds = ["ASV", "BOC", "DCV", "DAS", "EBR", "GLP", "GZR", "LDV", "OMB",
               "PAR", "PEG", "PIB", "RBV", "RIT", "SIM", "SOF", "TVR", "VAN",
               "VEL", "VOX", ]
 

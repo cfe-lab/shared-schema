@@ -4,7 +4,7 @@ _compound_keys = ('compound', 'abbreviation')
 _compounds = [
     ("asunaprevir", "ASV"),
     ("boceprevir", "BOC"),
-    ("daclatasvir", "DAC"),
+    ("daclatasvir", "DCV"),
     ("dasabuvir", "DAS"),
     ("elbasvir", "EBR"),
     ("glecaprevir", "GLP"),
@@ -37,7 +37,7 @@ freqs = [dict(zip(_freq_keys, f)) for f in _freqs]
 
 _regimen_keys = ("name", "regimen")
 _regimens = [
-    ("DAKLINZA", "60mg DAC QD 12 weeks"),
+    ("DAKLINZA", "60mg DCV QD 12 weeks"),
     ("EPCLUSA", "400mg SOF + 100mg VEL QD 12 weeks"),
     ("HARVONI", "90mg LDV + 400mg SOF QD 12 weeks"),
     ("INCIVEK", "750mg TVR TID 12 weeks"),

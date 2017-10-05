@@ -82,7 +82,7 @@ class TestDose(unittest.TestCase):
 
     good_cases = [
         ('100mg SOF', rg.Dose([rg.Amount.of(100), rg.Compound('SOF')])),
-        ('200mg DAC', rg.Dose([rg.Amount.of(200), rg.Compound('DAC')])),
+        ('200mg DCV', rg.Dose([rg.Amount.of(200), rg.Compound('DCV')])),
     ]
 
     def test_good_case(self):
@@ -94,8 +94,8 @@ class TestDose(unittest.TestCase):
 class TestIndication(unittest.TestCase):
 
     good_cases = [
-        ("100mg DAC QID", [[('100', 'DAC')], 'QID']),
-        ("1mg SOF + 2mg DAC TID", [[('1', 'SOF'), ('2', 'DAC')], 'TID']),
+        ("100mg DCV QID", [[('100', 'DCV')], 'QID']),
+        ("1mg SOF + 2mg DCV TID", [[('1', 'SOF'), ('2', 'DCV')], 'TID']),
     ]
 
     def test_good_cases(self):
@@ -110,7 +110,7 @@ class TestIndication(unittest.TestCase):
 
             self.assertEqual(parsed, expected)
 
-    bad_cases = ["100 DAC QD", "100mgDAC QID", "100mg DAC FFF"]
+    bad_cases = ["100 DCV QD", "100mgDCV QID", "100mg DCV FFF"]
 
     def test_bad_cases(self):
         for src in self.bad_cases:
@@ -177,12 +177,12 @@ class TestTimeUnit(unittest.TestCase):
 class TestDrugCombination(unittest.TestCase):
 
     cases = [
-        ('1mg DAC BID', rg.DrugCombination([
-            pp.parse('1mg DAC BID', rg.Indication)
+        ('1mg DCV BID', rg.DrugCombination([
+            pp.parse('1mg DCV BID', rg.Indication)
         ])),
-        ('1mg SOF QD & 2mg DAC + 3mg GLP TID', rg.DrugCombination([
+        ('1mg SOF QD & 2mg DCV + 3mg GLP TID', rg.DrugCombination([
             pp.parse('1mg SOF QD', rg.Indication),
-            pp.parse('2mg DAC + 3mg GLP TID', rg.Indication),
+            pp.parse('2mg DCV + 3mg GLP TID', rg.Indication),
         ])),
     ]
 
@@ -210,12 +210,12 @@ class TestRegimen(unittest.TestCase):
         self.assertEqual(parsed, expected)
 
     def test_multiple_drugs(self):
-        src = "1mg SOF QD & 2mg DAC TID 2 weeks"
+        src = "1mg SOF QD & 2mg DCV TID 2 weeks"
         parsed = pp.parse(src, rg.Regimen)
 
         indications = rg.DrugCombination([
             pp.parse("1mg SOF QD", rg.Indication),
-            pp.parse("2mg DAC TID", rg.Indication),
+            pp.parse("2mg DCV TID", rg.Indication),
         ])
         duration = pp.parse("2 weeks", rg.Duration)
         expected = rg.Regimen([rg.RegimenPart([indications, duration])])
@@ -223,7 +223,7 @@ class TestRegimen(unittest.TestCase):
         self.assertEqual(parsed, expected)
 
     def test_multiple_regimen_parts(self):
-        src = ("1mg SOF TID 2 weeks, 2mg DAC QD 3 days,"
+        src = ("1mg SOF TID 2 weeks, 2mg DCV QD 3 days,"
                " 0.180mg PEG QWK 48 weeks")
         parsed = pp.parse(src, rg.Regimen)
 
@@ -233,7 +233,7 @@ class TestRegimen(unittest.TestCase):
                 pp.parse("2 weeks", rg.Duration),
             ]),
             rg.RegimenPart([
-                pp.parse("2mg DAC QD", rg.DrugCombination),
+                pp.parse("2mg DCV QD", rg.DrugCombination),
                 pp.parse("3 days", rg.Duration),
             ]),
             rg.RegimenPart([
