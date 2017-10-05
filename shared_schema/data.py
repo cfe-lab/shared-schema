@@ -63,8 +63,16 @@ schema_data = Schema([
              "Publication describing this study (if applicable)",
          ),
          field("name", "string", "The name of the study or trial"),
-         field("start_year", "integer", "The year that data collection began"),
-         field("end_year", "integer", "The year data collection ended"),
+         field(
+             "start_year",
+             "integer",
+             "The year that data collection began (e.g: 2008)",
+         ),
+         field(
+             "end_year",
+             "integer",
+             "The year data collection ended (e.g: 2012)",
+         ),
          field("notes", "string", "Notes on data from this project"),
         ],
         meta={'tags': {'managed'}, 'primary key': 'name'},
@@ -106,7 +114,11 @@ schema_data = Schema([
                  "Black/African American, Hispanic/Latino, Pacific Islander, "
                  "or White")
             ),
-            field("year_of_birth", "integer", "Participant's year of birth"),
+            field(
+                "year_of_birth",
+                "integer",
+                ("Participant's year of birth (e.g: 1985)"),
+            ),
         ],
         meta={'tags': {'clinical'}, 'primary key': 'id'},
     ),
@@ -220,8 +232,9 @@ schema_data = Schema([
             ),
             field("phos", "float", "Phosphate test result, in mg/dL."),
             field("urea", "float", "Urea test result, in ng/dL."),
-            field("plate", "float", "Platelet count, in cells/mm$^3$."),
-            field("CD4", "float", "CD4 count, in cells/mm$^3$."),
+            # NOTE(nknight): contains reStrucutredText markup for superscripts
+            field("plate", "float", "Platelet count, in cells/mm\ :sup:`3`."),
+            field("CD4", "float", "CD4 count, in cells/mm\ :sup:`3`."),
             field("crp", "float", "C-Reactive Protein test result, in mg/L."),
             field(
                 "il28b",
@@ -373,7 +386,7 @@ schema_data = Schema([
          field(
              "ltfu_year",
              "integer",
-             "The year the participant was lost to follow-up",
+             "The year the participant was lost to follow-up (e.g: 2012)",
          ),
          field(
              "died",
