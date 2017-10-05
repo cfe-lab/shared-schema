@@ -24,7 +24,11 @@ scheme = {
               descr="The ID of a person in the ``participants`` file"),
         from_schema('LossToFollowUp', 'ltfu_year'),
         from_schema('LossToFollowUp', 'died'),
-        from_schema('LossToFollowUp', 'cod'),
+        from_schema(
+            'LossToFollowUp',
+            'cod',
+            new_possible_values="See :ref:`tbl_cause_of_death`.",
+        ),
     ],
     'participants': [
         field('id', 'string', req=True,

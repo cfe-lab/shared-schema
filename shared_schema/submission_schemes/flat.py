@@ -28,7 +28,11 @@ scheme = {
               descr="Has this participant been lost to follow up?"),
         from_schema('LossToFollowUp', 'ltfu_year'),
         from_schema('LossToFollowUp', 'died'),
-        from_schema('LossToFollowUp', 'cod'),
+        from_schema(
+            'LossToFollowUp',
+            'cod',
+            new_possible_values="See :ref:`tbl_cause_of_death`.",
+        ),
         from_schema('BehaviorData', 'sex_ori'),
         from_schema('BehaviorData', 'idu'),
         from_schema('BehaviorData', 'idu_recent'),

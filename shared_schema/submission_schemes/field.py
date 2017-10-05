@@ -61,18 +61,25 @@ class Field(object):
     def possible_values(self) -> str:
         if self._possible_values is None:
             vals = ["``{}``".format(v) for v in
-                      _possible_values(self._schema_field_type)]
+                    _possible_values(self._schema_field_type)]
             return ', '.join(vals)
         else:
             return self._possible_values
 
     @staticmethod
     def from_schema_field(schema_field, req=False, new_descr=None,
-                          new_name=None):
+                          new_name=None, new_possible_values=None):
+
+        def or_default(item, default):
+            if item is not None:
+                return item
+            else:
+                return default
+
         return Field(
-            (new_name if new_name is not None else schema_field.name),
+            or_default(new_name, schema_field.name),
             schema_field.type,
             req=req,
-            descr=(new_descr if new_descr is not None
-                   else schema_field.description),
+            descr=or_default(new_descr, schema_field.description),
+            possible_values=or_default(new_possible_values, None),
         )
