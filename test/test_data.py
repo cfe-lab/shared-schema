@@ -62,4 +62,4 @@ class TestSchema(unittest.TestCase):
             'bar1',
         )
         with self.assertRaises(KeyError):
-            sd.find_primary_key_of('nonexistant_entity')
+            sd.primary_key_of('nonexistant_entity')
