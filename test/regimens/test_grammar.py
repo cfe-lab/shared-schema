@@ -180,7 +180,7 @@ class TestDrugCombination(unittest.TestCase):
         ('1mg DCV BID', rg.DrugCombination([
             pp.parse('1mg DCV BID', rg.Indication)
         ])),
-        ('1mg SOF QD & 2mg DCV + 3mg GLP TID', rg.DrugCombination([
+        ('(1mg SOF QD & 2mg DCV + 3mg GLP TID)', rg.DrugCombination([
             pp.parse('1mg SOF QD', rg.Indication),
             pp.parse('2mg DCV + 3mg GLP TID', rg.Indication),
         ])),

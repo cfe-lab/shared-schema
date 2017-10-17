@@ -9,7 +9,7 @@ The grammar it parses is as follows:
     RegimenPart     <- DrugCombination Duration
     Duration        <- Number TimeUnit
     TimeUnit        <- "day" | "days" | "week" | "weeks"
-    DrugCombination <- Indication ("&" Indication)*
+    DrugCombination <- "("? Indication ("&" Indication)* ")"?
     Indication      <- DoseList Frequency
     Frequency       <- "QD" | "BID" | "TID" | "QID" | "QWK"
     DoseList        <- Dose ("+" Dose)*
@@ -23,9 +23,9 @@ The grammar it parses is as follows:
 Example regimens:
 
     400mg SOF QD 12 weeks
-    200mg DCV + 100mg PEG TID 2 days
+    (200mg DCV + 100mg PEG TID) 2 days
     1000mg BOC QD 2 weeks, 100mg ASV 3 days
-    1mg SOF + 2mg SOF QID 3 weeks, 4mg DCV TID + 5mg BOC BID 6 weeks
+    (1mg SOF + 2mg SOF QID) 3 weeks, (4mg DCV TID + 5mg BOC BID) 6 weeks
 '''
 
 import re
@@ -152,7 +152,11 @@ class Duration(pp.Concat):
 
 
 class DrugCombination(pp.List):
-    grammar = pp.csl(Indication, separator="&")
+    grammar = (
+        pp.optional("("),
+        pp.csl(Indication, separator="&"),
+        pp.optional(")"),
+    )
 
 
 class RegimenPart(pp.Concat):

@@ -38,8 +38,8 @@ freqs = [dict(zip(_freq_keys, f)) for f in _freqs]
 _regimen_keys = ("name", "regimen")
 _regimens = [
     ("DAKLINZA", "60mg DCV QD 12 weeks"),
-    ("EPCLUSA", "400mg SOF + 100mg VEL QD 12 weeks"),
-    ("HARVONI", "90mg LDV + 400mg SOF QD 12 weeks"),
+    ("EPCLUSA", "(400mg SOF + 100mg VEL QD) 12 weeks"),
+    ("HARVONI", "(90mg LDV + 400mg SOF QD) 12 weeks"),
     ("INCIVEK", "750mg TVR TID 12 weeks"),
     ("MAVYRET", "300mg GLP + 120mg PIB QD 12 weeks"),
     ("OLYSIO", "150mg SIM QD 12 weeks"),
