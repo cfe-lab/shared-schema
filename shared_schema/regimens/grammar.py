@@ -23,9 +23,9 @@ The grammar it parses is as follows:
 Example regimens:
 
     400mg SOF QD 12 weeks
-    (200mg DCV + 100mg PEG TID) 2 days
+    (200mg DCV + 100mg PEG) TID 2 days
     1000mg BOC QD 2 weeks, 100mg ASV 3 days
-    (1mg SOF + 2mg SOF QID) 3 weeks, (4mg DCV TID + 5mg BOC BID) 6 weeks
+    (1mg SOF + 2mg SOF) QID 3 weeks, (4mg DCV TID + 5mg BOC) BID 6 weeks
 '''
 
 import re
