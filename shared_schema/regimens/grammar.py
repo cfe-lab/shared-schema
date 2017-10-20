@@ -9,10 +9,10 @@ The grammar it parses is as follows:
     RegimenPart     <- DrugCombination Duration
     Duration        <- Number TimeUnit
     TimeUnit        <- "day" | "days" | "week" | "weeks"
-    DrugCombination <- "("? Indication ("&" Indication)* ")"?
+    DrugCombination <-  Indication ("&" Indication)*
     Indication      <- DoseList Frequency
     Frequency       <- "QD" | "BID" | "TID" | "QID" | "QWK"
-    DoseList        <- Dose ("+" Dose)*
+    DoseList        <- "("? Dose ("+" Dose)* ")"?
     Dose            <- Amount Compound
     Amount          <- Number "mg"
     Compound        <- "ASV" | "BOC" ...
@@ -94,7 +94,11 @@ class Dose(pp.Concat):
 
 
 class DoseList(pp.List):
-    grammar = pp.csl(Dose, separator='+')
+    grammar = (
+        pp.optional("("),
+        pp.csl(Dose, separator='+'),
+        pp.optional(")"),
+    )
 
 
 class Indication(pp.Concat):
@@ -152,11 +156,7 @@ class Duration(pp.Concat):
 
 
 class DrugCombination(pp.List):
-    grammar = (
-        pp.optional("("),
-        pp.csl(Indication, separator="&"),
-        pp.optional(")"),
-    )
+    grammar = pp.csl(Indication, separator="&")
 
 
 class RegimenPart(pp.Concat):
