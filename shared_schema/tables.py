@@ -32,6 +32,14 @@ class Entity(_entity):
     def tags(self):
         return self.meta.get('tags', {})
 
+    @property
+    def primary_key(self):
+        pk = self.meta.get('primary key')
+        if pk is None:
+            msg = "Missing primary key on {}".format(self.name)
+            raise ValueError(msg)
+        return pk
+
 
 _field = collections.namedtuple(
     "field",
@@ -51,6 +59,10 @@ class Field(_field):
     @property
     def tags(self):
         return self.meta.get('tags', {})
+
+    @property
+    def nullable(self):
+        return 'required' not in self.tags
 
 
 field = Field.make

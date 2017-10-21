@@ -13,5 +13,6 @@ setup(
         "pypeg2 >= 2.15.2, <3",
         "pystache >=0.5.4, <0.6",
         "setuptools >=36.1.1, <37.0",
+        "SQLAlchemy >=1.1.14, <2.0",
     ],
 )

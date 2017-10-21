@@ -18,8 +18,8 @@ clean:
 test: $(PYTHON_SRC) $(TESTS) FORCE
 	pep8 shared_schema
 	pep8 test
-	pyflakes shared_schema
-	pyflakes test
+	flake8 shared_schema
+	flake8 test
 	python -m unittest -b
 
 check: $(PYTHON_SRC) $(TESTS) FORCE
