@@ -79,10 +79,18 @@ def as_table(entity: tables.Entity, meta, schema_data):
 class DAO(object):
     '''A data access object that conforms to the SHARED Schema'''
 
-    def __init__(self, schema_data):
+    def __init__(self, schema_data, db_url, echo=False):
         self._meta = sa.MetaData()
         self.tables = {}
         for entity in schema_data.entities.values():
             tbl = as_table(entity, self._meta, schema_data)
             self.tables[entity.name] = tbl
             setattr(self, entity.name.lower(), tbl)
+        self.engine = sa.create_engine(db_url, echo=echo)
+
+    def init_db(self):
+        self._meta.create_all(self.engine)
+
+    def execute(self, expr, *rest):
+        conn = self.engine.connect()
+        return conn.execute(expr, *rest)

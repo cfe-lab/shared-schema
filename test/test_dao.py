@@ -1,8 +1,6 @@
 import unittest
 import uuid
 
-import sqlalchemy as sa
-
 from shared_schema import dao
 from shared_schema.data import schema_data
 
@@ -21,12 +19,8 @@ class TestDaoOperations(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dao = dao.DAO(schema_data)
-
-    def setUp(self):
-        self.engine = sa.create_engine('sqlite:///:memory:')
-        self.dao._meta.create_all(self.engine)
-        self.conn = self.engine.connect()
+        cls.dao = dao.DAO(schema_data, 'sqlite:///:memory:', echo=False)
+        cls.dao.init_db()
 
     def test_insert_retrieve(self):
         test_person = {
@@ -37,7 +31,7 @@ class TestDaoOperations(unittest.TestCase):
         }
 
         insert = self.dao.person.insert().values(**test_person)
-        insert_result = self.conn.execute(insert)
+        insert_result = self.dao.execute(insert)
         self.assertIsNotNone(
             insert_result,
             'Test Person insert returned None',
@@ -45,7 +39,7 @@ class TestDaoOperations(unittest.TestCase):
 
         select = self.dao.person.select().where(
             self.dao.person.c.id == test_person['id'])
-        select_result = self.conn.execute(select).first()
+        select_result = self.dao.execute(select).first()
         self.assertIsNotNone(
             select_result,
             "Couldn't retrieve created test person",
