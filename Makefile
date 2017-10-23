@@ -22,9 +22,6 @@ test: $(PYTHON_SRC) $(TESTS) FORCE
 	flake8 test
 	python -m unittest -b
 
-check: $(PYTHON_SRC) $(TESTS) FORCE
-	pep8 shared_schema
-
 docs/schema.svg: shared_schema/dot.py shared_schema/data.py
 	python -m shared_schema export dot  | unflatten | dot -Tsvg > docs/schema.svg
 
