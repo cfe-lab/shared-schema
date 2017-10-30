@@ -1,5 +1,6 @@
 import unittest
 
+from shared_schema.data import schema_data
 from shared_schema.submission_schemes import field
 from shared_schema.submission_schemes import multi_table
 
@@ -25,3 +26,11 @@ class TestMultiTableSubmissionScheme(unittest.TestCase):
                 len(set(fnames)),
                 msg.format(entity, duplicate_fields)
             )
+
+    def test_applicable_schema_paths_are_valid(self):
+        '''Verify that fields' schema paths point to fields in the schema'''
+        for tbl in multi_table.scheme.values():
+            for fld in tbl:
+                if fld.schema_path == 'not applicable':
+                    continue
+                schema_data.find_field(*fld.schema_path)

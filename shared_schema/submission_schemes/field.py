@@ -8,7 +8,7 @@ submission scheme field from a database schema field, possible
 changing some of its properties in the process.
 '''
 
-from typing import List
+from typing import List, Tuple
 
 from shared_schema import util
 
@@ -45,13 +45,22 @@ def _get_scheme_field_type(schema_field_type: str) -> str:
 class Field(object):
     '''A field in a submission scheme entity'''
 
-    def __init__(self, name: str, schema_type: str=None, descr: str=None,
-                 req: bool=False, possible_values: str=None) -> None:
+    def __init__(self,
+                 name: str,
+                 schema_type: str,
+                 schema_path: Tuple[str, str]=None,
+                 descr: str=None,
+                 req: bool=False,
+                 possible_values: str=None) -> None:
         self._schema_field_type = schema_type
         self.name = name
         self.description = descr
         self._possible_values = possible_values
         self.required = req
+        if schema_path is None:
+            msg = "Missing schema_path for field '{}'"
+            raise TypeError(msg.format(name))
+        self.schema_path = schema_path
 
     @property
     def type(self) -> str:
@@ -68,7 +77,8 @@ class Field(object):
 
     @staticmethod
     def from_schema_field(schema_field, req=False, new_descr=None,
-                          new_name=None, new_possible_values=None):
+                          new_name=None, new_possible_values=None,
+                          schema_path=None):
 
         def or_default(item, default):
             if item is not None:
@@ -78,7 +88,8 @@ class Field(object):
 
         return Field(
             or_default(new_name, schema_field.name),
-            schema_field.type,
+            schema_path=schema_path,
+            schema_type=schema_field.type,
             req=req,
             descr=or_default(new_descr, schema_field.description),
             possible_values=or_default(new_possible_values, None),

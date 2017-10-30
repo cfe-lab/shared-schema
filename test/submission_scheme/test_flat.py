@@ -1,5 +1,6 @@
 import unittest
 
+from shared_schema.data import schema_data
 from shared_schema.submission_schemes import field
 from shared_schema.submission_schemes import flat
 
@@ -32,3 +33,10 @@ class TestFlatSubmissionScheme(unittest.TestCase):
             len(set(names)),
             msg.format(duplicate_names),
         )
+
+    def test_applicable_schema_paths_are_valid(self):
+        '''Verify that fields' schema paths point to fields in the schema'''
+        for fld in flat.scheme['flat']:
+            if fld.schema_path == 'not applicable':
+                continue
+            schema_data.find_field(*fld.schema_path)

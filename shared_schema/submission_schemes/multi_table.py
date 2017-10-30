@@ -15,13 +15,23 @@ field = field.Field
 
 def from_schema(entity_name, field_name, **kwargs):
     schema_field = schema.find_field(entity_name, field_name)
-    return field.from_schema_field(schema_field, **kwargs)
+    schema_path = (entity_name, field_name)
+    return field.from_schema_field(
+        schema_field,
+        schema_path=schema_path,
+        **kwargs
+    )
 
 
 scheme = {
     'ltfu': [
-        field('id', 'string', req=True,
-              descr="The ID of a person in the ``participants`` file"),
+        field(
+            'id',
+            'string',
+            req=True,
+            descr="The ID of a person in the ``participants`` file",
+            schema_path=('LossToFollowUp', 'person_id'),
+        ),
         from_schema('LossToFollowUp', 'ltfu_year'),
         from_schema('LossToFollowUp', 'died'),
         from_schema(
@@ -31,16 +41,26 @@ scheme = {
         ),
     ],
     'participants': [
-        field('id', 'string', req=True,
-              descr="A participant's anonymous id"),
+        field(
+            'id',
+            'string',
+            req=True,
+            descr="A participant's anonymous id",
+            schema_path='not applicable',
+        ),
         from_schema('Person', 'country'),
         from_schema('Person', 'sex'),
         from_schema('Person', 'ethnicity'),
         from_schema('Person', 'year_of_birth'),
     ],
     'behavior': [
-        field('person', 'string', req=True,
-              descr="The ID of a peson in the ``participants`` file"),
+        field(
+            'person',
+            'string',
+            req=True,
+            descr="The ID of a peson in the ``participants`` file",
+            schema_path=('BehaviorData', 'person_id'),
+        ),
         from_schema('BehaviorData', 'sex_ori'),
         from_schema('BehaviorData', 'idu'),
         from_schema('BehaviorData', 'idu_recent'),
@@ -49,8 +69,13 @@ scheme = {
         from_schema('BehaviorData', 'prison'),
     ],
     'clinical': [
-        field('person', 'string', req=True,
-              descr="The ID of a person in the ``participants`` file"),
+        field(
+            'person',
+            'string',
+            req=True,
+            descr="The ID of a person in the ``participants`` file",
+            schema_path=('ClinicalData', 'person_id'),
+        ),
         from_schema('ClinicalData', 'kind'),
         from_schema("ClinicalData", "hiv"),
         from_schema("ClinicalData", "hbv"),
@@ -82,10 +107,20 @@ scheme = {
         from_schema("ClinicalData", "transpl"),
     ],
     'isolates': [
-        field('id', 'string', req=True,
-              descr="The ID of a person in the ``participants`` file"),
-        field('seq_file', 'string', req=True,
-              descr="The name of a sequence file in the ``sequences`` folder"),
+        field(
+            'id',
+            'string',
+            req=True,
+            descr="The ID of a person in the ``participants`` file",
+            schema_path=('ClinicalIsolate', 'person_id'),
+        ),
+        field(
+            'seq_file',
+            'string',
+            req=True,
+            descr="The name of a sequence file in the ``sequences`` folder",
+            schema_path='not applicable',
+        ),
         from_schema('Isolate', 'genotype'),
         from_schema('Isolate', 'subgenotype'),
         from_schema('Isolate', 'seq_method'),
@@ -94,8 +129,13 @@ scheme = {
         from_schema('ClinicalIsolate', 'sample_kind'),
     ],
     'treatment': [
-        field('id', 'string', req=True,
-              descr="The ID of a person in the ``participants`` file"),
+        field(
+            'id',
+            'string',
+            req=True,
+            descr="The ID of a person in the ``participants`` file",
+            schema_path=('TreatmentData', 'person_id'),
+        ),
         from_schema('TreatmentData', 'first_treatment'),
         from_schema('TreatmentData', 'duration_sch'),
         from_schema('TreatmentData', 'duration_act'),
@@ -104,6 +144,7 @@ scheme = {
             'string',
             descr="What drug regimens was the participant taking?",
             possible_values="See :ref:`treatment_regimens`.",
+            schema_path='not applicable',
         ),
         field(
             'prev_regimen',
@@ -111,6 +152,7 @@ scheme = {
             descr=("If the participant has been treated before, what "
                    "treatment regimen were they taking previously?"),
             possible_values="See :ref:`treatment_regimens`.",
+            schema_path='not applicable',
         ),
         field(
             'pprev_regimen',
@@ -118,8 +160,12 @@ scheme = {
             descr=("If the participant has had two previous treatments, "
                    "what regimen were they taking before-last?"),
             possible_values="See :ref:`treatment_regimens`.",
+            schema_path='not applicable',
         ),
         from_schema('TreatmentData', 'response'),
         from_schema('TreatmentData', 'notes'),
     ],
+}
+
+reverse = {
 }
