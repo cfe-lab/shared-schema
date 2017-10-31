@@ -26,7 +26,7 @@ def from_schema(entity_name, field_name, **kwargs):
 scheme = {
     'ltfu': [
         field(
-            'id',
+            'person',
             'string',
             req=True,
             descr="The ID of a person in the ``participants`` file",
@@ -108,7 +108,7 @@ scheme = {
     ],
     'isolates': [
         field(
-            'id',
+            'person',
             'string',
             req=True,
             descr="The ID of a person in the ``participants`` file",
@@ -130,7 +130,7 @@ scheme = {
     ],
     'treatment': [
         field(
-            'id',
+            'person',
             'string',
             req=True,
             descr="The ID of a person in the ``participants`` file",
@@ -165,7 +165,4 @@ scheme = {
         from_schema('TreatmentData', 'response'),
         from_schema('TreatmentData', 'notes'),
     ],
-}
-
-reverse = {
 }
