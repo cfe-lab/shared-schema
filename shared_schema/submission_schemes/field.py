@@ -59,6 +59,10 @@ class Field(object):
             raise TypeError(msg.format(name))
         self.schema_path = schema_path
 
+    def __str__(self):
+        tmpl = "<Field {} ({})>"
+        return tmpl.format(self.name, self.type)
+
     @property
     def type(self) -> datatypes.Datatype:
         dt = datatypes.classify(self._schema_field_type)
