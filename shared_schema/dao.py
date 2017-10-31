@@ -6,6 +6,7 @@ import uuid
 import sqlalchemy as sa
 import sqlalchemy.types as sa_types
 
+from . import datatypes
 from . import tables
 from . import util
 
@@ -34,29 +35,32 @@ class UUID(sa_types.TypeDecorator):
 
 
 def column_type(field_type, schema_data):
+    dt = datatypes.classify(field_type)
+    # NOTE(nknight): We're ignoring the 'length' parameter to the
+    # string field becuase sqlite and postgres don't require it
     simple_types = {
-        'bool': sa.Boolean,
-        'date': sa.Date,
-        'float': sa.Float,
-        'integer': sa.Integer,
-        'string': sa.String(),  # ignore length; SQLite doesn't require it
-        'uuid': UUID,
+        datatypes.Datatype.INTEGER: sa.Integer,
+        datatypes.Datatype.FLOAT: sa.Float,
+        datatypes.Datatype.STRING: sa.String(),
+        datatypes.Datatype.DATE: sa.Date,
+        datatypes.Datatype.UUID: UUID,
+        datatypes.Datatype.BOOL: sa.Boolean,
     }
-    if field_type in simple_types:
-        return simple_types.get(field_type)
-
-    if field_type.strip().startswith('foreign key'):
+    if dt in simple_types:
+        return simple_types.get(dt)
+    if dt is datatypes.Datatype.FOREIGN_KEY:
         target_entity = util.foreign_key_target(field_type)
         target_entity_pk = schema_data.primary_key_of(target_entity)
         fk_target = "{}.{}".format(target_entity, target_entity_pk)
         return sa.ForeignKey(fk_target)
-
-    if field_type.strip().startswith('enum'):
+    if dt is datatypes.Datatype.ENUM:
         members = list(util.enum_members(field_type))
         if not members:
             msg = "Invalid enum type: {}"
             raise ValueError(msg.format(field_type))
         return sa.Enum(*members)
+    msg = "Can't get column type for '{}'"
+    raise ValueError(msg.format(field_type))
 
 
 def as_column(field: tables.Field, entity: tables.Entity, schema_data):
