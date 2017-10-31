@@ -8,7 +8,8 @@ A Schema contains many entities, and can check things like foreign keys.'''
 
 import collections
 
-import shared_schema.util as util
+from . import datatypes
+from . import util
 
 
 _entity = collections.namedtuple(
@@ -71,9 +72,6 @@ field = Field.make
 class Schema(object):
     "A collection of related Entitites with some validity checks"
 
-    types = {"integer", "float", "string", "date", "uuid", "bool",
-             "enum", "foreign key"}
-
     def __init__(self, raw_entities):
         self.raw_entities = raw_entities
         self.entities = {e.name: e for e in raw_entities}
@@ -98,12 +96,11 @@ class Schema(object):
 
     @classmethod
     def type_is_valid(cls, t, entities):
-        known_type = t in cls.types
-        fk = t.lstrip().startswith("foreign key")
-        enum = t.lstrip().startswith("enum")
-        if not (known_type or fk or enum):
+        try:
+            datatype = datatypes.classify(t)
+        except ValueError:
             return False
-        elif fk:
+        if datatype == datatypes.Datatype.FOREIGN_KEY:
             fk_target = util.foreign_key_target(t)
             err_msg = "invalid foreign key target: {}".format(fk_target)
             assert fk_target in entities, err_msg
