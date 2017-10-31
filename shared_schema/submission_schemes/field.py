@@ -11,6 +11,7 @@ changing some of its properties in the process.
 from typing import List, Tuple
 
 from shared_schema import util
+from shared_schema import datatypes
 
 
 def _possible_values(schema_field_type: str) -> List[str]:
@@ -23,23 +24,19 @@ def _possible_values(schema_field_type: str) -> List[str]:
         return list(util.enum_members(schema_field_type))
 
 
-def _get_scheme_field_type(schema_field_type: str) -> str:
-    sft = schema_field_type.strip()
-    if sft == 'date':
-        return 'date'
-    elif sft == 'bool':
-        return 'bool'
-    elif sft in ['integer', 'float']:
-        return 'number'
-    elif sft in ['string', 'uuid']:
-        return 'text'
-    elif sft.startswith('enum'):
-        return 'text'
-    elif sft.startswith('foreign key'):
-        return 'text'
-    else:
-        msg_tmpl = 'Unknown schema field type: {}'
-        raise ValueError(msg_tmpl.format(sft))
+def _get_scheme_field_type(schema_field_type: str) -> datatypes.Datatype:
+    dt = datatypes.classify(schema_field_type)
+    scheme_types = {
+        datatypes.Datatype.INTEGER: 'number',
+        datatypes.Datatype.FLOAT: 'number',
+        datatypes.Datatype.STRING: 'text',
+        datatypes.Datatype.DATE: 'date',
+        datatypes.Datatype.UUID: 'text',
+        datatypes.Datatype.BOOL: 'bool',
+        datatypes.Datatype.ENUM: 'text',
+        datatypes.Datatype.FOREIGN_KEY: 'text',
+    }
+    return scheme_types.get(dt)
 
 
 class Field(object):
@@ -63,8 +60,9 @@ class Field(object):
         self.schema_path = schema_path
 
     @property
-    def type(self) -> str:
-        return _get_scheme_field_type(self._schema_field_type)
+    def type(self) -> datatypes.Datatype:
+        dt = datatypes.classify(self._schema_field_type)
+        return dt
 
     @property
     def possible_values(self) -> str:
