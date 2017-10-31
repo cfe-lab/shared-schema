@@ -71,8 +71,8 @@ field = Field.make
 class Schema(object):
     "A collection of related Entitites with some validity checks"
 
-    types = {"integer", "float", "string", "foreign key", "date",
-             "uuid", "enum", "bool"}
+    types = {"integer", "float", "string", "date", "uuid", "bool",
+             "enum", "foreign key"}
 
     def __init__(self, raw_entities):
         self.raw_entities = raw_entities
