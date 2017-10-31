@@ -18,7 +18,7 @@ def _possible_values(schema_field_type: str) -> List[str]:
     """The possible values of a schema field's corresponding submission
     scheme field.
     """
-    if not schema_field_type.strip().startswith('enum'):
+    if not datatypes.classify(schema_field_type) is datatypes.Datatype.ENUM:
         return []
     else:
         return list(util.enum_members(schema_field_type))
