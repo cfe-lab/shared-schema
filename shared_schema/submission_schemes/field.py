@@ -24,8 +24,9 @@ def _possible_values(schema_field_type: str) -> List[str]:
         return list(util.enum_members(schema_field_type))
 
 
-def _get_scheme_field_type(schema_field_type: str) -> datatypes.Datatype:
-    dt = datatypes.classify(schema_field_type)
+def _get_scheme_field_type(schema_field_type: datatypes.Datatype) -> str:
+    if not isinstance(schema_field_type, datatypes.Datatype):
+        raise ValueError()
     scheme_types = {
         datatypes.Datatype.INTEGER: 'number',
         datatypes.Datatype.FLOAT: 'number',
@@ -36,7 +37,7 @@ def _get_scheme_field_type(schema_field_type: str) -> datatypes.Datatype:
         datatypes.Datatype.ENUM: 'text',
         datatypes.Datatype.FOREIGN_KEY: 'text',
     }
-    return scheme_types.get(dt)
+    return scheme_types.get(schema_field_type)
 
 
 class Field(object):
@@ -44,7 +45,7 @@ class Field(object):
 
     def __init__(self,
                  name: str,
-                 schema_type: str,
+                 schema_type: datatypes.Datatype,
                  schema_path: Tuple[str, str]=None,
                  descr: str=None,
                  req: bool=False,
@@ -66,7 +67,7 @@ class Field(object):
     @property
     def type(self) -> datatypes.Datatype:
         dt = datatypes.classify(self._schema_field_type)
-        return dt
+        return _get_scheme_field_type(dt)
 
     @property
     def possible_values(self) -> str:

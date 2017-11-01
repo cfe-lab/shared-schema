@@ -1,6 +1,7 @@
 import unittest
 
 from shared_schema import data
+from shared_schema import datatypes
 from shared_schema.submission_schemes import field
 
 
@@ -39,9 +40,10 @@ class TestSubmissionSchemeField(unittest.TestCase):
             ('foreign key (Person)', 'text'),
         ]
         for inp, outp in cases:
+            dt = datatypes.classify(inp)
             self.assertEqual(
                 outp,
-                field._get_scheme_field_type(inp)
+                field._get_scheme_field_type(dt)
             )
 
     def test_existing_field(self):
@@ -49,5 +51,6 @@ class TestSubmissionSchemeField(unittest.TestCase):
         # the existing schema
         for entity in data.schema_data.raw_entities:
             for fld in entity.fields:
-                field._get_scheme_field_type(fld.type)
+                dt = datatypes.classify(fld.type)
+                field._get_scheme_field_type(dt)
                 field._possible_values(fld.type)
