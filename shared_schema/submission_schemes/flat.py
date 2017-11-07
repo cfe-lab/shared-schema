@@ -123,6 +123,12 @@ scheme = {
             schema_path='not applicable',
         ),
         field(
+            'bl_notes',
+            'string',
+            descr="Notes on the baseline sequence, if applicable",
+            schema_path='not applicable',
+        ),
+        field(
             'fu_seq_file',
             'string',
             descr=("The name of sequence file in the ``sequences`` folder "
@@ -169,6 +175,12 @@ scheme = {
                    "'5' or '5.0'."),
             schema_path='not applicable',
         ),
+        field(
+            'fu_notes',
+            'string',
+            descr="Notes on the follow-up sequence, if applicable",
+            schema_path='not applicable',
+        ),
         from_schema('TreatmentData', 'first_treatment'),
         from_schema('TreatmentData', 'duration_sch'),
         from_schema('TreatmentData', 'duration_act'),
@@ -196,6 +208,6 @@ scheme = {
             schema_path='not applicable',
         ),
         from_schema('TreatmentData', 'response'),
-        from_schema('TreatmentData', 'notes'),
+        from_schema('TreatmentData', 'notes', new_name='treatment_notes'),
     ]
 }
