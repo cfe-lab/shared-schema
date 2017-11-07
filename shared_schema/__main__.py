@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 parser.set_defaults(handler=lambda _: parser.print_help())
 
 
-subparsers = parser.add_subparsers(title='commands', )
+subparsers = parser.add_subparsers(title='commands')
 
 
 exporter = subparsers.add_parser(
