@@ -11,9 +11,9 @@ schema = data.schema_data
 field = field.Field
 
 
-def from_schema(entity_name, field_name, **kwargs):
-    schema_field = schema.find_field(entity_name, field_name)
-    schema_path = (entity_name, field_name)
+def from_schema(entity_name, schema_field_name, **kwargs):
+    schema_field = schema.find_field(entity_name, schema_field_name)
+    schema_path = (entity_name, schema_field_name)
     return field.from_schema_field(
         schema_field,
         schema_path=schema_path,
