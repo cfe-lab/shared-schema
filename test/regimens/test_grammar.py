@@ -1,3 +1,4 @@
+import decimal
 import unittest
 
 import pypeg2 as pp
@@ -62,7 +63,7 @@ class TestAmount(unittest.TestCase):
             )
             self.assertEqual(
                 parsed.milligrams,
-                float(case),
+                decimal.Decimal(case),
                 "Expected amount.milligrams to be {}".format(case),
             )
 

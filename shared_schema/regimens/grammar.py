@@ -28,6 +28,7 @@ Example regimens:
     (1mg SOF + 2mg SOF) QID 3 weeks, (4mg DCV TID + 5mg BOC) BID 6 weeks
 '''
 
+import decimal
 import re
 
 import pypeg2 as pp
@@ -55,13 +56,13 @@ class Number(pp.RegEx):
     def __eq__(self, other):
         type_matches = isinstance(other, type(self))
         if type_matches:
-            return float(self.pattern) == float(other.pattern)
+            return decimal.Decimal(self.pattern) == decimal.Decimal(other.pattern)
         else:
             return False
 
     @property
     def amount(self):
-        return float(self.pattern)
+        return decimal.Decimal(self.pattern)
 
 
 class Amount(pp.Concat):
@@ -71,7 +72,7 @@ class Amount(pp.Concat):
     def milligrams(self):
         number = self[0]
         if '.' in number.pattern:
-            return float(number.pattern)
+            return decimal.Decimal(number.pattern)
         else:
             return int(number.pattern)
 
