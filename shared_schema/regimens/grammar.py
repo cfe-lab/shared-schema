@@ -56,7 +56,9 @@ class Number(pp.RegEx):
     def __eq__(self, other):
         type_matches = isinstance(other, type(self))
         if type_matches:
-            return decimal.Decimal(self.pattern) == decimal.Decimal(other.pattern)
+            a = decimal.Decimal(self.pattern)
+            b = decimal.Decimal(other.pattern)
+            return a == b
         else:
             return False
 
