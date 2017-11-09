@@ -1,4 +1,5 @@
 import decimal
+import random
 import unittest
 
 import pypeg2 as pp
@@ -77,6 +78,15 @@ class TestAmount(unittest.TestCase):
         not_equals = [100, '100']
         for n in not_equals:
             self.assertNotEqual(n, rg.Amount.of(100))
+
+    def test_no_rounding_errors(self):
+        def as_amount(src):
+            parsed = pp.parse(src, rg.Amount)
+            return parsed.milligrams
+        for _ in range(2048):
+            amt = as_amount("{:.8f} mg".format(random.random()))
+            one = as_amount("1 mg")
+            self.assertEqual(amt, amt + one - one)
 
 
 class TestDose(unittest.TestCase):
