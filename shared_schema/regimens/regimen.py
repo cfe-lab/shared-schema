@@ -1,4 +1,4 @@
-'''A hashable, eq'able, cannonical representation of drug regimens'''
+'''A hashable, eq'able, canonical representation of drug regimens'''
 import collections
 import decimal
 import functools
@@ -6,7 +6,7 @@ import functools
 from . import grammar
 
 # NOTE(nknight): We don't consider grammar.TimeUnit or grammar.Number
-# because we cannonicalise the things that contain them direcly
+# because we canonicalise the things that contain them direcly
 # (Durations and Amounts); they're required for parsing, but don't
 # contain extra information.
 
@@ -26,7 +26,7 @@ def types_match(f):
 
 
 # ---------------------------------------------------------------------
-# Cannonicalizing Collections
+# Canonicalizing Collections
 '''These functions operate on collections and objects that can
 *sometimes* be consolidated, e.g. Doses of the same compound.
 

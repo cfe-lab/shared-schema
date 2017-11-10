@@ -1,4 +1,4 @@
-'''Test the hashable, equable, cannonical regimen data object'''
+'''Test the hashable, equable, canonical regimen data object'''
 
 import decimal
 import unittest
@@ -101,7 +101,7 @@ class TestParsingCollections(unittest.TestCase):
             frozenset([dcv_dose, boc_dose]),
         )
 
-    def test_doselist_cannonical(self):
+    def test_doselist_canonical(self):
         dl1 = parse_from_source("2mg DCV", rg.DoseList)
         dl2 = parse_from_source("1mg DCV + 1mg DCV", rg.DoseList)
         self.assertTrue(*methods_exist(dl1))
