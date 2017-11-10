@@ -8,8 +8,8 @@ treatment regimens based on drug labels from the US FDA.
 import csv
 import sys
 
-from . import standard
-from . import grammar
+from . import standard  # noqa
+from . import grammar  # noqa
 
 
 def format_row(row):
