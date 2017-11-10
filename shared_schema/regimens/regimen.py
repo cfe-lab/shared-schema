@@ -4,6 +4,7 @@ import decimal
 import functools
 
 from . import grammar
+from . import standard
 
 # NOTE(nknight): We don't consider grammar.TimeUnit or grammar.Number
 # because we canonicalise the things that contain them direcly
@@ -242,15 +243,19 @@ def _(src):
 
 # ---------------------------------------------------------------------
 
-class Regimen(object):
-    '''A hashable, eq'able object representing a drug regimen.'''
+def from_string(src):
+    '''Parse a regimen from a string
 
-    def __init__(self):
-        pass
-
-    def __hash__(self):
-        pass
-
-    @classmethod
-    def from_grammar_object(cls, grammar_obj):
-        return parse(grammar_obj)
+    Given the name of a standard regimen or a well-formed regimen
+    description, returns a data object with the normalized
+    regimen. Otherwise, throws a SyntaxError.
+    '''
+    if src.upper() in standard.regimens:
+        standard_regimen = standard.regimens.get(src.upper())
+        grammar_obj = grammar.parse(standard_regimen)
+        data_obj = parse(grammar_obj)
+        return data_obj
+    else:
+        grammar_obj = grammar.parse(src)
+        data_obj = parse(grammar_obj)
+        return data_obj

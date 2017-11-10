@@ -49,7 +49,7 @@ duration_24wks = decimal.Decimal(24 * 7)
 
 
 # ---------------------------------------------------------------------
-# Test Cases
+# Data Object Construction
 
 class TestParsingCompoundObjects(unittest.TestCase):
 
@@ -163,7 +163,7 @@ class TestParsingCollections(unittest.TestCase):
 
 class TestMonoidalOperations(unittest.TestCase):
 
-    # NOTE(nknight): Skip testing regimen.key, as it's just an accessor
+    # NOTE(nknight): Skip testing regimen.key; it's just an accessor
 
     dose_a1 = regimen._dose(amount=1, compound='test')
     dose_a2 = regimen._dose(amount=2, compound='test')
@@ -173,6 +173,10 @@ class TestMonoidalOperations(unittest.TestCase):
     druglist_b = frozenset([dose_b1])
     druglist_ab = frozenset([dose_a1, dose_b1])
 
+    indication_a = regimen._indication(frequency='QD', doselist=druglist_a)
+    indication_b = regimen._indication(frequency='QD', doselist=druglist_b)
+    indication_ab = regimen._indication(frequency='QD', doselist=druglist_ab)
+
     def test_dose_add(self):
         self.assertEqual(
             regimen.add(self.dose_a1, self.dose_a2),
@@ -181,18 +185,46 @@ class TestMonoidalOperations(unittest.TestCase):
         with self.assertRaises(ValueError):
             regimen.add(self.dose_a1, self.dose_b1)
 
-    def test_dose_consolidating_insert(self):
-        xs = frozenset([self.dose_a1, self.dose_b1])
-        new_xs = regimen.consolidating_insert(xs, self.dose_a1)
-        self.assertEqual(
-            new_xs,
-            frozenset([
-                regimen._dose(amount=2, compound='test'),
-                self.dose_b1
-            ]),
+    def test_indication_add(self):
+        key_mismatch_indication = regimen._indication(
+            frequency='QWK',
+            doselist=self.druglist_a,
         )
+        self.assertEqual(
+            regimen.add(self.indication_a, self.indication_b),
+            self.indication_ab,
+        )
+        with self.assertRaises(ValueError):
+            regimen.add(self.indication_a, key_mismatch_indication)
 
-    def test_indication_consolidating_insert(self):
+    def test_regimen_part_add(self):
+        drugcombo_a = frozenset([self.indication_a])
+        drugcombo_b = frozenset([self.indication_b])
+        drugcombo_ab = frozenset([self.indication_ab])
+        regpart_a = regimen._regimen_part(
+            duration=decimal.Decimal(1),
+            drug_combination=drugcombo_a,
+        )
+        regpart_b = regimen._regimen_part(
+            duration=decimal.Decimal(1),
+            drug_combination=drugcombo_b,
+        )
+        regpart_ab = regimen._regimen_part(
+            duration=decimal.Decimal(1),
+            drug_combination=drugcombo_ab,
+        )
+        keymismatch_regpart = regimen._regimen_part(
+            duration=decimal.Decimal(2),
+            drug_combination=drugcombo_a,
+        )
+        self.assertEqual(
+            regimen.add(regpart_a, regpart_b),
+            regpart_ab,
+        )
+        with self.assertRaises(ValueError):
+            regimen.add(regpart_a, keymismatch_regpart)
+
+    def test_consolidating_insert(self):
         self.assertEqual(
             regimen.consolidating_insert(
                 self.druglist_a,
@@ -214,3 +246,31 @@ class TestMonoidalOperations(unittest.TestCase):
             ),
             frozenset([self.dose_a2, self.dose_b1]),
         )
+
+
+# ---------------------------------------------------------------------
+# Integrated Parsing
+
+
+class TestFromString(unittest.TestCase):
+
+    def is_regimen(self, parsed):
+        self.assertIsInstance(parsed, frozenset)
+        reg_part = next(iter(parsed))
+        self.assertIsInstance(reg_part, regimen._regimen_part)
+
+    def test_parse_standard_reg(self):
+        src = 'SOVALDI'
+        parsed = regimen.from_string(src)
+        self.is_regimen(parsed)
+
+    def test_parse_regimen(self):
+        src = ("(200mg SOF + 800mg DCV) QD & 100mg BOC TID 2 weeks, "
+               "1mg PAR QWK 11days")
+        parsed = regimen.from_string(src)
+        self.is_regimen(parsed)
+
+    def test_error(self):
+        src = 'ill-formed regimen'
+        with self.assertRaises(SyntaxError):
+            regimen.from_string(src)
