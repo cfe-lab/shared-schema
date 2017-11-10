@@ -20,8 +20,8 @@ test: $(PYTHON_SRC) $(TESTS) FORCE
 	${VBIN}/python -m unittest
 
 check: $(PYTHON_SRC) $(TESTS) FORCE test
-	${VBIN}/pep8 shared_schema
-	${VBIN}/pep8 test
+	${VBIN}/pycodestyle shared_schema
+	${VBIN}/pycodestyle test
 	${VBIN}/flake8 shared_schema
 	${VBIN}/flake8 test
 
