@@ -108,7 +108,7 @@ class Indication(pp.Concat):
     grammar = DoseList, Frequency
 
 
-_time_units = ['day', 'days', 'week',  'weeks']
+_time_units = ['day', 'days', 'week', 'weeks']
 
 
 class TimeUnit(pp.Keyword):

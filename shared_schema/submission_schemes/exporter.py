@@ -32,7 +32,7 @@ def get_confirmation(resolved_path, files):
                 sys.exit('Aborting')
             else:
                 print("Please enter 'y' or 'n'")
-        except:
+        except Exception:
             print()
             sys.exit('Aborting')
 

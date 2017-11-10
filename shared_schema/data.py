@@ -10,17 +10,18 @@ schema_data = Schema([
         "Medication",
         ("Anti-HCV drugs. Phenotypic resistance tests and treatment records "
          "reference this table."),
-        [field(
-            "full_name",
-            "string",
-            "The medication's name",
-            meta={'tags': {'required'}},
-        ),
-         field(
-             "short_name",
-             "string",
-             "The medication's three-letter abbreviation",
-         ),
+        [
+            field(
+                "full_name",
+                "string",
+                "The medication's name",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "short_name",
+                "string",
+                "The medication's three-letter abbreviation",
+            ),
         ],
         meta={'tags': {'managed'}, 'primary key': 'full_name'},
     ),
@@ -51,29 +52,30 @@ schema_data = Schema([
     Entity.make(
         "SourceStudy",
         "A study, trial, or other batch of data from a collaborator",
-        [field(
-            "collaborator",
-            "foreign key (Collaborator)",
-            "The collaborator providing the data",
-            meta={'tags': {'required'}},
-        ),
-         field(
-             "ref_id",
-             "foreign key (Reference)",
-             "Publication describing this study (if applicable)",
-         ),
-         field("name", "string", "The name of the study or trial"),
-         field(
-             "start_year",
-             "integer",
-             "The year that data collection began (e.g: 2008)",
-         ),
-         field(
-             "end_year",
-             "integer",
-             "The year data collection ended (e.g: 2012)",
-         ),
-         field("notes", "string", "Notes on data from this project"),
+        [
+            field(
+                "collaborator",
+                "foreign key (Collaborator)",
+                "The collaborator providing the data",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "ref_id",
+                "foreign key (Reference)",
+                "Publication describing this study (if applicable)",
+            ),
+            field("name", "string", "The name of the study or trial"),
+            field(
+                "start_year",
+                "integer",
+                "The year that data collection began (e.g: 2008)",
+            ),
+            field(
+                "end_year",
+                "integer",
+                "The year data collection ended (e.g: 2012)",
+            ),
+            field("notes", "string", "Notes on data from this project"),
         ],
         meta={'tags': {'managed'}, 'primary key': 'name'},
     ),
@@ -377,28 +379,29 @@ schema_data = Schema([
     Entity.make(
         "LossToFollowUp",
         "Records data about participants leaving the study",
-        [field(
-            "person_id",
-            "foreign key (Person)",
-            "",
-            meta={'tags': {'required'}},
-        ),
-         field(
-             "ltfu_year",
-             "integer",
-             "The year the participant was lost to follow-up (e.g: 2012)",
-         ),
-         field(
-             "died",
-             "bool",
-             "Is the participant deceased?",
-         ),
-         field(
-             "cod",
-             ("enum(liv, aid, odo, can, cir, res, dia, gen, tra, cer, dig, "
-              "oth)"),
-             "Cause of death (if applicable; blank otherwise)"
-         ),
+        [
+            field(
+                "person_id",
+                "foreign key (Person)",
+                "",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "ltfu_year",
+                "integer",
+                "The year the participant was lost to follow-up (e.g: 2012)",
+            ),
+            field(
+                "died",
+                "bool",
+                "Is the participant deceased?",
+            ),
+            field(
+                "cod",
+                ("enum(liv, aid, odo, can, cir, res, dia, gen, tra, cer, dig, "
+                 "oth)"),
+                "Cause of death (if applicable; blank otherwise)"
+            ),
         ],
         meta={'tags': {'clinical'}, 'primary key': 'person_id'},
     ),
@@ -447,7 +450,7 @@ schema_data = Schema([
             ),
         ],
         meta={'primary key': 'id'},
-        ),
+    ),
 
     Entity.make(
         "Sequence",
@@ -516,30 +519,31 @@ schema_data = Schema([
             ),
         ],
         meta={'primary key': 'id'},
-        ),
+    ),
 
     Entity.make(
         "ClinicalIsolate",
         "Isolate information",
-        [field(
-            "isolate_id",
-            "foreign key (Isolate)",
-            "The isolate this data pertains to",
-            meta={'tags': {'required', 'managed'}},
-        ),
-         field(
-             "person_id",
-             "foreign key (Person)",
-             "The participant who gave the isolate",
-             meta={'tags': {'required'}},
-         ),
-         field(
-             "sample_kind",
-             "enum(bl, eot, fw4, fw12, fw24)",
-             ("Whether this isolate is from  a baseline sample, an end-of-"
-              "treatment-sample, or a follow up sample 4, 12, or 24 weeks "
-              "after end-of-treatment."),
-         ),
+        [
+            field(
+                "isolate_id",
+                "foreign key (Isolate)",
+                "The isolate this data pertains to",
+                meta={'tags': {'required', 'managed'}},
+            ),
+            field(
+                "person_id",
+                "foreign key (Person)",
+                "The participant who gave the isolate",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "sample_kind",
+                "enum(bl, eot, fw4, fw12, fw24)",
+                ("Whether this isolate is from  a baseline sample, an end-of-"
+                 "treatment-sample, or a follow up sample 4, 12, or 24 weeks "
+                 "after end-of-treatment."),
+            ),
         ],
         meta={'tags': {'clinical'}, 'primary key': 'isolate_id'},
     ),
@@ -744,6 +748,6 @@ schema_data = Schema([
             field("pubmed_id", "string", ""),
         ],
         meta={'primary key': 'id'},
-        ),
+    ),
 
 ])
