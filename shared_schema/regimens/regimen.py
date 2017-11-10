@@ -6,6 +6,8 @@ import functools
 from . import grammar
 from . import standard
 
+# flake8: noqa
+
 # NOTE(nknight): We don't consider grammar.TimeUnit or grammar.Number
 # because we canonicalise the things that contain them direcly
 # (Durations and Amounts); they're required for parsing, but don't

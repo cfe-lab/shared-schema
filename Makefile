@@ -23,7 +23,7 @@ check: $(PYTHON_SRC) $(TESTS) FORCE test
 	${VBIN}/pycodestyle shared_schema
 	${VBIN}/pycodestyle test
 # Skip F811, function redefinition
-	${VBIN}/flake8 --ignore=F811 shared_schema
+	${VBIN}/flake8 shared_schema
 	${VBIN}/flake8 test
 
 docs/schema.svg: shared_schema/dot.py shared_schema/data.py
