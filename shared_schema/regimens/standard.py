@@ -1,6 +1,5 @@
 '''Record standard compounds and treatment regimens'''
 
-_compound_keys = ('compound', 'abbreviation')
 _compounds = [
     ("asunaprevir", "ASV"),
     ("boceprevir", "BOC"),
@@ -23,9 +22,9 @@ _compounds = [
     ("velpatasvir", "VEL"),
     ("voxilaprevir", "VOX"),
 ]
-compounds = [dict(zip(_compound_keys, c)) for c in _compounds]
+compounds = {cmpnd: abbr for cmpnd, abbr in _compounds}
+compound_keys = ('compound', 'abbreviation')
 
-_freq_keys = ("abbreviation", "description")
 _freqs = [
     ("QD", "once daily"),
     ("BID", "twice daily"),
@@ -33,9 +32,10 @@ _freqs = [
     ("QID", "four times daily"),
     ("QWK", "weekly"),
 ]
-freqs = [dict(zip(_freq_keys, f)) for f in _freqs]
+freqs = {abbr: desc for abbr, desc in _freqs}
+freq_keys = ('abbreviation', 'description')
 
-_regimen_keys = ("name", "regimen")
+
 _regimens = [
     ("DAKLINZA", "60mg DCV QD 12 weeks"),
     ("EPCLUSA", "(400mg SOF + 100mg VEL) QD 12 weeks"),
@@ -57,4 +57,5 @@ _regimens = [
     ("COPEGUS1000", "500mg RBV BID 48 weeks"),
     ("COPEGUS1200", "600mg RBV BID 48 weeks"),
 ]
-regimens = [dict(zip(_regimen_keys, r)) for r in _regimens]
+regimens = {name: reg for name, reg in _regimens}
+regimen_keys = ('name', 'regimen')

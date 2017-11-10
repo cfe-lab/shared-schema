@@ -8,13 +8,9 @@ treatment regimens based on drug labels from the US FDA.
 import csv
 import sys
 
-from . import standard  # noqa
 from . import grammar  # noqa
-
-
-def format_row(row):
-    'Capitalize keys so we can display them'
-    return {k.capitalize(): v for k, v in row.items()}
+from . import standard  # noqa
+from . import regimen  # noqa
 
 
 def _print_table(keys, rows):
@@ -25,13 +21,14 @@ def _print_table(keys, rows):
     )
     writer.writeheader()
     for row in rows:
-        writer.writerow(format_row(row))
+        rowdict = dict(zip(display_keys, row))
+        writer.writerow(rowdict)
 
 
 TABLES = {
-    'regimens': (standard._regimen_keys, standard.regimens),
-    'compounds': (standard._compound_keys, standard.compounds),
-    'frequencies': (standard._freq_keys, standard.freqs),
+    'regimens': (standard.regimen_keys, standard.regimens),
+    'compounds': (standard.compound_keys, standard.compounds),
+    'frequencies': (standard.freq_keys, standard.freqs),
 }
 
 
@@ -39,4 +36,4 @@ def handler(args):
     '''Print the desired information to standard output'''
     table = args.table
     keys, rows = TABLES[table]
-    _print_table(keys, rows)
+    _print_table(keys, rows.items())

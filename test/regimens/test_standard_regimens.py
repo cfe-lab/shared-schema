@@ -8,7 +8,7 @@ class TestStandardRegimens(unittest.TestCase):
 
     def test_parsing(self):
         "Check that the regimens in the standard regimens can be parsed"
-        for nm, reg in ((r['name'], r['regimen']) for r in standard.regimens):
+        for nm, reg in standard.regimens.items():
             msg = "Error parsing regimenn for {}"
             try:
                 rg.parse(reg)
