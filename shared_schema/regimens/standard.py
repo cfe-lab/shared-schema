@@ -59,3 +59,16 @@ _regimens = [
 ]
 regimens = {name: reg for name, reg in _regimens}
 regimen_keys = ('name', 'regimen')
+
+
+def expand(src):
+    '''Replace standard regimen names with their contents.
+
+    This function searchs a regimen source string for standard regimen
+    names and replaces them with the long form of their contents, as
+    understood by the grammar.
+    '''
+    for name, explicit in regimens.items():
+        if name in src:
+            src = src.replace(name, explicit)
+    return src
