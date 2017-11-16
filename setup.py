@@ -7,7 +7,7 @@ setup(
     version="0.1",
     author="Nathaniel Knight",
     author_email="nknight@cfenet.ubc.ca",
-    url="https://github.com/neganp/shared-schema",
+    url="https://github.com/hcv-shared/shared-schema",
     packages=find_packages(),
     install_requires=[
         "pypeg2 >= 2.15.2, <3",
