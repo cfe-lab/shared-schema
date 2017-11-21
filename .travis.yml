@@ -1,8 +1,8 @@
-dist: trusty
+language: python
 python:
   - "3.6"
 install:
-  - python3 -m venv venv
+  - python -m venv venv
   - ./venv/bin/pip install -e ".[tests]"
 script:
   - make test
