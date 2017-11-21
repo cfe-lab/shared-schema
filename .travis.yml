@@ -2,7 +2,10 @@ language: python
 python:
   - "3.6"
 install:
-  - python -m venv venv
-  - ./venv/bin/pip install -e ".[tests]"
+  - pip install -e ".[tests]"
 script:
-  - make test
+  - python -m unittest
+  - pycodestyle shared_schema
+  - pycodestyle test
+  - flake8 shared_schema
+  - flake8 test
