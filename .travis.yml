@@ -11,4 +11,4 @@ script:
   - flake8 test
 notifications:
   email:
-    on_error: change
+    on_failure: change
