@@ -137,7 +137,6 @@ scheme = {
             schema_path=('TreatmentData', 'person_id'),
         ),
         from_schema('TreatmentData', 'first_treatment'),
-        from_schema('TreatmentData', 'duration_sch'),
         from_schema('TreatmentData', 'duration_act'),
         field(
             'regimen',

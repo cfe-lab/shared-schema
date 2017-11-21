@@ -291,11 +291,6 @@ schema_data = Schema([
                 "Is this the participant's first treatment ",
             ),
             field(
-                "duration_sch",
-                "integer",
-                "The duration (in days) this treatment was scheduled for",
-            ),
-            field(
                 "duration_act",
                 "integer",
                 ("The treatment's actual duration (in days), "
@@ -351,7 +346,7 @@ schema_data = Schema([
 
     Entity.make(
         'RegimenDrugInclusion',
-        'Links regimens to the drugs they include',
+        'The drugs in a regimen, and their doses and durations',
         [
             field('medication_id', 'foreign key(Medication)', ''),
             field('regimen_id', 'foreign key(Regimen)', ''),
@@ -361,14 +356,14 @@ schema_data = Schema([
                 "Dosage of the medication prescribed (in mg)",
             ),
             field(
-                "dose_number",
-                "float",
-                "Number of doses taken per ``dose_period``",
+                "frequency",
+                "enum(QD, BID, TID, QID, QWK)",
+                "How often is this medication taken",
             ),
             field(
-                "dose_period",
-                "enum(day, week, course)",
-                "Period over which dosage is measured",
+                "Duration",
+                "integer",
+                "How long (in days) does the course of this medication last",
             ),
         ],
         meta={'primary key': ['medication_id', 'regimen_id']},
