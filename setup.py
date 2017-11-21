@@ -24,5 +24,6 @@ setup(
     install_requires=install_requires,
     extras_require={
         "tests": tests_require,
-    }
+    },
+    test_suite='test',
 )

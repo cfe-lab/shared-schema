@@ -1,4 +1,4 @@
-'''Definition of the flat data submission scheme.
+'''Definition of the simple data submission scheme.
 
 This scheme is designed for simpler data sets where the flexibility of
 relational data isn't required.
@@ -22,7 +22,7 @@ def from_schema(entity_name, schema_field_name, **kwargs):
 
 
 scheme = {
-    'flat': [
+    'simple': [
         field(
             'id',
             'string',

@@ -40,7 +40,7 @@ The SHARED database collects the demographic information, treatment
 histories, clinical outcomes, and viral sequences of participants. In
 very simple cases, where there is only \textbf{one record per
   participant}, these can be submitted as a single spreadsheet (this
-arrangement is called the \textit{flat scheme}). For most cases, where
+arrangement is called the \textit{simple scheme}). For most cases, where
 there might be \textbf{more than one} treatment record or viral
 sequencing result for each participant, the data should be submitted
 as multiple tables (this is called the \textit{multi-table schem}).
@@ -90,12 +90,12 @@ while in transit.
 
 
 
-\section{Flat Scheme}
+\section{Simple Scheme}
 
 If each participant has only a single clinical, behavior, and
-treatment record, the flat scheme can be used. This is a single CSV
+treatment record, the simple scheme can be used. This is a single CSV
 file or MS Excel sheet with the columns described in table
-\ref{tbl:flat-scheme}. Required fields are marked with a bullt (•). We
+\ref{tbl:simple-scheme}. Required fields are marked with a bullt (•). We
 don't expect anybody to have collected the data for every field;
 fields that don't apply to your study can be omitted.
 
@@ -103,11 +103,11 @@ The file containing participant data should be called
 \texttt{data}. Sequence data should be included as FASTA files in a
 \textbf{sub-directory} called \texttt{sequences}. The layout of an
 example data directory is shown in figure
-\ref{fig:example-flat-directory}.
+\ref{fig:example-simple-directory}.
 
 \begin{figure}
-  \caption{Flat-Scheme Expected Files}
-  \label{fig:flat-scheme-expected-files}
+  \caption{Simple-Scheme Expected Files}
+  \label{fig:simple-scheme-expected-files}
 \begin{verbatim}
 my_flat_data_prep_directory/
  ├── data.csv OR data.xls OR data.xlsx
@@ -118,12 +118,12 @@ my_flat_data_prep_directory/
 \end{verbatim}
 \end{figure}
 
-The fields expected in a flat scheme data file are as follows:
+The fields expected in a simple scheme data file are as follows:
 
-%% TODO(nknight): flat scheme table
+%% TODO(nknight): simple scheme table
 \begin{table}
-  \caption{Flat-Scheme Table Fields}
-  \label{tbl:flat-scheme}
+  \caption{Simple-Scheme Table Fields}
+  \label{tbl:simple-scheme}
   coming soon
 \end{table}
 
