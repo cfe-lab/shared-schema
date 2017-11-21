@@ -305,7 +305,6 @@ schema_data = Schema([
                 "regimen",
                 "foreign key (Regimen)",
                 "The drug regimen taken by the participant",
-                meta={'tags': {'required'}},
             ),
             field(
                 "prev_regimen",
