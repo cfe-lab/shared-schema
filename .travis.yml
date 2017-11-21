@@ -9,3 +9,6 @@ script:
   - pycodestyle test
   - flake8 shared_schema
   - flake8 test
+notifications:
+  email:
+    on_error: change
