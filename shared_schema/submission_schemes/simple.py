@@ -139,7 +139,7 @@ scheme = {
             'fu_kind',
             'enum(eot, fw4, fw12, fw24, fw+)',
             descr=("The kind of follow up sample provided (end-of-treatment "
-                   "or up to 4, 12, 24, or weeks after end-of-treatment)."),
+                   "or up to 4, 12, 24 or more weeks later)."),
             schema_path='not applicable',
         ),
         field(
