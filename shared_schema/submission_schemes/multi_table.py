@@ -76,7 +76,6 @@ scheme = {
             descr="The ID of a person in the ``participants`` file",
             schema_path=('ClinicalData', 'person_id'),
         ),
-        from_schema('ClinicalData', 'kind'),
         from_schema("ClinicalData", "hiv"),
         from_schema("ClinicalData", "hbv"),
         from_schema("ClinicalData", "ost"),

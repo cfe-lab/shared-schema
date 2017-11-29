@@ -178,13 +178,6 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
-                "kind",
-                "enum(bl, eot, fw4, fw12, fw24, fw+)",
-                ("Whether this clinical data is baseline, end-of-treatment, "
-                 "or a follow up after at-most 4, 12, 24, or more weeks"),
-                meta={'tags': {'required'}},
-            ),
-            field(
                 "person_id",
                 "foreign key(Person)",
                 "The person to whom this data pertains",
