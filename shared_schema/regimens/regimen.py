@@ -18,7 +18,7 @@ from . import standard
 # Helpers
 
 def types_match(f):
-    "Ensures that the types of the decorated binary function's arguments match"
+    "Decorator that ensures the types of a binary function's arguments match"
     @functools.wraps(f)
     def wrapped(x, y):
         if type(x) is not type(y):
@@ -168,7 +168,7 @@ def _(regimen_part, other):
 # Converter
 
 @functools.singledispatch
-def parse(src):
+def _parse(src):
     '''Parse a grammar object into a hashable, eq'able object
 
     This multi-method should turn each node that's parsed by the
@@ -180,70 +180,118 @@ def parse(src):
     raise ValueError(msg.format(type(src), src))
 
 
-@parse.register(grammar.Frequency)
+@_parse.register(grammar.Frequency)
 def _(src):
     return str(src)
 
 
-@parse.register(grammar.Compound)
+@_parse.register(grammar.Compound)
 def _(src):
     return str(src)
 
 
-@parse.register(grammar.Amount)
+@_parse.register(grammar.Amount)
 def _(src):
     return src.milligrams
 
 
-@parse.register(grammar.Dose)
+@_parse.register(grammar.Dose)
 def _(src):
     amount, compound = src
-    return _dose(amount=parse(amount), compound=parse(compound))
+    return _dose(amount=_parse(amount), compound=_parse(compound))
 
 
-@parse.register(grammar.DoseList)
+@_parse.register(grammar.DoseList)
 def _(src):
-    doses = [parse(dose) for dose in src]
+    doses = [_parse(dose) for dose in src]
     return frozenset(consolidate(doses))
 
 
-@parse.register(grammar.Indication)
+@_parse.register(grammar.Indication)
 def _(src):
     doselist, frequency = src
     return _indication(
-        doselist=parse(doselist),
-        frequency=parse(frequency),
+        doselist=_parse(doselist),
+        frequency=_parse(frequency),
     )
 
 
-@parse.register(grammar.Duration)
+@_parse.register(grammar.Duration)
 def _(src):
     days = src.days
     return decimal.Decimal(days)
 
 
-@parse.register(grammar.DrugCombination)
+@_parse.register(grammar.DrugCombination)
 def _(src):
-    indications = consolidate(parse(ind) for ind in iter(src))
+    indications = consolidate(_parse(ind) for ind in iter(src))
     return frozenset(indications)
 
 
-@parse.register(grammar.RegimenPart)
+@_parse.register(grammar.RegimenPart)
 def _(src):
     drug_combination, duration = src
     return _regimen_part(
-        drug_combination=parse(drug_combination),
-        duration=parse(duration),
+        drug_combination=_parse(drug_combination),
+        duration=_parse(duration),
     )
 
 
-@parse.register(grammar.Regimen)
+@_parse.register(grammar.Regimen)
 def _(src):
-    parts = consolidate(parse(part) for part in iter(src))
+    parts = consolidate(_parse(part) for part in iter(src))
     return frozenset(parts)
 
 
 # ---------------------------------------------------------------------
+
+def parse(src):
+    '''Given a string representing a raw regimen, parse it into:
+
+    ParsedRegimen = frozenset(RegimenPart)
+    RegimenPart = NamedTuple(
+                      duration=decimal.Decimal,  # days
+                      drug_combination=frozenset(Indication),
+                  )
+    Indication = NamedTuple(
+                     frequency=Enum(QD, BID, TID, QID, QWK),
+                     doselist=frozenset(Dose),
+                 )
+    Dose = NamedTuple(
+               compound=Enum(regimens.grammar._compounds),
+               amount=Decimal.decimal,  # milligrams
+           )
+
+    In addition, this procedure will consolidate regimens with the
+    same duration, indications with the same frequency, and doses of
+    the same compound.
+
+    For example,
+
+        100mg ASV QID 1 week, 100mg BOC TID 1 week, 100mg DCV QD 2 weeks
+
+    would be consolidated to
+
+        100mg ASV QID & 100mg BOC TID 1 week, 100mg DCV QD 2 weeks
+
+    The first two regimens were combined because they have the same
+    duration, but the doses weren't combined because they are of
+    different drugs and the indications weren't combined because they
+    are for different times daily.
+
+    By contrast,
+
+        100mg EBR TID 2 weeks, 100 EBR TID 2 weeks
+
+    would be consolidated to
+
+        200 mg EBR TID 2 weeks
+
+    because the compounds, indications, and regimens match, so they
+    can be merged at every level.
+    '''
+    return _parse(src)
+
 
 def from_string(src):
     '''Parse a regimen from a string
@@ -255,9 +303,9 @@ def from_string(src):
     if src.upper() in standard.regimens:
         standard_regimen = standard.regimens.get(src.upper())
         grammar_obj = grammar.parse(standard_regimen)
-        data_obj = parse(grammar_obj)
+        data_obj = _parse(grammar_obj)
         return data_obj
     else:
         grammar_obj = grammar.parse(src)
-        data_obj = parse(grammar_obj)
+        data_obj = _parse(grammar_obj)
         return data_obj
