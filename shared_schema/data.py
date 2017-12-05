@@ -354,7 +354,7 @@ schema_data = Schema([
                 "How often is this medication taken",
             ),
             field(
-                "Duration",
+                "duration",
                 "integer",
                 "How long (in days) does the course of this medication last",
             ),
