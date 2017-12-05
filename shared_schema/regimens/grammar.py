@@ -73,10 +73,7 @@ class Amount(pp.Concat):
     @property
     def milligrams(self):
         number = self[0]
-        if '.' in number.pattern:
-            return decimal.Decimal(number.pattern)
-        else:
-            return int(number.pattern)
+        return decimal.Decimal(number.pattern)
 
     def __eq__(self, other):
         type_matches = isinstance(other, type(self))
