@@ -2,7 +2,6 @@ import unittest
 import uuid
 
 from shared_schema import dao
-from shared_schema.data import schema_data
 
 
 class TestUuidType(unittest.TestCase):
@@ -19,7 +18,7 @@ class TestDaoOperations(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dao = dao.DAO(schema_data, 'sqlite:///:memory:', echo=False)
+        cls.dao = dao.DAO('sqlite:///:memory:', echo=False)
         cls.dao.init_db()
 
     def test_insert_retrieve(self):

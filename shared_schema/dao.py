@@ -6,6 +6,7 @@ import uuid
 import sqlalchemy as sa
 import sqlalchemy.types as sa_types
 
+from . import data
 from . import datatypes
 from . import tables
 from . import util
@@ -83,9 +84,11 @@ def as_table(entity: tables.Entity, meta, schema_data):
 class DAO(object):
     '''A data access object that conforms to the SHARED Schema'''
 
-    def __init__(self, schema_data, db_url, echo=False):
+    def __init__(self, db_url, schema_data=None, echo=False):
         self._meta = sa.MetaData()
         self.tables = {}
+        if schema_data is None:
+            schema_data = data.schema_data
         for entity in schema_data.entities.values():
             tbl = as_table(entity, self._meta, schema_data)
             self.tables[entity.name] = tbl
