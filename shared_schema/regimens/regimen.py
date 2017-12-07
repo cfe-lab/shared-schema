@@ -2,6 +2,9 @@
 import collections
 import decimal
 import functools
+import uuid
+
+import sqlalchemy.sql as sql
 
 from . import grammar
 from . import standard
@@ -309,3 +312,29 @@ def from_string(src):
         grammar_obj = grammar.parse(src)
         data_obj = _parse(grammar_obj)
         return data_obj
+
+
+def _reg_part(row):
+    dose = _dose(amount=row.dose, compound=row.medication_id)
+    doses = frozenset([dose])
+    indication = _indication(
+        frequency=row.frequency,
+        doselist=doses,
+    )
+    drug_combination = frozenset([indication])
+    regpart = _regimen_part(
+        duration=row.duration,
+        drug_combination=drug_combination,
+    )
+    return regpart
+
+
+def from_dao(dao, uid):
+    if type(uid) is not uuid.UUID:
+        uid = uuid.UUID(uid)
+    query = sql.select([dao.regimen, dao.regimendruginclusion]).where(
+        (dao.regimen.c.id == uid) and
+        dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id
+    )
+    reg_rows = dao.execute(query).fetchall()
+    return consolidate(map(_reg_part, reg_rows))

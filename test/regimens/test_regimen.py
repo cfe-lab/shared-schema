@@ -1,7 +1,10 @@
 '''Test the hashable, equable, canonical regimen data object'''
 
+import collections
 import decimal
 import unittest
+import unittest.mock as mock
+import uuid
 
 import pypeg2 as pp
 
@@ -274,3 +277,92 @@ class TestFromString(unittest.TestCase):
         src = 'ill-formed regimen'
         with self.assertRaises(SyntaxError):
             regimen.from_string(src)
+
+
+fake_result = collections.namedtuple(
+    'RowProxy',
+    ['dose', 'medication_id', 'frequency', 'duration'],
+)
+
+
+class TestFromDao(unittest.TestCase):
+
+    doses = {
+        'sof100': regimen._dose(amount=100, compound='SOF'),
+        'dcv100': regimen._dose(amount=100, compound='DCV'),
+    }
+
+    indications = {
+        'sof100qd': regimen._indication(
+            frequency='QD',
+            doselist=frozenset([doses['sof100']]),
+        ),
+        'sof100tid': regimen._indication(
+            frequency='TID',
+            doselist=frozenset([doses['sof100']]),
+        ),
+        'dcv100qd': regimen._indication(
+            frequency='QD',
+            doselist=frozenset([doses['dcv100']]),
+        )
+    }
+
+    def verify_loaded(self, loaded, expected):
+        fetch_mock = mock.Mock()
+        fetch_mock.fetchall = mock.Mock(return_value=loaded)
+        exec_mock = mock.Mock(return_value=fetch_mock)
+        dao_mock = mock.Mock()
+        dao_mock.execute = exec_mock
+
+        uid = uuid.uuid4()
+        with mock.patch('shared_schema.regimens.regimen.sql') as sa_sql_mock:
+            result = regimen.from_dao(dao_mock, uid)
+            sa_sql_mock.select.assert_called()
+        exec_mock.assert_called()
+        fetch_mock.fetchall.assert_called()
+        self.assertEqual(result, expected)
+
+    def test_simple_load(self):
+        loaded = [
+            fake_result(
+                dose=100,
+                medication_id='SOF',
+                frequency='QD',
+                duration=10,
+            )
+        ]
+        expected = frozenset([
+            regimen._regimen_part(
+                duration=10,
+                drug_combination=frozenset([
+                    self.indications['sof100qd'],
+                ]),
+            )
+        ])
+        self.verify_loaded(loaded, expected)
+
+    def test_merging_indication_load(self):
+        loaded = [
+            fake_result(
+                dose=100,
+                medication_id='SOF',
+                frequency='QD',
+                duration=10,
+            ),
+            fake_result(
+                dose=100,
+                medication_id='SOF',
+                frequency='TID',
+                duration=10,
+            ),
+        ]
+        expected = frozenset([
+            regimen._regimen_part(
+                duration=10,
+                drug_combination=frozenset([
+                    self.indications['sof100qd'],
+                    self.indications['sof100tid'],
+                ]),
+            ),
+        ])
+        self.verify_loaded(loaded, expected)
