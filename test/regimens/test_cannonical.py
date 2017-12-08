@@ -376,3 +376,44 @@ class TestFromDao(unittest.TestCase):
             ),
         ])
         self.verify_loaded(loaded, expected)
+
+
+class TestInclusions(unittest.TestCase):
+
+    def test_simple_inclusions(self):
+        drug_src = "100mg SOF BID 2 weeks"
+        regimen = parse_from_source(drug_src, rg.Regimen)
+        inclusion = next(cannonical.drug_inclusions(regimen))
+        self.assertEqual(inclusion.medication_id, 'SOF')
+        self.assertEqual(inclusion.dose, 100)
+        self.assertEqual(inclusion.frequency, 'BID')
+        self.assertEqual(inclusion.duration, 14)
+
+    def test_multiple_indication_inclusion(self):
+        drug_src = "100mg SOF + 200mg DCV BID 1 day"
+        regimen = parse_from_source(drug_src, rg.Regimen)
+        inclusions = cannonical.drug_inclusions(regimen)
+        for incl in inclusions:
+            self.assertEqual(incl.frequency, 'BID')
+            if incl.medication_id == 'SOF':
+                self.assertEqual(incl.dose, 100)
+            elif incl.medication_id == 'DCV':
+                self.assertEqual(incl.dose, 200)
+            else:
+                self.fail("unexpected inclusion: {}".format(incl))
+
+    def test_multiple_duration_inclusion(self):
+        drug_src = "100mg SOF QWK 1 day, 200mg DCV TID 2 days"
+        regimen = parse_from_source(drug_src, rg.Regimen)
+        inclusions = cannonical.drug_inclusions(regimen)
+        for incl in inclusions:
+            if incl.medication_id == 'SOF':
+                self.assertEqual(incl.dose, 100)
+                self.assertEqual(incl.duration, 1)
+                self.assertEqual(incl.frequency, 'QWK')
+            elif incl.medication_id == 'DCV':
+                self.assertEqual(incl.dose, 200)
+                self.assertEqual(incl.duration, 2)
+                self.assertEqual(incl.frequency, 'TID')
+            else:
+                self.fail("unexpected inclusions: {}".format(incl))

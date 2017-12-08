@@ -247,6 +247,7 @@ def _(src):
 
 
 # ---------------------------------------------------------------------
+# Create Regimens
 
 def parse(src):
     '''Given a string representing a raw regimen, parse it into:
@@ -338,3 +339,24 @@ def from_dao(dao, uid):
     )
     reg_rows = dao.execute(query).fetchall()
     return consolidate(map(_reg_part, reg_rows))
+
+
+# ---------------------------------------------------------------------
+# View Regimens
+
+_inclusion = collections.namedtuple(
+    "DrugInclusion",
+    ['medication_id', 'dose', 'frequency', 'duration'],
+)
+
+
+def drug_inclusions(regimen):
+    for reg_part in regimen:
+        for indication in reg_part.drug_combination:
+            for dose in indication.doselist:
+                yield _inclusion(
+                    medication_id=dose.compound,
+                    dose=dose.amount,
+                    frequency=indication.frequency,
+                    duration=reg_part.duration,
+                )

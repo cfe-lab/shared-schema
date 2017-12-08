@@ -101,3 +101,8 @@ class DAO(object):
     def execute(self, expr, *rest):
         conn = self.engine.connect()
         return conn.execute(expr, *rest)
+
+    def get_regimen(self, reg_id):
+        reg_qry = self.regimen.select(self.regimen.c.id == reg_id)
+        result = self.execute(reg_qry).fetchone()
+        return result
