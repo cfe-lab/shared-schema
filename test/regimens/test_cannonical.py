@@ -9,7 +9,7 @@ import uuid
 import pypeg2 as pp
 
 import shared_schema.regimens.grammar as rg
-import shared_schema.regimens.regimen as regimen
+import shared_schema.regimens.cannonical as cannonical
 
 
 # ---------------------------------------------------------------------
@@ -37,15 +37,15 @@ def equivalent(a, b):
 
 def parse_from_source(src, grammar_node):
     grammar_obj = pp.parse(src, grammar_node)
-    parsed = regimen.parse(grammar_obj)
+    parsed = cannonical.parse(grammar_obj)
     return parsed
 
 
 # ---------------------------------------------------------------------
 # Example Data
-dcv_dose = regimen._dose(amount=decimal.Decimal(1), compound='DCV')
-sof_dose = regimen._dose(amount=decimal.Decimal(2), compound='SOF')
-boc_dose = regimen._dose(amount=decimal.Decimal(3), compound='BOC')
+dcv_dose = cannonical._dose(amount=decimal.Decimal(1), compound='DCV')
+sof_dose = cannonical._dose(amount=decimal.Decimal(2), compound='SOF')
+boc_dose = cannonical._dose(amount=decimal.Decimal(3), compound='BOC')
 
 duration_12wks = decimal.Decimal(12 * 7)
 duration_24wks = decimal.Decimal(24 * 7)
@@ -68,7 +68,7 @@ class TestParsingCompoundObjects(unittest.TestCase):
         self.assertTrue(*methods_exist(parsed))
         self.assertEqual(
             parsed,
-            regimen._indication(
+            cannonical._indication(
                 frequency="QD",
                 doselist=frozenset([dcv_dose, sof_dose]),
             ),
@@ -80,10 +80,10 @@ class TestParsingCompoundObjects(unittest.TestCase):
         self.assertTrue(*methods_exist(parsed))
         self.assertEqual(
             parsed,
-            regimen._regimen_part(
+            cannonical._regimen_part(
                 duration=duration_12wks,
                 drug_combination=frozenset([
-                    regimen._indication(
+                    cannonical._indication(
                         frequency='QD',
                         doselist=frozenset([sof_dose]),
                     )
@@ -121,11 +121,11 @@ class TestParsingCollections(unittest.TestCase):
         self.assertEqual(
             parsed,
             frozenset([
-                regimen._indication(
+                cannonical._indication(
                     doselist=frozenset([dcv_dose]),
                     frequency="QD",
                 ),
-                regimen._indication(
+                cannonical._indication(
                     doselist=frozenset([boc_dose]),
                     frequency="TID",
                 ),
@@ -142,19 +142,19 @@ class TestParsingCollections(unittest.TestCase):
         self.assertEqual(
             parsed,
             frozenset([
-                regimen._regimen_part(
+                cannonical._regimen_part(
                     duration=duration_12wks,
                     drug_combination=frozenset([
-                        regimen._indication(
+                        cannonical._indication(
                             frequency='QD',
                             doselist=frozenset([dcv_dose, sof_dose]),
                         )
                     ]),
                 ),
-                regimen._regimen_part(
+                cannonical._regimen_part(
                     duration=duration_24wks,
                     drug_combination=frozenset([
-                        regimen._indication(
+                        cannonical._indication(
                             frequency='QD',
                             doselist=frozenset([boc_dose]),
                         )
@@ -166,84 +166,93 @@ class TestParsingCollections(unittest.TestCase):
 
 class TestMonoidalOperations(unittest.TestCase):
 
-    # NOTE(nknight): Skip testing regimen.key; it's just an accessor
+    # NOTE(nknight): Skip testing cannonical.key; it's just an accessor
 
-    dose_a1 = regimen._dose(amount=1, compound='test')
-    dose_a2 = regimen._dose(amount=2, compound='test')
-    dose_b1 = regimen._dose(amount=1, compound='other test')
+    dose_a1 = cannonical._dose(amount=1, compound='test')
+    dose_a2 = cannonical._dose(amount=2, compound='test')
+    dose_b1 = cannonical._dose(amount=1, compound='other test')
 
     druglist_a = frozenset([dose_a1])
     druglist_b = frozenset([dose_b1])
     druglist_ab = frozenset([dose_a1, dose_b1])
 
-    indication_a = regimen._indication(frequency='QD', doselist=druglist_a)
-    indication_b = regimen._indication(frequency='QD', doselist=druglist_b)
-    indication_ab = regimen._indication(frequency='QD', doselist=druglist_ab)
+    indication_a = cannonical._indication(
+        frequency='QD',
+        doselist=druglist_a,
+    )
+    indication_b = cannonical._indication(
+        frequency='QD',
+        doselist=druglist_b,
+    )
+    indication_ab = cannonical._indication(
+        frequency='QD',
+        doselist=druglist_ab,
+    )
 
     def test_dose_add(self):
         self.assertEqual(
-            regimen.add(self.dose_a1, self.dose_a2),
-            regimen._dose(amount=3, compound='test'),
+            cannonical.add(self.dose_a1, self.dose_a2),
+            cannonical._dose(amount=3, compound='test'),
         )
         with self.assertRaises(ValueError):
-            regimen.add(self.dose_a1, self.dose_b1)
+            cannonical.add(self.dose_a1, self.dose_b1)
 
     def test_indication_add(self):
-        key_mismatch_indication = regimen._indication(
+        key_mismatch_indication = cannonical._indication(
             frequency='QWK',
             doselist=self.druglist_a,
         )
         self.assertEqual(
-            regimen.add(self.indication_a, self.indication_b),
+            cannonical.add(self.indication_a, self.indication_b),
             self.indication_ab,
         )
         with self.assertRaises(ValueError):
-            regimen.add(self.indication_a, key_mismatch_indication)
+            cannonical.add(self.indication_a, key_mismatch_indication)
 
     def test_regimen_part_add(self):
         drugcombo_a = frozenset([self.indication_a])
         drugcombo_b = frozenset([self.indication_b])
         drugcombo_ab = frozenset([self.indication_ab])
-        regpart_a = regimen._regimen_part(
+        regpart_a = cannonical._regimen_part(
             duration=decimal.Decimal(1),
             drug_combination=drugcombo_a,
         )
-        regpart_b = regimen._regimen_part(
+        regpart_b = cannonical._regimen_part(
             duration=decimal.Decimal(1),
             drug_combination=drugcombo_b,
         )
-        regpart_ab = regimen._regimen_part(
+        regpart_ab = cannonical._regimen_part(
             duration=decimal.Decimal(1),
             drug_combination=drugcombo_ab,
         )
-        keymismatch_regpart = regimen._regimen_part(
+        keymismatch_regpart = cannonical._regimen_part(
             duration=decimal.Decimal(2),
             drug_combination=drugcombo_a,
         )
         self.assertEqual(
-            regimen.add(regpart_a, regpart_b),
+            cannonical.add(regpart_a, regpart_b),
             regpart_ab,
         )
         with self.assertRaises(ValueError):
-            regimen.add(regpart_a, keymismatch_regpart)
+            cannonical.add(regpart_a, keymismatch_regpart)
 
     def test_consolidating_insert(self):
         self.assertEqual(
-            regimen.consolidating_insert(
+            cannonical.consolidating_insert(
                 self.druglist_a,
                 self.dose_b1,
             ),
             self.druglist_ab,
         )
         self.assertEqual(
-            regimen.consolidating_insert(
+            cannonical.consolidating_insert(
                 self.druglist_a,
                 self.dose_a1,
             ),
             frozenset([self.dose_a2]),
         )
         self.assertEqual(
-            regimen.consolidating_insert(
+            cannonical.consolidating_insert(
                 self.druglist_ab,
                 self.dose_a1,
             ),
@@ -260,23 +269,23 @@ class TestFromString(unittest.TestCase):
     def is_regimen(self, parsed):
         self.assertIsInstance(parsed, frozenset)
         reg_part = next(iter(parsed))
-        self.assertIsInstance(reg_part, regimen._regimen_part)
+        self.assertIsInstance(reg_part, cannonical._regimen_part)
 
     def test_parse_standard_reg(self):
         src = 'SOVALDI'
-        parsed = regimen.from_string(src)
+        parsed = cannonical.from_string(src)
         self.is_regimen(parsed)
 
     def test_parse_regimen(self):
         src = ("(200mg SOF + 800mg DCV) QD & 100mg BOC TID 2 weeks, "
                "1mg PAR QWK 11days")
-        parsed = regimen.from_string(src)
+        parsed = cannonical.from_string(src)
         self.is_regimen(parsed)
 
     def test_error(self):
         src = 'ill-formed regimen'
         with self.assertRaises(SyntaxError):
-            regimen.from_string(src)
+            cannonical.from_string(src)
 
 
 fake_result = collections.namedtuple(
@@ -288,20 +297,20 @@ fake_result = collections.namedtuple(
 class TestFromDao(unittest.TestCase):
 
     doses = {
-        'sof100': regimen._dose(amount=100, compound='SOF'),
-        'dcv100': regimen._dose(amount=100, compound='DCV'),
+        'sof100': cannonical._dose(amount=100, compound='SOF'),
+        'dcv100': cannonical._dose(amount=100, compound='DCV'),
     }
 
     indications = {
-        'sof100qd': regimen._indication(
+        'sof100qd': cannonical._indication(
             frequency='QD',
             doselist=frozenset([doses['sof100']]),
         ),
-        'sof100tid': regimen._indication(
+        'sof100tid': cannonical._indication(
             frequency='TID',
             doselist=frozenset([doses['sof100']]),
         ),
-        'dcv100qd': regimen._indication(
+        'dcv100qd': cannonical._indication(
             frequency='QD',
             doselist=frozenset([doses['dcv100']]),
         )
@@ -315,8 +324,9 @@ class TestFromDao(unittest.TestCase):
         dao_mock.execute = exec_mock
 
         uid = uuid.uuid4()
-        with mock.patch('shared_schema.regimens.regimen.sql') as sa_sql_mock:
-            result = regimen.from_dao(dao_mock, uid)
+        sql_mod = 'shared_schema.regimens.cannonical.sql'
+        with mock.patch(sql_mod) as sa_sql_mock:
+            result = cannonical.from_dao(dao_mock, uid)
             sa_sql_mock.select.assert_called()
         exec_mock.assert_called()
         fetch_mock.fetchall.assert_called()
@@ -332,7 +342,7 @@ class TestFromDao(unittest.TestCase):
             )
         ]
         expected = frozenset([
-            regimen._regimen_part(
+            cannonical._regimen_part(
                 duration=10,
                 drug_combination=frozenset([
                     self.indications['sof100qd'],
@@ -357,7 +367,7 @@ class TestFromDao(unittest.TestCase):
             ),
         ]
         expected = frozenset([
-            regimen._regimen_part(
+            cannonical._regimen_part(
                 duration=10,
                 drug_combination=frozenset([
                     self.indications['sof100qd'],

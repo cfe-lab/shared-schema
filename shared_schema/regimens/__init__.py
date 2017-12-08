@@ -10,7 +10,7 @@ import sys
 
 from . import grammar  # noqa
 from . import standard  # noqa
-from . import regimen  # noqa
+from . import cannonical  # noqa
 
 
 def _print_table(keys, rows):
