@@ -222,7 +222,9 @@ def _(src):
 @_parse.register(grammar.Duration)
 def _(src):
     days = src.days
-    return decimal.Decimal(days)
+    if int(days) != days:
+        raise ValueError("Fractional days in regimen duration")
+    return int(days)
 
 
 @_parse.register(grammar.DrugCombination)
