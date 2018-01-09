@@ -229,6 +229,11 @@ schema_data = Schema([
             field("urea", "float", "Urea test result, in ng/dL."),
             # NOTE(nknight): contains reStrucutredText markup for superscripts
             field("plate", "float", "Platelet count, in cells/mm\ :sup:`3`."),
+            field(
+                "apri",
+                "float",
+                "AST to Platelet Ratio Index (in 1/(cells/mm\ :sup:`3`)).",
+            ),
             field("CD4", "float", "CD4 count, in cells/mm\ :sup:`3`."),
             field("crp", "float", "C-Reactive Protein test result, in mg/L."),
             field(
