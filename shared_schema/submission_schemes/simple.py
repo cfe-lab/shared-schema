@@ -75,7 +75,6 @@ scheme = {
         from_schema("ClinicalData", "phos"),
         from_schema("ClinicalData", "urea"),
         from_schema("ClinicalData", "plate"),
-        from_schema("ClinicalData", "apri"),
         from_schema("ClinicalData", "CD4"),
         from_schema("ClinicalData", "crp"),
         from_schema("ClinicalData", "il28b"),
