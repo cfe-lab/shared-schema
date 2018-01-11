@@ -102,7 +102,8 @@ schema_data = Schema([
             field(
                 "country",
                 "string",
-                "The country where the person participated in the study",
+                ("The country where the person participated in the study (as "
+                 "an ISO 3166-1 alpha-3 code)"),
             ),
             field(
                 "sex",
