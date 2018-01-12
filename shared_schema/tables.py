@@ -27,6 +27,15 @@ class Entity(_entity):
             raise UserWarning("Metadata is required (for primary key)")
         if 'primary key' not in meta:
             raise UserWarning("Primary key is required in meta")
+        if type(meta["primary key"]) is not str:
+            for pk in meta["primary key"]:
+                fld = next(
+                    (fld for fld in fields if fld.name == pk),
+                    None,
+                )
+                if fld is None:
+                    msg = "Meta contains a Primary Key that isn't a field: {}"
+                    raise UserWarning(msg.format(pk))
         return cls(name, description, fields, meta)
 
     @property

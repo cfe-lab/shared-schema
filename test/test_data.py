@@ -8,8 +8,8 @@ class TestSchema(unittest.TestCase):
 
     def test_no_duplicate_keys(self):
         bad_data = [
-            tables.Entity.make("a", "", [], meta={'primary key': None}),
-            tables.Entity.make("a", "", [], meta={'primary key': None}),
+            tables.Entity.make("a", "", [], meta={'primary key': "a"}),
+            tables.Entity.make("a", "", [], meta={'primary key': "a"}),
         ]
         with self.assertRaises(AssertionError):
             tables.Schema(bad_data)
