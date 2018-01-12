@@ -59,11 +59,6 @@ schema_data = Schema([
                 "The collaborator providing the data",
                 meta={'tags': {'required'}},
             ),
-            field(
-                "ref_id",
-                "foreign key (Reference)",
-                "Publication describing this study (if applicable)",
-            ),
             field("name", "string", "The name of the study or trial"),
             field(
                 "start_year",
@@ -545,11 +540,6 @@ schema_data = Schema([
                 "foreign key (Isolate)",
                 "The isolate this data pertains to",
             ),
-            field(
-                "ref_id",
-                "foreign key (Reference)",
-                "A reference describing this lab isolate",
-            ),
             field("genbank_id", "string", "GenBank ID (if applicable)"),
             field(
                 "parent_sequence",
@@ -692,11 +682,6 @@ schema_data = Schema([
                 "The isolate being tested",
             ),
             field(
-                "reference_id",
-                "foreign key (Reference)",
-                "Source (if applicable)",
-            ),
-            field(
                 "susc_method",
                 "enum(luciferase, qpcr, bdna, beta-gal)",
                 "Method used to measure susceptibility",
@@ -736,6 +721,60 @@ schema_data = Schema([
             field("pubmed_id", "string", ""),
         ],
         meta={'primary key': 'id'},
+    ),
+
+    Entity.make(
+        "SourceStudyReference",
+        "Indicates the literature reference for a source study",
+        [
+            field(
+                "sourcestudy_id",
+                "foreign key (SourceStudy)",
+                "The marked source study",
+            ),
+            field(
+                "reference_id",
+                "foreign key (Reference)",
+                "The associated literature reference",
+            )
+        ],
+        meta={"primary key": ["sourcestudy_id", "reference_id"]},
+    ),
+
+    Entity.make(
+        "SusceptibilityReference",
+        "Marks the reference supporting a susceptibility result",
+        [
+            field(
+                "susceptibility_id",
+                "foreign key (Susceptibility)",
+                "The marked susceptibility",
+            ),
+            field(
+                "reference_id",
+                "foreign key (Reference)",
+                "The associated literature reference",
+            )
+        ],
+        meta={"primary key": ["susceptibility_id", "reference_id"]},
+    ),
+
+    Entity.make(
+        "LabIsolateReference",
+        "Marks the literature reference describing a lab isolate",
+        [
+            field(
+                "labisolate_id",
+                "foreign key (LabIsolate)",
+                "The marked lab isolate",
+            ),
+            field(
+                "reference_id",
+                "foreign key (Reference)",
+                "The associated literature reference",
+            )
+        ],
+        meta={"primary key": ["labisolate_id", "reference_id"]},
     ),
 
 ])
