@@ -2,6 +2,7 @@ import unittest
 import uuid
 
 from shared_schema import dao
+from shared_schema import tables
 
 
 class TestUuidType(unittest.TestCase):
@@ -11,6 +12,27 @@ class TestUuidType(unittest.TestCase):
             u = uuid.uuid4()
             s = dao.UUID.as_str(u)
             assert uuid.UUID(s) == u
+
+
+class TestTableConversion(unittest.TestCase):
+
+    def test_compound_primary_keys(self):
+        entity = tables.Entity.make(
+            "TestEntity",
+            "The test entity",
+            [
+                tables.Field.make("a", "integer", "Test field 'a'"),
+                tables.Field.make("b", "integer", "Test field 'b'"),
+            ],
+            meta={"primary key": ["a", "b"]},
+        )
+        schema_data = tables.Schema([entity])
+        test_dao = dao.DAO("sqlite:///:memory:", schema_data=schema_data)
+
+        table = test_dao.testentity
+        keys = table.primary_key.columns.keys()
+        self.assertIn("a", keys)
+        self.assertIn("b", keys)
 
 
 class TestDaoOperations(unittest.TestCase):

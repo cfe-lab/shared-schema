@@ -64,12 +64,18 @@ def column_type(field_type, schema_data):
     raise ValueError(msg.format(field_type))
 
 
+def is_pk(field: tables.Field, entity: tables.Entity):
+    is_sole_pk = field.name == entity.meta["primary key"]
+    is_compound_pk = field.name in entity.meta["primary key"]
+    return is_sole_pk or is_compound_pk
+
+
 def as_column(field: tables.Field, entity: tables.Entity, schema_data):
     col_type = column_type(field.type, schema_data)
     name = field.name
-    is_pk = name == entity.meta['primary key']
+    mark_pk = is_pk(field, entity)
     nullable = field.nullable
-    return sa.Column(name, col_type, primary_key=is_pk, nullable=nullable)
+    return sa.Column(name, col_type, primary_key=mark_pk, nullable=nullable)
 
 
 def as_table(entity: tables.Entity, meta, schema_data):
