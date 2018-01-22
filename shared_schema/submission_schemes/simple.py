@@ -83,10 +83,11 @@ scheme = {
         from_schema("ClinicalData", "hep_car"),
         from_schema("ClinicalData", "transpl"),
         field(
-            'bl_seq_file',
+            'bl_seq_id',
             'string',
-            descr=("The name of sequence file in the ``sequences`` folder "
-                   "containing the participants baseline sample sequence."),
+            descr=("The id of a sequence in one of the FASTA files in the the "
+                   "``sequences`` folder containing the participants baseline "
+                   "sample sequence."),
             schema_path='not applicable',
         ),
         field(
@@ -129,10 +130,11 @@ scheme = {
             schema_path='not applicable',
         ),
         field(
-            'fu_seq_file',
+            'fu_seq_id',
             'string',
-            descr=("The name of sequence file in the ``sequences`` folder "
-                   "containing the participants follow-up sample sequence."),
+            descr=("The id of a sequence in one of the FASTA files in the "
+                   "``sequences`` folder containing the participants "
+                   " follow-up sample sequence."),
             schema_path='not applicable',
         ),
         field(

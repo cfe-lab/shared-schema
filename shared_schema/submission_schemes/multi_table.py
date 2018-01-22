@@ -114,10 +114,11 @@ scheme = {
             schema_path=('ClinicalIsolate', 'person_id'),
         ),
         field(
-            'seq_file',
+            'seq_id',
             'string',
             req=True,
-            descr="The name of a sequence file in the ``sequences`` folder",
+            descr=("The id of a sequence in one of the FASTA files in the  in "
+                   "the ``sequences`` folder"),
             schema_path='not applicable',
         ),
         from_schema('Isolate', 'genotype'),
