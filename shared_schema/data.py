@@ -4,27 +4,10 @@ from shared_schema.tables import Field, Entity, Schema
 field = Field.make
 
 
-schema_data = Schema([
+drug_id_enum_type = ("enum(ASV, BOC, DCV, DAS, EBR, GLP, GZR, LDV, OMB, PAR, "
+                     "PEG, PIB, RBV, RIT, SIM, SOF, TVR, VAN, VEL, VOX)")
 
-    Entity.make(
-        "Medication",
-        ("Anti-HCV drugs. Phenotypic resistance tests and treatment records "
-         "reference this table."),
-        [
-            field(
-                "full_name",
-                "string",
-                "The medication's name",
-                meta={'tags': {'required'}},
-            ),
-            field(
-                "short_name",
-                "string",
-                "The medication's three-letter abbreviation",
-            ),
-        ],
-        meta={'tags': {'managed'}, 'primary key': 'short_name'},
-    ),
+schema_data = Schema([
 
     # ==================================================
     # Collaborator and Study/Trial data
@@ -337,7 +320,11 @@ schema_data = Schema([
         'RegimenDrugInclusion',
         'The drugs in a regimen, and their doses and durations',
         [
-            field('medication_id', 'foreign key(Medication)', ''),
+            field(
+                'medication_id',
+                drug_id_enum_type,
+                'The three letter code for a medication.',
+            ),
             field('regimen_id', 'foreign key(Regimen)', ''),
             field(
                 "dose",
@@ -687,9 +674,9 @@ schema_data = Schema([
                 "Method used to measure susceptibility",
             ),
             field(
-                "medication_id",
-                "foreign key (Medication)",
-                "The medication being tested",
+                "medication",
+                drug_id_enum_type,
+                "The three letter id of the medication being tested",
             ),
             field(
                 "result",
