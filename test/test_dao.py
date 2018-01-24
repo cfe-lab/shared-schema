@@ -40,7 +40,7 @@ class TestDaoOperations(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dao = dao.DAO('sqlite:///:memory:', echo=False)
+        cls.dao = dao.DAO('sqlite:///:memory:', engine_args={"echo": False})
         cls.dao.init_db()
 
     def test_insert_retrieve(self):

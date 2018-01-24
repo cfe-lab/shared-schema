@@ -23,7 +23,7 @@ schema_data = Schema([
                 "The medication's three-letter abbreviation",
             ),
         ],
-        meta={'tags': {'managed'}, 'primary key': 'full_name'},
+        meta={'tags': {'managed'}, 'primary key': 'short_name'},
     ),
 
     # ==================================================
