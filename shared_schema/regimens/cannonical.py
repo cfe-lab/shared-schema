@@ -336,8 +336,10 @@ def from_dao(dao, uid):
     if type(uid) is not uuid.UUID:
         uid = uuid.UUID(uid)
     query = sql.select([dao.regimen, dao.regimendruginclusion]).where(
-        (dao.regimen.c.id == uid) and
-        dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id
+        sql.and_(
+            dao.regimen.c.id == uid,
+            dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id,
+        ),
     )
     reg_rows = dao.execute(query).fetchall()
     return consolidate(map(_reg_part, reg_rows))
