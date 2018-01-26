@@ -10,6 +10,7 @@ from . import data
 from . import datatypes
 from . import tables
 from . import util
+from . import regimens
 
 
 class UUID(sa_types.TypeDecorator):
