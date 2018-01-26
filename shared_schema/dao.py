@@ -89,9 +89,29 @@ def as_table(entity: tables.Entity, meta, schema_data):
 
 
 class DAO(object):
-    '''A data access object that conforms to the SHARED Schema'''
+    '''A Data Access Object (DAO) that conforms to the SHARED Schema.
 
-    def __init__(self, db_url, schema_data=None, echo=False):
+    The tables (as defined by a shared_schema.tables.Schema instance)
+    are available in a dictionary that lives in an attribute called
+    "tables". They're also available directly as attributes on the DOA
+    (in lowercase, e.g. "dao.regimen" or "dao.behaviordata").
+    '''
+
+    def __init__(self, db_url, engine_args=None, schema_data=None):
+        '''Connects to the database and creates as SqlAlchemy engine.
+
+        Arguments:
+        - db_url        the connection string of the database to use
+        - schema_data   an instance of shared_schema.tables.Schema
+        - engine_args   a map of keyword args for sqlalchemy.create_engine
+
+        Use the database URL "sqlite:///:memory:" for an ephemeral
+        testing database.
+
+        If isn't provided, "shared_schema.data.schema_data" is used by
+        default.
+        '''
+        self._db_url = db_url
         self._meta = sa.MetaData()
         self.tables = {}
         if schema_data is None:
@@ -100,7 +120,9 @@ class DAO(object):
             tbl = as_table(entity, self._meta, schema_data)
             self.tables[entity.name] = tbl
             setattr(self, entity.name.lower(), tbl)
-        self.engine = sa.create_engine(db_url, echo=echo)
+        if engine_args is None:
+            engine_args = {}
+        self.engine = sa.create_engine(db_url, **engine_args)
         # Enable foreign key checking (disabled by default in SQLite)"
         if "sqlite" in self._db_url.lower():
             with self.engine.connect() as conn:
