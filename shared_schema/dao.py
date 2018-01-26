@@ -108,9 +108,44 @@ class DAO(object):
     def init_db(self):
         self._meta.create_all(self.engine)
 
+    def load_standard_regimens(self):
+        '''Populate the Regimen and RegimenDrugInclusion tables with the
+        regimens from shared_schema.regimens.standard
+        '''
+        for regname, regspec in regimens.standard.regimens.items():
+            with self.engine.begin():
+                reg_id = uuid.uuid4()
+                self.insert(
+                    "regimen",
+                    {
+                        "id": reg_id,
+                        "name": regname,
+                    },
+                )
+                regdata = regimens.cannonical.from_string(regspec)
+                inclusion_data = [
+                    {
+                        "regimen_id": reg_id,
+                        "medication_id": incl.medication_id,
+                        "dose": incl.dose,
+                        "frequency": incl.frequency,
+                        "duration": incl.duration,
+                    }
+                    for incl in regimens.cannonical.drug_inclusions(regdata)
+                ]
+                self.insert("regimendruginclusion", inclusion_data)
+
     def execute(self, expr, *rest):
         conn = self.engine.connect()
         return conn.execute(expr, *rest)
+
+    def insert(self, tablename, item):
+        table = getattr(self, tablename)
+        if table is None:
+            raise ValueError("No such table: {}".format(tablename))
+        ins = table.insert()
+        with self.engine.begin() as conn:
+            conn.execute(ins, item)
 
     def get_regimen(self, reg_id):
         reg_qry = self.regimen.select(self.regimen.c.id == reg_id)

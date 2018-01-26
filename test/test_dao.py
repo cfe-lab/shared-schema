@@ -35,6 +35,27 @@ class TestTableConversion(unittest.TestCase):
         self.assertIn("b", keys)
 
 
+class TestLoadStandardRegimens(unittest.TestCase):
+    '''Verify that standard regimens can be loaded'''
+
+    def test_regimens_can_be_loaded(self):
+        d = dao.DAO("sqlite:///:memory:", engine_args={"echo": False})
+        d.init_db()
+        first_qry = d.engine.execute(d.regimen.select()).fetchall()
+        self.assertEqual(
+            0,
+            len(first_qry),
+            "Expected no regimens in an un-loaded database",
+        )
+        d.load_standard_regimens()
+        second_qry = d.engine.execute(d.regimen.select()).fetchall()
+        self.assertGreater(
+            len(second_qry),
+            0,
+            "Expected some regimens in a loaded database",
+        )
+
+
 class TestDaoOperations(unittest.TestCase):
     '''Verify that saving, loading, and querying work as expected'''
 
