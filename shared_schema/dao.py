@@ -41,7 +41,7 @@ def column_type(field_type, schema_data):
     # string field becuase sqlite and postgres don't require it
     simple_types = {
         datatypes.Datatype.INTEGER: sa.Integer,
-        datatypes.Datatype.FLOAT: sa.Float,
+        datatypes.Datatype.FLOAT: sa.Float(asdecimal=True),
         datatypes.Datatype.STRING: sa.String(),
         datatypes.Datatype.DATE: sa.Date,
         datatypes.Datatype.UUID: UUID,
