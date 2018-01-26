@@ -100,6 +100,10 @@ class DAO(object):
             self.tables[entity.name] = tbl
             setattr(self, entity.name.lower(), tbl)
         self.engine = sa.create_engine(db_url, echo=echo)
+        # Enable foreign key checking (disabled by default in SQLite)"
+        if "sqlite" in self._db_url.lower():
+            with self.engine.connect() as conn:
+                conn.execute("PRAGMA foreign_keys = on")
 
     def init_db(self):
         self._meta.create_all(self.engine)
