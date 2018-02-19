@@ -1,6 +1,6 @@
 '''Create latex source file for the schema data dictionary.
 
-Creating a vialbe LaTeX source is surprisingly brittle because LaTeX's
+Creating a viable LaTeX source is surprisingly brittle because LaTeX's
 overlaps with the psuedo-markdown used in `schema.data`. The following
 issues were encountered during development and might come up in the future:
 
