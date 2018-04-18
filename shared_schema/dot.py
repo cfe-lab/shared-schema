@@ -19,7 +19,7 @@ def node(entity):
     tooltip = entity.description
     tags = entity.tags
     href = "#{}".format(entity.name.lower())
-    tmpl = ('{name} [href="/{href}", '
+    tmpl = ('{name} [href="{href}", '
             'tooltip="{tooltip}", '
             'target="_parent", '
             'style="filled", '
