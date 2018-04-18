@@ -9,7 +9,7 @@ install_requires = [
 ]
 
 tests_require = [
-    "pycodestyle >=2.3.1, <3.0",
+    "pycodestyle == 2.3.1",
     "flake8 >= 3.5.0, <4.0",
 ]
 

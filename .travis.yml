@@ -4,6 +4,7 @@ python:
 install:
   - pip install -e ".[tests]"
 script:
+  - pip check
   - python -m unittest
   - pycodestyle shared_schema
   - pycodestyle test
