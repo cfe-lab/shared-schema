@@ -342,7 +342,7 @@ schema_data = Schema([
                 "How long (in days) does the course of this medication last",
             ),
         ],
-        meta={'primary key': ['medication_id', 'regimen_id']},
+        meta={'primary key': ('medication_id', 'regimen_id')},
     ),
 
 
@@ -396,6 +396,56 @@ schema_data = Schema([
                  "depending on kind)"),
                 meta={'tags': {'required', 'managed'}},
             ),
+        ],
+        meta={'primary key': 'id'},
+    ),
+
+    Entity.make(
+        "ReferenceSequence",
+        ("Reference nucleotide sequences that alignments are performed with "
+         "respect to"),
+        [
+            field(
+                "id",
+                "uuid",
+                "Unique identifier", meta={'tags': {'managed', 'required'}}
+            ),
+            field(
+                "name",
+                "string",
+                "The reference sequence's name",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "genebank",
+                "string",
+                "Genbank accession number",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "nt_seq",
+                "string",
+                "Raw nucleotide sequence",
+                meta={'tags': {'required'}},
+            ),
+        ],
+        meta={"primary key": "id"},
+    ),
+
+    Entity.make(
+        "Sequence",
+        "Sequences and data needed for rapid alignment",
+        [
+            field(
+                "id",
+                "uuid",
+                "Unique identifier", meta={'tags': {'managed', 'required'}}
+            ),
+            field(
+                "isolate_id",
+                "foreign key (Isolate)",
+                "Isolate the sequence was obtained from",
+            ),
             field(
                 "genotype",
                 "enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)",
@@ -418,69 +468,10 @@ schema_data = Schema([
                 ("The cutoff-fraction used to generate a consensus sequence; "
                  "'5%' is stored as '0.05'"),
             ),
-        ],
-        meta={'primary key': 'id'},
-    ),
-
-    Entity.make(
-        "Sequence",
-        "Sequences and data needed for rapid alignment",
-        [
             field(
-                "id",
-                "uuid",
-                "Unique identifier", meta={'tags': {'managed', 'required'}}
-            ),
-            field(
-                "isolate_id",
-                "foreign key (Isolate)",
-                "Isolate the sequence was obtained from",
-            ),
-            field(
-                "nt_seq",
+                "raw_nt_seq",
                 "string",
-                "Raw nucleotide sequence (if available)",
-            ),
-            field(
-                "nt_start",
-                "integer",
-                ("The starting position of the nucleotide sequence (with "
-                 "respect to the reference)"),
-            ),
-            field(
-                "nt_end",
-                "integer",
-                ("The end position of the nucleotide sequence (with respect "
-                 "to the reference)"),
-            ),
-            field(
-                "aa_seq",
-                "string",
-                "The sequence's raw amino-acid sequence",
-            ),
-            field(
-                "aa_start",
-                "integer",
-                ("The starting position of the amino acid sequence (with "
-                 "respect to the reference"),
-            ),
-            field(
-                "aa_end",
-                "integer",
-                ("The end position of the amino acid sequence "
-                 "(with respect to the reference)"),
-            ),
-            field(
-                "aa_derived",
-                "bool",
-                ("Was the amino-acid sequence derived from "
-                 "the nucleotide sequence?"),
-            ),
-            field(
-                "reference",
-                "string",
-                ("The reference genome this sequence is described "
-                 "with respect to"),
+                "The raw nucleotide in the assembled sequence",
             ),
             field(
                 "notes",
@@ -489,6 +480,58 @@ schema_data = Schema([
             ),
         ],
         meta={'primary key': 'id'},
+    ),
+
+    Entity.make(
+        "Alignment",
+        "A gene found in a sequence",
+        [
+            field(
+                "id",
+                "uuid",
+                "Unique identifier",
+                meta={'tags': {'managed', 'required'}},
+            ),
+            field(
+                "sequence_id",
+                "foreign key (Sequence)",
+                "The sequence this alignment was found in",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "reference_id",
+                "foreign key (ReferenceSequence)",
+                ("The reference sequence this alignment was performed with "
+                 "respect to"),
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "nt_start",
+                "integer",
+                ("The first position of the alignment in the raw nucleotide "
+                 "sequence"),
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "nt_end",
+                "integer",
+                ("The last position of the alignment in the raw nucleotide "
+                 "sequence"),
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "gene",
+                "string",
+                "The name of the gene this alignment is in",
+                meta={'tags': {'required'}},
+            ),
+            field(
+                "notes",
+                "string",
+                "Miscellaneous notes",
+            ),
+        ],
+        meta={"primary key": "id"},
     ),
 
     Entity.make(
@@ -602,58 +645,42 @@ schema_data = Schema([
         "A substitution, insertion, or deletion in an RNA sequence",
         [
             field(
-                "id",
-                "uuid",
-                "Unique identifier", meta={'tags': {'managed'}},
-            ),
-            field("name", "string", "Name of the substitution"),
-            field(
-                "reference_sequence",
-                "string",
-                "Name of the consensus wild-type reference sequence",
+                "alignment_id",
+                "foreign key (Alignment)",
+                "The alignment this substitution is found in",
             ),
             field(
                 "position",
                 "integer",
                 "Nucleotide position (with respect to the reference sequence)",
             ),
-            field("length", "integer", "Length of the substitution"),
             field(
-                "content",
+                "kind",
+                "enum (simple, insertion, deletion)",
+                ("Kind of subsitution ('simple' for a single nucleotide "
+                 "polymorphism, insertion or deletion for gaps)"),
+            ),
+            field(
+                "sub_aa",
                 "string",
-                "The nucleotide content of the substitution",
+                ("For a simple substitution, the new amino acid (blank for "
+                 "insertions and deletions)"),
             ),
             field(
-                "resistance_associated",
-                "bool",
-                ("Is this a resistance associated substitution observed in "
-                 "virologic failures in the clinic?"),
+                "insertion",
+                "string",
+                ("For an insertion, the inserted Amino Acid sequence (blank "
+                 "for SNPs and deletions"),
+            ),
+            field(
+                "deletion_length",
+                "integer",
+                ("For a deletion, the number of deleted amino acids (blank "
+                 "for SNPs and insertions"),
             ),
         ],
-        meta={'tags': {'managed'}, 'primary key': 'id'},
+        meta={'primary key': ('alignment_id', 'position')},
     ),
-
-    Entity.make(
-        "SequenceSubstitution",
-        "Indicates that the attached sequence has the attached substitution",
-        [
-            field(
-                "sequence_id",
-                "foreign key (Sequence)",
-                "The sequence being tagged",
-            ),
-            field(
-                "substitution_id",
-                "foreign key (Substitution)",
-                "The substitution identified in the tagged sequence",
-            ),
-        ],
-        meta={
-            'tags': {'managed'},
-            'primary key': ['sequence_id', 'substitution_id'],
-        },
-    ),
-
 
     # ==================================================
     # Susceptibility results
@@ -725,7 +752,7 @@ schema_data = Schema([
                 "The associated literature reference",
             )
         ],
-        meta={"primary key": ["sourcestudy_id", "reference_id"]},
+        meta={"primary key": ("sourcestudy_id", "reference_id")},
     ),
 
     Entity.make(
@@ -743,7 +770,7 @@ schema_data = Schema([
                 "The associated literature reference",
             )
         ],
-        meta={"primary key": ["susceptibility_id", "reference_id"]},
+        meta={"primary key": ("susceptibility_id", "reference_id")},
     ),
 
     Entity.make(
@@ -761,7 +788,7 @@ schema_data = Schema([
                 "The associated literature reference",
             )
         ],
-        meta={"primary key": ["labisolate_id", "reference_id"]},
+        meta={"primary key": ("labisolate_id", "reference_id")},
     ),
 
 ])
