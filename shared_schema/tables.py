@@ -24,7 +24,8 @@ class Entity(_entity):
     @classmethod
     def make(cls, name, description, fields, meta=None):
         if meta is None:
-            raise UserWarning("Metadata is required (for primary key)")
+            msg = "Missing metadata in {} (required for primary key)"
+            raise UserWarning(msg.format(name))
         if 'primary key' not in meta:
             raise UserWarning("Primary key is required in meta")
         if type(meta["primary key"]) is not str:
