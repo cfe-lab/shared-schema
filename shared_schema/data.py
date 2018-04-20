@@ -440,7 +440,8 @@ schema_data = Schema([
             field(
                 "id",
                 "uuid",
-                "Unique identifier", meta={'tags': {'managed', 'required'}}
+                "Unique identifier",
+                meta={'tags': {'managed', 'required'}},
             ),
             field(
                 "isolate_id",
