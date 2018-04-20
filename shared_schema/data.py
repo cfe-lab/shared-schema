@@ -408,7 +408,8 @@ schema_data = Schema([
             field(
                 "id",
                 "uuid",
-                "Unique identifier", meta={'tags': {'managed', 'required'}}
+                "Unique identifier",
+                meta={'tags': {'managed', 'required'}},
             ),
             field(
                 "name",
@@ -445,6 +446,7 @@ schema_data = Schema([
                 "isolate_id",
                 "foreign key (Isolate)",
                 "Isolate the sequence was obtained from",
+                meta={'tags': {'required'}},
             ),
             field(
                 "genotype",
@@ -461,17 +463,20 @@ schema_data = Schema([
                 "seq_method",
                 "enum(sanger, ngs)",
                 "The sequencing method used on this isolate",
+                meta={'tags': {'required'}},
             ),
             field(
                 "cutoff",
                 "float",
                 ("The cutoff-fraction used to generate a consensus sequence; "
                  "'5%' is stored as '0.05'"),
+                meta={'tags': {'required'}},
             ),
             field(
                 "raw_nt_seq",
                 "string",
                 "The raw nucleotide in the assembled sequence",
+                meta={'tags': {'required'}},
             ),
             field(
                 "notes",
