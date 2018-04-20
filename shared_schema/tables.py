@@ -92,6 +92,13 @@ class Schema(object):
             err_msg = "invalid type: {}".format(t)
             assert self.type_is_valid(t, self.entities), err_msg
 
+    def get_entity(self, entity_name):
+        entity = self.entities.get(entity_name)
+        if entity is None:
+            msg = "No entity called '{}' in schema"
+            raise KeyError(msg.format(entity_name))
+        return entity
+
     @property
     def relationships(self):
         rels = set()
@@ -119,10 +126,7 @@ class Schema(object):
             return True
 
     def find_field(self, entity_name, field_name):
-        entity = self.entities.get(entity_name)
-        if entity is None:
-            msg = "No entity called '{}' in schema"
-            raise KeyError(msg.format(entity_name))
+        entity = self.get_entity(entity_name)
         field = next((f for f in entity.fields if f.name == field_name),
                      None)
         if field is None:
@@ -131,8 +135,5 @@ class Schema(object):
         return field
 
     def primary_key_of(self, entity_name):
-        entity = self.entities.get(entity_name)
-        if entity is None:
-            msg = "No entity called '{}' in schema"
-            raise KeyError(msg.format(entity_name))
+        entity = self.get_entity(entity_name)
         return entity.meta['primary key']
