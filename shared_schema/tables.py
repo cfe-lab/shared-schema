@@ -137,3 +137,10 @@ class Schema(object):
     def primary_key_of(self, entity_name):
         entity = self.get_entity(entity_name)
         return entity.meta['primary key']
+
+    def namedtuple_for(self, entity_name):
+        entity = self.get_entity(entity_name)
+        return collections.namedtuple(
+            entity.name,
+            [fld.name for fld in entity.fields],
+        )
