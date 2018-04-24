@@ -121,6 +121,14 @@ scheme = {
                    "the ``sequences`` folder"),
             schema_path='not applicable',
         ),
+        field(
+            'genes',
+            'string',
+            req=False,
+            descr=("A comma-separated list of genes present in this sequence "
+                   "(NS3, NS5A, and NS5B are accepted)."),
+            schema_path="not applicable",
+        ),
         from_schema('Sequence', 'genotype'),
         from_schema('Sequence', 'subgenotype'),
         from_schema('Sequence', 'seq_method'),

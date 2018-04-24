@@ -91,6 +91,14 @@ scheme = {
             schema_path='not applicable',
         ),
         field(
+            "bl_genes",
+            "string",
+            descr=("A comma-separated list of genes present in this sequence "
+                   "(NS3, NS5A and NS5B are accepted)."),
+            schema_path="not applicable",
+            req=False,
+        ),
+        field(
             'bl_genotype',
             'enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)',
             descr="The baseline sample's genotype",
@@ -136,6 +144,14 @@ scheme = {
                    "``sequences`` folder containing the participants "
                    " follow-up sample sequence."),
             schema_path='not applicable',
+        ),
+        field(
+            "fu_genes",
+            "string",
+            descr=("A comma-separated list of genes present in this sequence "
+                   "(NS3, NS5A and NS5B are accepted)."),
+            schema_path="not applicable",
+            req=False,
         ),
         field(
             'fu_kind',
