@@ -531,11 +531,6 @@ schema_data = Schema([
                 "The name of the gene this alignment is in",
                 meta={'tags': {'required'}},
             ),
-            field(
-                "notes",
-                "string",
-                "Miscellaneous notes",
-            ),
         ],
         meta={"primary key": "id"},
     ),
