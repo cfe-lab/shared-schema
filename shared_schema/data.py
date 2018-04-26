@@ -3,16 +3,13 @@ from .regimens import standard
 
 field = Field.make
 
-
-drug_id_enum_type = "enum({})".format(
-    ", ".join(code for _, code in standard._compounds)
-)
+drug_ids = [code for _, code in standard._compounds]
+drug_id_enum_type = "enum({})".format(", ".join(drug_ids))
 
 schema_data = Schema([
 
     # ==================================================
     # Collaborator and Study/Trial data
-
     Entity.make(
         "Collaborator",
         "A collaborating site (provides participant data)",
@@ -30,9 +27,11 @@ schema_data = Schema([
                 meta={'tags': {'required'}},
             ),
         ],
-        meta={'tags': {'managed'}, 'primary key': 'id'},
+        meta={
+            'tags': {'managed'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "SourceStudy",
         "A study, trial, or other batch of data from a collaborator",
@@ -56,13 +55,14 @@ schema_data = Schema([
             ),
             field("notes", "string", "Notes on data from this project"),
         ],
-        meta={'tags': {'managed'}, 'primary key': 'name'},
+        meta={
+            'tags': {'managed'},
+            'primary key': 'name'
+        },
     ),
-
 
     # ==================================================
     # Participant Data (demographic, clinical, behavioral, treatment)
-
     Entity.make(
         "Person",
         "A study participant",
@@ -94,7 +94,7 @@ schema_data = Schema([
                 "enum(am-nat, asian, black, hisp, pa-isl, white)",
                 ("The participant's ethnicity: American Native, Asian, "
                  "Black/African American, Hispanic/Latino, Pacific Islander, "
-                 "or White")
+                 "or White"),
             ),
             field(
                 "year_of_birth",
@@ -102,9 +102,11 @@ schema_data = Schema([
                 ("Participant's year of birth (e.g: 1985)"),
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "BehaviorData",
         "Behavioral information about a participant",
@@ -144,9 +146,11 @@ schema_data = Schema([
                 "Has the participant been in prison (ever)?",
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "ClinicalData",
         "Participants' test results and relevant medical history",
@@ -239,9 +243,11 @@ schema_data = Schema([
                 "Has the participant had a liver transplant?",
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "TreatmentData",
         "Information about a participant's treatment",
@@ -291,13 +297,15 @@ schema_data = Schema([
                 "enum(svr, nr, eot, bt, rl, ri)",
                 ("Viral response: sustained, non-responsive, detectable viral "
                  "load at end-of-treatment, viral-breakthrough during"
-                 "treatment, eventual relapse, eventual reinfection)")
+                 "treatment, eventual relapse, eventual reinfection)"),
             ),
             field("notes", "string", "Additional notes (if applicable)"),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "Regimen",
         "A collection of kinds and ammounts of drugs used in treatment",
@@ -314,9 +322,11 @@ schema_data = Schema([
                 'The trade name of this treatment, if applicable',
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         'RegimenDrugInclusion',
         'The drugs in a regimen, and their doses and durations',
@@ -345,8 +355,6 @@ schema_data = Schema([
         ],
         meta={'primary key': ('medication_id', 'regimen_id')},
     ),
-
-
     Entity.make(
         "LossToFollowUp",
         "Records data about participants leaving the study",
@@ -371,15 +379,17 @@ schema_data = Schema([
                 "cod",
                 ("enum(liv, aid, odo, can, cir, res, dia, gen, tra, cer, dig, "
                  "oth)"),
-                "Cause of death (if applicable; blank otherwise)"
+                "Cause of death (if applicable; blank otherwise)",
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'person_id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'person_id'
+        },
     ),
 
     # ==================================================
     # Isolates & Sequences
-
     Entity.make(
         "Isolate",
         "Virus isolate (from an individual or used in a lab experiment)",
@@ -400,7 +410,6 @@ schema_data = Schema([
         ],
         meta={'primary key': 'id'},
     ),
-
     Entity.make(
         "ReferenceSequence",
         ("Reference nucleotide sequences that alignments are performed with "
@@ -433,7 +442,6 @@ schema_data = Schema([
         ],
         meta={"primary key": "id"},
     ),
-
     Entity.make(
         "Sequence",
         "Sequences and data needed for rapid alignment",
@@ -488,7 +496,6 @@ schema_data = Schema([
         ],
         meta={'primary key': 'id'},
     ),
-
     Entity.make(
         "Alignment",
         "A gene found in a sequence",
@@ -535,7 +542,6 @@ schema_data = Schema([
         ],
         meta={"primary key": "id"},
     ),
-
     Entity.make(
         "ClinicalIsolate",
         "Isolate information",
@@ -560,9 +566,11 @@ schema_data = Schema([
                  "after end-of-treatment."),
             ),
         ],
-        meta={'tags': {'clinical'}, 'primary key': 'isolate_id'},
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'isolate_id'
+        },
     ),
-
     Entity.make(
         "LabIsolate",
         "Isolates created in the lab",
@@ -578,12 +586,12 @@ schema_data = Schema([
                 "string",
                 "The sequence from which this isolate is derived",
             ),
-            field("parent_gt",
-                  "enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)",
-                  "The parent sequence's genotype"),
-            field("parent_sgt",
-                  "string",
-                  "The parent sequence's subgenotype"),
+            field(
+                "parent_gt",
+                "enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)",
+                "The parent sequence's genotype",
+            ),
+            field("parent_sgt", "string", "The parent sequence's subgenotype"),
             field(
                 "islt_kind",
                 ("enum(full-virus, full-replicon, stable-subgenomic, "
@@ -595,7 +603,8 @@ schema_data = Schema([
             field(
                 "ins",
                 "foreign key (Sequence)",
-                "A sequence inserted into this isolate's parent sequence"),
+                "A sequence inserted into this isolate's parent sequence",
+            ),
             field(
                 "ins_src_start",
                 "integer",
@@ -610,7 +619,8 @@ schema_data = Schema([
             field(
                 "ins_pos_start",
                 "integer",
-                "Inserted sequence's start position"),
+                "Inserted sequence's start position",
+            ),
             field(
                 "ins_pos_end",
                 "integer",
@@ -624,24 +634,23 @@ schema_data = Schema([
             field(
                 "ins_gt",
                 "enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)",
-                "The inserted sequence's genotype"),
-            field(
-                "ins_sgt",
-                "string",
-                "The inserted sequence's subgenotype"),
+                "The inserted sequence's genotype",
+            ),
+            field("ins_sgt", "string", "The inserted sequence's subgenotype"),
             field(
                 "mutations",
                 "string",
                 "A list of site-directed mutations applied to the isolate",
             ),
         ],
-        meta={'tags': {'phenotypic'}, 'primary key': 'isolate_id'},
+        meta={
+            'tags': {'phenotypic'},
+            'primary key': 'isolate_id'
+        },
     ),
-
 
     # ==================================================
     # Substitution tags
-
     Entity.make(
         "Substitution",
         "A substitution, insertion, or deletion in an RNA sequence",
@@ -686,7 +695,6 @@ schema_data = Schema([
 
     # ==================================================
     # Susceptibility results
-
     Entity.make(
         "Susceptibility",
         "Susceptibility test results",
@@ -721,9 +729,11 @@ schema_data = Schema([
                 "Represents uncertainty in the fold-change measurement",
             ),
         ],
-        meta={'tags': {'phenotypic'}, 'primary key': 'id'},
+        meta={
+            'tags': {'phenotypic'},
+            'primary key': 'id'
+        },
     ),
-
     Entity.make(
         "Reference",
         "A reference to a publication",
@@ -738,7 +748,6 @@ schema_data = Schema([
         ],
         meta={'primary key': 'id'},
     ),
-
     Entity.make(
         "SourceStudyReference",
         "Indicates the literature reference for a source study",
@@ -756,7 +765,6 @@ schema_data = Schema([
         ],
         meta={"primary key": ("sourcestudy_id", "reference_id")},
     ),
-
     Entity.make(
         "SusceptibilityReference",
         "Marks the reference supporting a susceptibility result",
@@ -774,7 +782,6 @@ schema_data = Schema([
         ],
         meta={"primary key": ("susceptibility_id", "reference_id")},
     ),
-
     Entity.make(
         "LabIsolateReference",
         "Marks the literature reference describing a lab isolate",
@@ -792,5 +799,4 @@ schema_data = Schema([
         ],
         meta={"primary key": ("labisolate_id", "reference_id")},
     ),
-
 ])
