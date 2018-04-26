@@ -1,11 +1,12 @@
 from shared_schema.tables import Field, Entity, Schema
-
+from .regimens import standard
 
 field = Field.make
 
 
-drug_id_enum_type = ("enum(ASV, BOC, DCV, DAS, EBR, GLP, GZR, LDV, OMB, PAR, "
-                     "PEG, PIB, RBV, RIT, SIM, SOF, TVR, VAN, VEL, VOX)")
+drug_id_enum_type = "enum({})".format(
+    ", ".join(code for _, code in standard._compounds)
+)
 
 schema_data = Schema([
 
