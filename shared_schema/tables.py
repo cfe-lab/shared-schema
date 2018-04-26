@@ -11,7 +11,6 @@ import collections
 from . import datatypes
 from . import util
 
-
 _entity = collections.namedtuple(
     "entity",
     ["name", "description", "fields", "meta"],
@@ -102,7 +101,7 @@ class Schema(object):
     @property
     def relationships(self):
         rels = set()
-        for ename, entity in self.entities.items():
+        for _, entity in self.entities.items():
             types = (f.type for f in entity.fields)
             foreign_keys = [t for t in types if "foreign key" in t]
             targets = [util.foreign_key_target(f) for f in foreign_keys]
@@ -127,8 +126,7 @@ class Schema(object):
 
     def find_field(self, entity_name, field_name):
         entity = self.get_entity(entity_name)
-        field = next((f for f in entity.fields if f.name == field_name),
-                     None)
+        field = next((f for f in entity.fields if f.name == field_name), None)
         if field is None:
             msg = "No field called '{}' on entity {}"
             raise KeyError(msg.format(field_name, entity_name))
