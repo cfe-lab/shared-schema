@@ -659,17 +659,20 @@ schema_data = Schema([
                 "alignment_id",
                 "foreign key (Alignment)",
                 "The alignment this substitution is found in",
+                meta={"tags": {"required"}},
             ),
             field(
                 "position",
                 "integer",
                 "Nucleotide position (with respect to the reference sequence)",
+                meta={"tags": {"required"}},
             ),
             field(
                 "kind",
                 "enum (simple, insertion, deletion)",
                 ("Kind of subsitution ('simple' for a single nucleotide "
                  "polymorphism, insertion or deletion for gaps)"),
+                meta={"tags": {"required"}},
             ),
             field(
                 "sub_aa",
