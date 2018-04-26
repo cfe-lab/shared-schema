@@ -146,16 +146,14 @@ class DAO(object):
                     },
                 )
                 regdata = regimens.cannonical.from_string(regspec)
-                inclusion_data = [
-                    {
-                        "regimen_id": reg_id,
-                        "medication_id": incl.medication_id,
-                        "dose": incl.dose,
-                        "frequency": incl.frequency,
-                        "duration": incl.duration,
-                    }
-                    for incl in regimens.cannonical.drug_inclusions(regdata)
-                ]
+                inclusions = regimens.cannonical.drug_inclusions(regdata)
+                inclusion_data = [{
+                    "regimen_id": reg_id,
+                    "medication_id": incl.medication_id,
+                    "dose": incl.dose,
+                    "frequency": incl.frequency,
+                    "duration": incl.duration,
+                } for incl in inclusions]
                 self.insert("regimendruginclusion", inclusion_data)
 
     def execute(self, expr, *rest):
