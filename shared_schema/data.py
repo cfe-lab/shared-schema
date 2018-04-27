@@ -168,17 +168,23 @@ schema_data = Schema([
             ),
             field("hiv", "bool", "Is the participant co-infected with HIV?"),
             field("hbv", "bool", "Is the participant co-infected with HBV?"),
+            field("vl", "float", "Viral Load (in IU/mL)"),
             field(
                 "ost",
                 "bool",
                 ("Has the participant undergone opioid substitution therapy "
                  "in the last six months?"),
             ),
-            field("chir", "bool", "Does the participant have cirrhosis?"),
+            field("cirr", "bool", "Does the participant have cirrhosis?"),
             field(
-                "metavir",
-                "enum(A0, A1, A2, A3, F0, F1, F2, F3, F4)",
-                "Metavir score",
+                "fibrosis",
+                "enum(F0, F1, F2, F3, F4)",
+                "METAVIR fibrosis score",
+            ),
+            field(
+                "inflamation",
+                "enum(A0, A1, A2, A3)",
+                "METAVIR inflamation score",
             ),
             field(
                 "metavir_by",
@@ -192,11 +198,11 @@ schema_data = Schema([
                 "float",
                 "Aspartate aminotransferase level (in U/L).",
             ),
-            field("crt", "float", "Creatinine level (in μM/L)."),
+            field("crt", "float", "Creatinine level (in mg/dL)."),
             field(
                 "egfr",
                 "float",
-                "Estimated glomerular filtration rate (in mL/minBSAc).",
+                "Estimated glomerular filtration rate (in mL/min).",
             ),
             field("ctp", "float", "Child-Turcotte-Pugh score."),
             field("meld", "float", "MELD score."),
@@ -294,7 +300,7 @@ schema_data = Schema([
             ),
             field(
                 "response",
-                "enum(svr, nr, eot, bt, rl, ri)",
+                "enum(SVR, NR, EOT, BT, RL, RI)",
                 ("Viral response: sustained, non-responsive, detectable viral "
                  "load at end-of-treatment, viral-breakthrough during"
                  "treatment, eventual relapse, eventual reinfection)"),
