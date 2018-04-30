@@ -303,7 +303,7 @@ schema_data = Schema([
                 "enum(SVR, NR, EOT, BT, RL, RI)",
                 ("Viral response: sustained, non-responsive, detectable viral "
                  "load at end-of-treatment, viral-breakthrough during"
-                 "treatment, eventual relapse, eventual reinfection)"),
+                 "treatment, eventual relapse, or eventual reinfection"),
             ),
             field("notes", "string", "Additional notes (if applicable)"),
         ],
