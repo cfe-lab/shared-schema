@@ -35,7 +35,6 @@ _freqs = [
 freqs = {abbr: desc for abbr, desc in _freqs}
 freq_keys = ('abbreviation', 'description')
 
-
 _regimens = [
     ("DAKLINZA", "60mg DCV QD 12 weeks"),
     ("EPCLUSA", "(400mg SOF + 100mg VEL) QD 12 weeks"),
@@ -52,7 +51,7 @@ _regimens = [
     ("VIEKIRA XR",
      "(600mg DAS + 25mg OMB + 150mg PAR +100mg RIT) QD 12 weeks"),
     ("VOSEVI", "(400mg SOF + 100mg VEL + 100mg VOX) QD 12 weeks"),
-    ("ZEPATTIER", "(50mg EBR + 100mg GZR) QD 12 weeks"),
+    ("ZEPATIER", "(50mg EBR + 100mg GZR) QD 12 weeks"),
     ("PEGASYS", "0.180mg PEG QWK 48 weeks"),
     ("COPEGUS1000", "500mg RBV BID 48 weeks"),
     ("COPEGUS1200", "600mg RBV BID 48 weeks"),
