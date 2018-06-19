@@ -208,6 +208,7 @@ scheme = {
             descr="What drug regimens was the participant taking?",
             possible_values="See :ref:`treatment_regimens`.",
             schema_path='not applicable',
+            req=True,
         ),
         field(
             'prev_regimen',
