@@ -1,9 +1,8 @@
-'''This module is for exporting submission schemes'''
+'''This module is for exporting the submission scheme'''
 
 import csv
 import pathlib
 import sys
-
 
 COLUMNS = 'name', 'type', 'required', 'description', 'possible values'
 

@@ -1,12 +1,10 @@
 import unittest
 
 from shared_schema.data import schema_data
-from shared_schema.submission_schemes import field
-from shared_schema.submission_schemes import simple
+from shared_schema.submission_scheme import field, simple
 
 
 class TestSimpleSubmissionScheme(unittest.TestCase):
-
     def test_construction_succeeded(self):
         'Test that the derivation from the database schema succeeded'
         for entity, fields in simple.scheme.items():

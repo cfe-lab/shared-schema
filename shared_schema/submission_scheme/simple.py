@@ -5,7 +5,7 @@ relational data isn't required.
 '''
 
 from shared_schema import data
-from shared_schema.submission_schemes import field
+from shared_schema.submission_scheme import field
 
 schema = data.schema_data
 field = field.Field
@@ -15,10 +15,7 @@ def from_schema(entity_name, schema_field_name, **kwargs):
     schema_field = schema.find_field(entity_name, schema_field_name)
     schema_path = (entity_name, schema_field_name)
     return field.from_schema_field(
-        schema_field,
-        schema_path=schema_path,
-        **kwargs
-    )
+        schema_field, schema_path=schema_path, **kwargs)
 
 
 scheme = {
@@ -28,8 +25,7 @@ scheme = {
             'string',
             req=True,
             descr="A participant's anonymous id",
-            schema_path='not applicable'
-        ),
+            schema_path='not applicable'),
         from_schema('Person', 'country'),
         from_schema('Person', 'sex'),
         from_schema('Person', 'ethnicity'),

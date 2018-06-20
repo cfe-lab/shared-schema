@@ -1,12 +1,10 @@
 import unittest
 
-from shared_schema import data
-from shared_schema import datatypes
-from shared_schema.submission_schemes import field
+from shared_schema import data, datatypes
+from shared_schema.submission_scheme import field
 
 
 class TestSubmissionSchemeField(unittest.TestCase):
-
     def test_possible_values(self):
         self.assertEqual(
             [],
@@ -41,10 +39,7 @@ class TestSubmissionSchemeField(unittest.TestCase):
         ]
         for inp, outp in cases:
             dt = datatypes.classify(inp)
-            self.assertEqual(
-                outp,
-                field._get_scheme_field_type(dt)
-            )
+            self.assertEqual(outp, field._get_scheme_field_type(dt))
 
     def test_existing_field(self):
         # Check that we can get an expected answer for all fields in

@@ -1,13 +1,11 @@
 import argparse
 
 import shared_schema.exporter
-import shared_schema.submission_schemes as submission_schemes
 import shared_schema.regimens as regimens
-
+import shared_schema.submission_scheme as submission_scheme
 
 DESC = '''Describe the SHARED project's database schema and related
 information in various formats.'''
-
 
 parser = argparse.ArgumentParser(
     prog='python -m shared_schema',
@@ -15,9 +13,7 @@ parser = argparse.ArgumentParser(
 )
 parser.set_defaults(handler=lambda _: parser.print_help())
 
-
 subparsers = parser.add_subparsers(title='commands')
-
 
 exporter = subparsers.add_parser(
     name='export',
@@ -30,15 +26,9 @@ exporter.add_argument(
 )
 exporter.set_defaults(handler=shared_schema.exporter.handler)
 
-
 submission_scheme_exporter = subparsers.add_parser(
     name='sub-scm',
     help='Export submission scheme data',
-)
-submission_scheme_exporter.add_argument(
-    'scheme',
-    choices=submission_schemes.SCHEMES.keys(),
-    help='The submission scheme to export',
 )
 submission_scheme_exporter.add_argument(
     'dest',
@@ -49,8 +39,7 @@ submission_scheme_exporter.add_argument(
     action='store_true',
     help='Skip confirmation prompt',
 )
-submission_scheme_exporter.set_defaults(handler=submission_schemes.handler)
-
+submission_scheme_exporter.set_defaults(handler=submission_scheme.handler)
 
 regimens_exporter = subparsers.add_parser(
     name='regimens',
@@ -62,7 +51,6 @@ regimens_exporter.add_argument(
     help="The regimen data table to export",
 )
 regimens_exporter.set_defaults(handler=regimens.handler)
-
 
 # TODO(nknight): add a `version` command (using argparse's version action)
 
