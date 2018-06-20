@@ -5,13 +5,9 @@ use as a guide when submitting data. Schemes are defined as "views" onto the
 schema so that names, types, and descriptions aren't duplicated.
 '''
 
-from . import exporter
-from . import multi_table
-from . import simple
-
+from . import exporter, simple
 
 SCHEMES = {
-    'multi-table': multi_table.scheme,
     'simple': simple.scheme,
 }
 
