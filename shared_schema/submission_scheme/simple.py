@@ -50,6 +50,13 @@ scheme = {
         from_schema('BehaviorData', 'ndu'),
         from_schema('BehaviorData', 'ndu_recent'),
         from_schema('BehaviorData', 'prison'),
+        field(
+            'kind',
+            'enum(bl, eot, fw4, fw12, fw24)',
+            descr=("Does this row contain baseline, end-of-treatment, or "
+                   "follow-up results?"),
+            schema_path="not applicable",
+        ),
         from_schema("ClinicalData", "hiv"),
         from_schema("ClinicalData", "hbv"),
         from_schema("ClinicalData", "ost"),
@@ -79,6 +86,7 @@ scheme = {
         from_schema("ClinicalData", "var_bleed"),
         from_schema("ClinicalData", "hep_car"),
         from_schema("ClinicalData", "transpl"),
+        from_schema("ClinicalData", "vl"),
         field(
             'bl_seq_id',
             'string',
