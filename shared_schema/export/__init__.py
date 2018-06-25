@@ -1,10 +1,12 @@
-'''An interface for expirting the schema in different formats
+'''An interface for exporting the schema in different formats
 
-Each module that knows how to export the schema (e.g. to
-ReSTructuredText, LaTeX, HTML, etc.) defines a function to do produce
-the output. This module lists the available functions and handles
-passing in the schema and doing any IO.
+This module contains several submodules that know how to export the schema in
+different formats (e.g. as CSV). They each define a function that accespts the
+schema and returns the output as a printable. This module contains a directory
+of available formats (in FORMAT) and takes care of selecting the appropriate
+function, calling it, and printing the result.
 '''
+
 import shared_schema
 from shared_schema import data
 
