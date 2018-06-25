@@ -5,12 +5,13 @@ compounds that may be included in treatment regimens, and a list of standard
 treatment regimens based on drug labels from the US FDA.
 '''
 
+import argparse
 import csv
 import sys
 
+from . import cannonical  # noqa
 from . import grammar  # noqa
 from . import standard  # noqa
-from . import cannonical  # noqa
 
 
 def _print_table(keys, rows):
@@ -32,7 +33,7 @@ TABLES = {
 }
 
 
-def handler(args):
+def handler(args: argparse.Namespace):
     '''Print the desired information to standard output'''
     table = args.table
     keys, rows = TABLES[table]

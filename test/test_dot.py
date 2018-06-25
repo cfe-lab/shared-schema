@@ -1,13 +1,11 @@
 import unittest
-
-from shared_schema import dot
-from shared_schema import data
-
 from test.example_data import entities
+
+from shared_schema import data
+from shared_schema.export import dot
 
 
 class TestElementRenderers(unittest.TestCase):
-
     def test_entity_node(self):
         foo_ent = entities[0]
         expected = ('foo [href="#foo", tooltip="A foo", '
