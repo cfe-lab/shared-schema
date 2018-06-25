@@ -3,8 +3,10 @@
 
 import enum
 
+# NOTE(nknight): MyPy doesn't support keyword args for namedtuples. See mypy
+# issue 4184: https://github.com/python/mypy/issues/4184
 
-Datatype = enum.Enum(
+Datatype = enum.Enum(  # type: ignore
     'Datatype',
     [
         "INTEGER",
@@ -18,7 +20,6 @@ Datatype = enum.Enum(
     ],
     module=__name__,
 )
-
 
 TYPE_MAP = {dt.name.lower(): dt for dt in Datatype}
 
