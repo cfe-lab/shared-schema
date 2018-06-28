@@ -49,7 +49,7 @@ class Field(object):
                  descr: str = None,
                  req: bool = False,
                  possible_values: str = None) -> None:
-        self._schema_field_type = schema_type
+        self.schema_type = schema_type
         self.name = name
         self.description = descr
         self._possible_values = possible_values
@@ -65,14 +65,13 @@ class Field(object):
 
     @property
     def type(self) -> datatypes.Datatype:
-        return datatypes.classify(self._schema_field_type)
+        return datatypes.classify(self.schema_type)
 
     @property
     def possible_values(self) -> str:
         if self._possible_values is None:
             vals = [
-                "``{}``".format(v)
-                for v in _possible_values(self._schema_field_type)
+                "``{}``".format(v) for v in _possible_values(self.schema_type)
             ]
             return ', '.join(vals)
         else:
