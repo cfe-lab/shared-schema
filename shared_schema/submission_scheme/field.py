@@ -66,8 +66,7 @@ class Field(object):
 
     @property
     def type(self) -> datatypes.Datatype:
-        dt = datatypes.classify(self._schema_field_type)
-        return _get_scheme_field_type(dt)
+        return datatypes.classify(self._schema_field_type)
 
     @property
     def possible_values(self) -> str:
