@@ -5,10 +5,12 @@ relational data isn't required.
 '''
 
 from shared_schema import data
-from shared_schema.submission_scheme import field
+
+from . import field as scm_field
 
 schema = data.schema_data
-field = field.Field
+Field = scm_field.Field  # A re-export to avoid importing the field module.
+field = scm_field.Field
 
 
 def from_schema(entity_name, schema_field_name, **kwargs):
@@ -234,3 +236,5 @@ scheme = {
         from_schema('TreatmentData', 'notes', new_name='treatment_notes'),
     ]
 }
+
+fields = scheme['simple']

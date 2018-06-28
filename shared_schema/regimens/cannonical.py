@@ -6,8 +6,7 @@ import uuid
 
 import sqlalchemy.sql as sql
 
-from . import grammar
-from . import standard
+from . import grammar, standard
 
 # flake8: noqa
 
@@ -16,18 +15,20 @@ from . import standard
 # (Durations and Amounts); they're required for parsing, but don't
 # contain extra information.
 
-
 # ---------------------------------------------------------------------
 # Helpers
 
+
 def types_match(f):
     "Decorator that ensures the types of a binary function's arguments match"
+
     @functools.wraps(f)
     def wrapped(x, y):
         if type(x) is not type(y):
             msg = "Can't combine '{}' and '{}"
             raise ValueError(msg.format(x, y))
         return f(x, y)
+
     return wrapped
 
 
@@ -77,6 +78,7 @@ def add(x, other):
 #  - each `key` value is unique
 #  - total for each `key` is the same before and after
 #  - etc.
+
 
 def consolidating_insert(collection, newobj):
     '''Insert an object into a collection, consolidating if possible.
@@ -170,6 +172,7 @@ def _(regimen_part, other):
 # ---------------------------------------------------------------------
 # Converter
 
+
 @functools.singledispatch
 def _parse(src):
     '''Parse a grammar object into a hashable, eq'able object
@@ -250,6 +253,7 @@ def _(src):
 
 # ---------------------------------------------------------------------
 # Create Regimens
+
 
 def parse(src):
     '''Given a string representing a raw regimen, parse it into:
@@ -339,8 +343,7 @@ def from_dao(dao, uid):
         sql.and_(
             dao.regimen.c.id == uid,
             dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id,
-        ),
-    )
+        ), )
     reg_rows = dao.execute(query).fetchall()
     return consolidate(map(_reg_part, reg_rows))
 

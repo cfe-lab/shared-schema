@@ -10,8 +10,7 @@ changing some of its properties in the process.
 
 from typing import List, Tuple
 
-from shared_schema import util
-from shared_schema import datatypes
+from shared_schema import datatypes, util
 
 
 def _possible_values(schema_field_type: str) -> List[str]:
@@ -46,10 +45,10 @@ class Field(object):
     def __init__(self,
                  name: str,
                  schema_type: datatypes.Datatype,
-                 schema_path: Tuple[str, str]=None,
-                 descr: str=None,
-                 req: bool=False,
-                 possible_values: str=None) -> None:
+                 schema_path: Tuple[str, str] = None,
+                 descr: str = None,
+                 req: bool = False,
+                 possible_values: str = None) -> None:
         self._schema_field_type = schema_type
         self.name = name
         self.description = descr
@@ -71,17 +70,21 @@ class Field(object):
     @property
     def possible_values(self) -> str:
         if self._possible_values is None:
-            vals = ["``{}``".format(v) for v in
-                    _possible_values(self._schema_field_type)]
+            vals = [
+                "``{}``".format(v)
+                for v in _possible_values(self._schema_field_type)
+            ]
             return ', '.join(vals)
         else:
             return self._possible_values
 
     @staticmethod
-    def from_schema_field(schema_field, req=False, new_descr=None,
-                          new_name=None, new_possible_values=None,
+    def from_schema_field(schema_field,
+                          req=False,
+                          new_descr=None,
+                          new_name=None,
+                          new_possible_values=None,
                           schema_path=None):
-
         def or_default(item, default):
             if item is not None:
                 return item
