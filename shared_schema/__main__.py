@@ -1,6 +1,6 @@
 import argparse
 
-import shared_schema.exporter
+import shared_schema.export
 import shared_schema.regimens as regimens
 import shared_schema.submission_scheme as submission_scheme
 
@@ -21,10 +21,10 @@ exporter = subparsers.add_parser(
 )
 exporter.add_argument(
     'format',
-    choices=shared_schema.exporter.FORMATS.keys(),
+    choices=shared_schema.export.FORMATS.keys(),
     help='The format to print the schema in',
 )
-exporter.set_defaults(handler=shared_schema.exporter.handler)
+exporter.set_defaults(handler=shared_schema.export.handler)
 
 submission_scheme_exporter = subparsers.add_parser(
     name='sub-scm',
