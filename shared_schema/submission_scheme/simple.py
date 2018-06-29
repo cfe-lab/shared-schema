@@ -89,123 +89,6 @@ scheme = {
         from_schema("ClinicalData", "hep_car"),
         from_schema("ClinicalData", "transpl"),
         from_schema("ClinicalData", "vl"),
-        field(
-            'bl_seq_id',
-            'string',
-            descr=("The id of a sequence in one of the FASTA files in the the "
-                   "``sequences`` folder containing the participants baseline "
-                   "sample sequence."),
-            schema_path='not applicable',
-        ),
-        field(
-            "bl_genes",
-            "string",
-            descr=("A comma-separated list of genes present in this sequence "
-                   "(NS3, NS5A and NS5B are accepted)."),
-            schema_path="not applicable",
-            req=False,
-        ),
-        field(
-            'bl_genotype',
-            'enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)',
-            descr="The baseline sample's genotype",
-            schema_path='not applicable',
-        ),
-        field(
-            'bl_subgenotype',
-            'string',
-            descr="The baseline sample's subgenotype",
-            schema_path='not applicable',
-        ),
-        field(
-            'bl_strain',
-            'string',
-            descr="The isolate's strain (if applicable/known)",
-            schema_path='not applicable',
-        ),
-        field(
-            'bl_seq_method',
-            'string',
-            descr="The sequencing method used on the baseline isolate",
-            possible_values="``sanger``, ``ngs``",
-            schema_path='not applicable',
-        ),
-        field(
-            'bl_cutoff',
-            'float',
-            descr=("The cutoff percentage used to generate the baseline "
-                   "sample consensus sequence; 5% should be entered as "
-                   "'5' or '5.0'."),
-            schema_path='not applicable',
-        ),
-        field(
-            'bl_notes',
-            'string',
-            descr="Notes on the baseline sequence, if applicable",
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_seq_id',
-            'string',
-            descr=("The id of a sequence in one of the FASTA files in the "
-                   "``sequences`` folder containing the participants "
-                   " follow-up sample sequence."),
-            schema_path='not applicable',
-        ),
-        field(
-            "fu_genes",
-            "string",
-            descr=("A comma-separated list of genes present in this sequence "
-                   "(NS3, NS5A and NS5B are accepted)."),
-            schema_path="not applicable",
-            req=False,
-        ),
-        field(
-            'fu_kind',
-            'enum(eot, fw4, fw12, fw24, fw+)',
-            descr=("The kind of follow up sample provided (end-of-treatment "
-                   "or up to 4, 12, 24 or more weeks later)."),
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_genotype',
-            'enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)',
-            descr="The follow-up sample's genotype",
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_subgenotype',
-            'string',
-            descr="The follow-up sample's subgenotype",
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_strain',
-            'string',
-            descr="The follow-up isolate's strain (if applicable/known)",
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_seq_method',
-            'string',
-            descr="The sequencing method used on the follow-up isolate",
-            possible_values="``sanger``, ``ngs``",
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_cutoff',
-            'float',
-            descr=("The cutoff percentage used to generate the follow-up "
-                   "sample consensus sequence; 5% should be entered as "
-                   "'5' or '5.0'."),
-            schema_path='not applicable',
-        ),
-        field(
-            'fu_notes',
-            'string',
-            descr="Notes on the follow-up sequence, if applicable",
-            schema_path='not applicable',
-        ),
         from_schema('TreatmentData', 'first_treatment'),
         from_schema('TreatmentData', 'duration_act'),
         field(
@@ -234,6 +117,64 @@ scheme = {
         ),
         from_schema('TreatmentData', 'response'),
         from_schema('TreatmentData', 'notes', new_name='treatment_notes'),
+        field(
+            "seq_kind",
+            'enum(bl, eot, fw4, fw12, fw24, fw+)',
+            descr=("The kind of sequence in this record: (baseline, "
+                   "end-of-treatment, or follo-up at up to 4, 12, 24, or more"
+                   "weeks."),
+            schema_path="not applicable",
+        ),
+        field(
+            'genotype',
+            'enum(1, 2, 3, 4, 5, 6, mixed, recombinant, indeterminate)',
+            descr="The sequence's clinically determined genotype.",
+            schema_path='not applicable',
+        ),
+        field(
+            "subgenotype",
+            'string',
+            descr="The sequence's clinically determined subgenotype",
+            schema_path='not applicable',
+        ),
+        field(
+            'strain',
+            'string',
+            descr="The isolate's strain (if applicable/known)",
+            schema_path='not applicable',
+        ),
+        field(
+            "seq_id",
+            "string",
+            descr="The id of a sequence in the FASTA files directory.",
+            schema_path='not applicable',
+        ),
+        field(
+            "gene",
+            "enum(ns3, ns5a, ns5b)",
+            descr="The gene contained in this record's sequence.",
+            schema_path="not applicable",
+        ),
+        field(
+            'seq_method',
+            'string',
+            descr="The sequencing method used to obtain this sequence.",
+            possible_values="``sanger``, ``ngs``",
+            schema_path='not applicable',
+        ),
+        field(
+            'cutoff',
+            'float',
+            descr=("The cutoff percentage used to generate the consensus "
+                   "sequence; 5% should be entered as '5' or '5.0'."),
+            schema_path='not applicable',
+        ),
+        field(
+            'seq_notes',
+            'string',
+            descr="Notes on the baseline sequence, if applicable",
+            schema_path='not applicable',
+        ),
     ]
 }
 
