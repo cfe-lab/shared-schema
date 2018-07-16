@@ -138,7 +138,7 @@ schema_data = Schema([
             field(
                 "ndu_recent",
                 "bool",
-                "None-injection drug use in the past 6 months?",
+                "Non-injection drug use in the past 6 months?",
             ),
             field(
                 "prison",
