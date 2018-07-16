@@ -166,6 +166,11 @@ schema_data = Schema([
                 "foreign key(Person)",
                 "The person to whom this data pertains",
             ),
+            field(
+                "kind",
+                "enum(bl, eot, fw4, fw12, fw24)",
+                "Is this clinical data baseline or follow-up?",
+            ),
             field("hiv", "bool", "Is the participant co-infected with HIV?"),
             field("hbv", "bool", "Is the participant co-infected with HBV?"),
             field("vl", "float", "Viral Load (in IU/mL)"),
