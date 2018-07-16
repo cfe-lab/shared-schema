@@ -13,6 +13,8 @@ from . import cannonical  # noqa
 from . import grammar  # noqa
 from . import standard  # noqa
 
+Regimen = grammar.Regimen
+
 
 def _print_table(keys, rows):
     display_keys = [k.capitalize() for k in keys]
