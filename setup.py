@@ -1,18 +1,17 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # TODO(nknight): include template files
 
 install_requires = [
-        "pypeg2 >= 2.15.2, <3",
-        "pystache >=0.5.4, <0.6",
-        "SQLAlchemy >=1.1.14, <2.0",
+    "pypeg2 >= 2.15.2, <3",
+    "pystache >=0.5.4, <0.6",
+    "SQLAlchemy >=1.1.14, <2.0",
 ]
 
 tests_require = [
     "pycodestyle == 2.3.1",
     "flake8 >= 3.5.0, <4.0",
 ]
-
 
 setup(
     name="shared_schema",
