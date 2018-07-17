@@ -314,18 +314,18 @@ schema_data = Schema([
                  "if different from the scheduled duration"),
             ),
             field(
-                "regimen",
+                "regimen_id",
                 "foreign key (Regimen)",
                 "The drug regimen taken by the participant",
             ),
             field(
-                "prev_regimen",
+                "prev_regimen_id",
                 "foreign key (Regimen)",
                 ("If the participant has been treated before, what is the "
                  "last regimen they were on?"),
             ),
             field(
-                "pprev_regimen",
+                "pprev_regimen_id",
                 "foreign key (Regimen)",
                 ("If the participant has been treated before, what regimen "
                  "were they on before-last?"),
