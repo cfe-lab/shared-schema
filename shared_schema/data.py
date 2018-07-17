@@ -146,7 +146,7 @@ schema_data = Schema([
             ),
             field(
                 "person_id",
-                "foreign key (Person)",
+                "foreign key (Case)",
                 "The participant this data pertains to",
                 meta={'tags': {'required'}},
             ),
@@ -190,7 +190,7 @@ schema_data = Schema([
             ),
             field(
                 "person_id",
-                "foreign key(Person)",
+                "foreign key(Case)",
                 "The person to whom this data pertains",
             ),
             field(
@@ -298,7 +298,7 @@ schema_data = Schema([
             ),
             field(
                 "person_id",
-                "foreign key (Person)",
+                "foreign key (Case)",
                 "The participant that this data pertains to",
                 meta={'tags': {'required'}},
             ),
@@ -399,7 +399,7 @@ schema_data = Schema([
         [
             field(
                 "person_id",
-                "foreign key (Person)",
+                "foreign key (Case)",
                 "",
                 meta={'tags': {'required'}},
             ),
@@ -592,7 +592,7 @@ schema_data = Schema([
             ),
             field(
                 "person_id",
-                "foreign key (Person)",
+                "foreign key (Case)",
                 "The participant who gave the isolate",
                 meta={'tags': {'required'}},
             ),
