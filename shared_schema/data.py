@@ -145,7 +145,7 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
-                "person_id",
+                "case_id",
                 "foreign key (Case)",
                 "The participant this data pertains to",
                 meta={'tags': {'required'}},
@@ -189,7 +189,7 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
-                "person_id",
+                "case_id",
                 "foreign key(Case)",
                 "The person to whom this data pertains",
             ),
@@ -297,7 +297,7 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
-                "person_id",
+                "case_id",
                 "foreign key (Case)",
                 "The participant that this data pertains to",
                 meta={'tags': {'required'}},
@@ -398,7 +398,7 @@ schema_data = Schema([
         "Records data about participants leaving the study",
         [
             field(
-                "person_id",
+                "case_id",
                 "foreign key (Case)",
                 "",
                 meta={'tags': {'required'}},
@@ -422,7 +422,7 @@ schema_data = Schema([
         ],
         meta={
             'tags': {'clinical'},
-            'primary key': 'person_id'
+            'primary key': 'case_id'
         },
     ),
 
@@ -591,7 +591,7 @@ schema_data = Schema([
                 meta={'tags': {'required', 'managed'}},
             ),
             field(
-                "person_id",
+                "case_id",
                 "foreign key (Case)",
                 "The participant who gave the isolate",
                 meta={'tags': {'required'}},
