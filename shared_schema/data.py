@@ -1,4 +1,5 @@
-from shared_schema.tables import Field, Entity, Schema
+from shared_schema.tables import Entity, Field, Schema
+
 from .regimens import standard
 
 field = Field.make
@@ -74,17 +75,6 @@ schema_data = Schema([
                 meta={'tags': {'managed', 'required'}},
             ),
             field(
-                "study_id",
-                "foreign key (SourceStudy)",
-                "The study the participant entered the database with",
-            ),
-            field(
-                "country",
-                "string",
-                ("The country where the person participated in the study (as "
-                 "an ISO 3166-1 alpha-3 code)"),
-            ),
-            field(
                 "sex",
                 "enum(male, female, other)",
                 "The participant's sex at birth",
@@ -107,6 +97,43 @@ schema_data = Schema([
             'primary key': 'id'
         },
     ),
+    Entity.make(
+        "Case",
+        "A collection of related data from a study participant", [
+            field(
+                "id",
+                "uuid",
+                "Unique identifier",
+                meta={'tags': {'managed', 'required'}},
+            ),
+            field(
+                "person_id",
+                "foreign key (Person)",
+                "The person who contributed the data in this case.",
+                meta={"tags": {"required"}},
+            ),
+            field(
+                "study_id",
+                "foreign key (SourceStudy)",
+                "The study the participant entered the database with",
+            ),
+            field(
+                "country",
+                "string",
+                ("The country where the person participated in the study (as "
+                 "an ISO 3166-1 alpha-3 code)"),
+            ),
+            field(
+                "study_participant_id",
+                "string",
+                ("The unique identifier that the source study gave to the "
+                 "person contributing this data"),
+            )
+        ],
+        meta={
+            'tags': {'clinical'},
+            'primary key': 'id',
+        }),
     Entity.make(
         "BehaviorData",
         "Behavioral information about a participant",
