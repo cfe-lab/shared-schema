@@ -58,6 +58,7 @@ scheme = {
             descr=("Does this row contain baseline, end-of-treatment, or "
                    "follow-up results?"),
             schema_path="not applicable",
+            req=True,
         ),
         from_schema("ClinicalData", "hiv"),
         from_schema("ClinicalData", "hbv"),
