@@ -37,12 +37,6 @@ schema_data = Schema([
         "SourceStudy",
         "A study, trial, or other batch of data from a collaborator",
         [
-            field(
-                "collaborator",
-                "foreign key (Collaborator)",
-                "The collaborator providing the data",
-                meta={'tags': {'required'}},
-            ),
             field("name", "string", "The name of the study or trial"),
             field(
                 "start_year",
@@ -61,6 +55,17 @@ schema_data = Schema([
             'primary key': 'name'
         },
     ),
+    Entity.make(
+        "SourceStudyCollaborator",
+        "Indicates which collaborator(s) are associate with each source study",
+        [
+            field("collaborator_id", "foreign key (Collaborator)",
+                  "A collaborator providing data for the associated study"),
+            field("study_name", "foreign key (SourceStudy)", ""),
+        ],
+        meta={
+            "primary key": ("collaborator_id", "study_name"),
+        }),
 
     # ==================================================
     # Participant Data (demographic, clinical, behavioral, treatment)
