@@ -4,6 +4,7 @@
 import uuid
 
 import sqlalchemy as sa
+import sqlalchemy.sql as sql
 import sqlalchemy.types as sa_types
 
 from . import data, datatypes, regimens, tables, util
@@ -170,7 +171,8 @@ class DAO(object):
             raise ValueError("No such table: {}".format(tablename))
         pk_cols = list(table.primary_key)
         identical = [col == item.get(col.name) for col in pk_cols]
-        fetched = self.execute(table.select(*identical)).fetchone()
+        fetched = self.execute(table.select().where(
+            sql.and_(*identical))).fetchone()
         if fetched is None:
             self.insert(tablename, item)
         else:

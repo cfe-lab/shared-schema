@@ -57,8 +57,7 @@ class TestLoadStandardRegimens(unittest.TestCase):
 class TestDaoOperations(unittest.TestCase):
     '''Verify that saving, loading, and querying work as expected'''
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(cls):
         cls.dao = dao.DAO('sqlite:///:memory:', engine_args={"echo": False})
         cls.dao.init_db()
 
@@ -90,12 +89,11 @@ class TestDaoOperations(unittest.TestCase):
             "UUID didn't corretly serialize/deserialize",
         )
 
-    def assert_person_exists_with_props(self, **person_props):
-        preds = [
-            self.dao.person.columns[k] == v for k, v in person_props.items()
-        ]
+    def assert_entity_exists_with_properties(self, entity_name, **props):
+        tbl = getattr(self.dao, entity_name)
+        preds = [tbl.columns[k] == v for k, v in props.items()]
         pred = sql.and_(*preds)
-        select = self.dao.person.select().where(pred)
+        select = tbl.select().where(pred)
         result = self.dao.execute(select).first()
         self.assertIsNotNone(result)
 
@@ -106,9 +104,9 @@ class TestDaoOperations(unittest.TestCase):
             "year_of_birth": 1999,
         }
         self.dao.insert("person", test_person)
-        self.assert_person_exists_with_props(**test_person)
+        self.assert_entity_exists_with_properties("person", **test_person)
         self.dao.insert_or_check_identical("person", test_person)
-        self.assert_person_exists_with_props(**test_person)
+        self.assert_entity_exists_with_properties("person", **test_person)
 
     def test_insert_or_check_identical_with_new(self):
         test_person = {
@@ -118,7 +116,7 @@ class TestDaoOperations(unittest.TestCase):
         }
         self.dao.insert("person", test_person)
         self.dao.insert_or_check_identical("person", test_person)
-        self.assert_person_exists_with_props(**test_person)
+        self.assert_entity_exists_with_properties("person", **test_person)
 
     def test_insert_or_check_identical_with_mismatch(self):
         test_person = {
@@ -127,7 +125,42 @@ class TestDaoOperations(unittest.TestCase):
             "year_of_birth": 1999,
         }
         self.dao.insert("person", test_person)
-        self.assert_person_exists_with_props(**test_person)
+        self.assert_entity_exists_with_properties("person", **test_person)
         test_person["year_of_birth"] = 2000
         with self.assertRaises(Exception):
-            self.assert_person_exists_with_props(**test_person)
+            self.assert_entity_exists_with_properties("person", **test_person)
+
+    def test_insert_or_check_identical_with_multipart_primary_key(self):
+        test_sourcestudy = {
+            "name": "Test Study",
+            "start_year": 2000,
+            "end_year": 2000,
+            "notes": None,
+        }
+        test_collaborator = {
+            "id": uuid.uuid4(),
+            "name": "Test Collaborator",
+        }
+        self.dao.insert("sourcestudy", test_sourcestudy)
+        self.dao.insert("collaborator", test_collaborator)
+
+        test_sourcestudycollaborator = {
+            "collaborator_id": test_collaborator["id"],
+            "study_name": test_sourcestudy["name"],
+        }
+        self.dao.insert_or_check_identical(
+            "sourcestudycollaborator",
+            test_sourcestudycollaborator,
+        )
+        self.assert_entity_exists_with_properties(
+            "sourcestudycollaborator",
+            **test_sourcestudycollaborator,
+        )
+        self.dao.insert_or_check_identical(
+            "sourcestudycollaborator",
+            test_sourcestudycollaborator,
+        )
+        # NOTE(nknight): None of the tables with multiple primary keys have
+        # other fields, so the "check identical" function of this method
+        # doesn't really apply. Any value that's different from the existing
+        # value is a legitimate new value, and would be inserted.
