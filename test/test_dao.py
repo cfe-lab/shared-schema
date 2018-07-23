@@ -2,6 +2,7 @@ import unittest
 import uuid
 
 from shared_schema import dao, tables
+from sqlalchemy import sql
 
 
 class TestUuidType(unittest.TestCase):
@@ -88,3 +89,45 @@ class TestDaoOperations(unittest.TestCase):
             type(select_result['id']),
             "UUID didn't corretly serialize/deserialize",
         )
+
+    def assert_person_exists_with_props(self, **person_props):
+        preds = [
+            self.dao.person.columns[k] == v for k, v in person_props.items()
+        ]
+        pred = sql.and_(*preds)
+        select = self.dao.person.select().where(pred)
+        result = self.dao.execute(select).first()
+        self.assertIsNotNone(result)
+
+    def test_insert_or_check_identical_with_existing(self):
+        test_person = {
+            "id": uuid.uuid4(),
+            "sex": "other",
+            "year_of_birth": 1999,
+        }
+        self.dao.insert("person", test_person)
+        self.assert_person_exists_with_props(**test_person)
+        self.dao.insert_or_check_identical("person", test_person)
+        self.assert_person_exists_with_props(**test_person)
+
+    def test_insert_or_check_identical_with_new(self):
+        test_person = {
+            "id": uuid.uuid4(),
+            "sex": "other",
+            "year_of_birth": 1999,
+        }
+        self.dao.insert("person", test_person)
+        self.dao.insert_or_check_identical("person", test_person)
+        self.assert_person_exists_with_props(**test_person)
+
+    def test_insert_or_check_identical_with_mismatch(self):
+        test_person = {
+            "id": uuid.uuid4(),
+            "sex": "other",
+            "year_of_birth": 1999,
+        }
+        self.dao.insert("person", test_person)
+        self.assert_person_exists_with_props(**test_person)
+        test_person["year_of_birth"] = 2000
+        with self.assertRaises(Exception):
+            self.assert_person_exists_with_props(**test_person)

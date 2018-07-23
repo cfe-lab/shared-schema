@@ -6,11 +6,7 @@ import uuid
 import sqlalchemy as sa
 import sqlalchemy.types as sa_types
 
-from . import data
-from . import datatypes
-from . import tables
-from . import util
-from . import regimens
+from . import data, datatypes, regimens, tables, util
 
 
 class UUID(sa_types.TypeDecorator):
@@ -157,8 +153,8 @@ class DAO(object):
                 self.insert("regimendruginclusion", inclusion_data)
 
     def execute(self, expr, *rest):
-        conn = self.engine.connect()
-        return conn.execute(expr, *rest)
+        with self.engine.begin() as conn:
+            return conn.execute(expr, *rest)
 
     def insert(self, tablename, item):
         table = getattr(self, tablename)
@@ -167,6 +163,28 @@ class DAO(object):
         ins = table.insert()
         with self.engine.begin() as conn:
             conn.execute(ins, item)
+
+    def insert_or_check_identical(self, tablename, item):
+        table = getattr(self, tablename)
+        if table is None:
+            raise ValueError("No such table: {}".format(tablename))
+        pk_cols = list(table.primary_key)
+        identical = [col == item.get(col.name) for col in pk_cols]
+        fetched = self.execute(table.select(*identical)).fetchone()
+        if fetched is None:
+            self.insert(tablename, item)
+        else:
+            tmpl = ("Mismatch in expected datbase value: "
+                    "{tbl}.{fld} : {pre} != {given}")
+            for key, given in item.items():
+                if getattr(fetched, key, None) != given:
+                    msg = tmpl.format(
+                        tbl=tablename,
+                        fld=key,
+                        pre=fetched.get(key),
+                        given=given,
+                    )
+                    raise ValueError(msg)
 
     def get_regimen(self, reg_id):
         reg_qry = self.regimen.select(self.regimen.c.id == reg_id)
