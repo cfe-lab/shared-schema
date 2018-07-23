@@ -727,13 +727,13 @@ schema_data = Schema([
                 "insertion",
                 "string",
                 ("For an insertion, the inserted Amino Acid sequence (blank "
-                 "for SNPs and deletions"),
+                 "for SNPs and deletions)"),
             ),
             field(
                 "deletion_length",
                 "integer",
                 ("For a deletion, the number of deleted amino acids (blank "
-                 "for SNPs and insertions"),
+                 "for SNPs and insertions)"),
             ),
         ],
         meta={'primary key': ('alignment_id', 'position')},
