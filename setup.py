@@ -20,6 +20,8 @@ setup(
     author_email="nknight@cfenet.ubc.ca",
     url="https://github.com/hcv-shared/shared-schema",
     packages=find_packages(),
+    package_dir={"shared_schema": "shared_schema"},
+    package_data={"shared_schema": ["templates/*.mustache"]},
     install_requires=install_requires,
     extras_require={
         "tests": tests_require,
