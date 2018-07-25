@@ -1,6 +1,7 @@
 import argparse
 
 import shared_schema.export
+import shared_schema.reference_sequences as refseqs
 import shared_schema.regimens as regimens
 import shared_schema.submission_scheme as submission_scheme
 
@@ -51,6 +52,12 @@ regimens_exporter.add_argument(
     help="The regimen data table to export",
 )
 regimens_exporter.set_defaults(handler=regimens.handler)
+
+refseq_exporter = subparsers.add_parser(
+    name="refseqs",
+    help="Print reference sequence metadata as CSV",
+)
+refseq_exporter.set_defaults(handler=refseqs.handler)
 
 # TODO(nknight): add a `version` command (using argparse's version action)
 
