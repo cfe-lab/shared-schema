@@ -6,9 +6,9 @@ import uuid
 
 
 class Gene(enum.Enum):
-    ns3 = 1
-    ns5a = 2
-    ns5b = 3
+    ns3 = "ns3"
+    ns5a = "ns5a"
+    ns5b = "ns5b"
 
 
 class RefSeq(ty.NamedTuple):
@@ -47,7 +47,7 @@ def handler(_) -> None:
 SEQS = [
     RefSeq(
         genotype="1",
-        subgenotype="A",
+        subgenotype="a",
         gene=Gene.ns3,
         shared_id=uuid.UUID("04deae83-fda3-4316-b6dc-4c29e2e79204"),
         genbank="NC_004102",
@@ -56,7 +56,7 @@ SEQS = [
     ),
     RefSeq(
         genotype="1",
-        subgenotype="A",
+        subgenotype="a",
         gene=Gene.ns5a,
         shared_id=uuid.UUID("deb3a7b6-057d-4af3-b0f1-6d01ad350057"),
         genbank="NC_004102",
@@ -65,7 +65,7 @@ SEQS = [
     ),
     RefSeq(
         genotype="1",
-        subgenotype="A",
+        subgenotype="a",
         gene=Gene.ns5b,
         shared_id=uuid.UUID("7ac4e78b-4c1e-4faf-9c17-aae0a3e0145f"),
         genbank="NC_004102",
@@ -74,7 +74,7 @@ SEQS = [
     ),
     RefSeq(
         genotype="1",
-        subgenotype="B",
+        subgenotype="b",
         gene=Gene.ns3,
         shared_id=uuid.UUID("e3008a2d-fd6e-41cf-90e7-b3ef31788b79"),
         genbank="AJ238799",
@@ -83,7 +83,7 @@ SEQS = [
     ),
     RefSeq(
         genotype="1",
-        subgenotype="B",
+        subgenotype="b",
         gene=Gene.ns5a,
         shared_id=uuid.UUID("9a720eb5-8f05-4787-bb43-398090612156"),
         genbank="AJ238799",
@@ -92,7 +92,7 @@ SEQS = [
     ),
     RefSeq(
         genotype="1",
-        subgenotype="B",
+        subgenotype="b",
         gene=Gene.ns5b,
         shared_id=uuid.UUID("282d7594-abe8-496a-a9b1-e33c413935b7"),
         genbank="AJ238799",
