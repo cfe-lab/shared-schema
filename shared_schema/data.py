@@ -118,7 +118,7 @@ schema_data = Schema([
                 meta={"tags": {"required"}},
             ),
             field(
-                "study_id",
+                "study_name",
                 "foreign key (SourceStudy)",
                 "The study the participant entered the database with",
             ),
@@ -799,7 +799,7 @@ schema_data = Schema([
         "Indicates the literature reference for a source study",
         [
             field(
-                "sourcestudy_id",
+                "sourcestudy_name",
                 "foreign key (SourceStudy)",
                 "The marked source study",
             ),
@@ -809,7 +809,7 @@ schema_data = Schema([
                 "The associated literature reference",
             )
         ],
-        meta={"primary key": ("sourcestudy_id", "reference_id")},
+        meta={"primary key": ("sourcestudy_name", "reference_id")},
     ),
     Entity.make(
         "SusceptibilityReference",
