@@ -1,8 +1,15 @@
+import tempfile
 import unittest
 import uuid
 
 from shared_schema import dao, tables
 from sqlalchemy import sql
+
+
+def tmp_dao(**kwargs):
+    db_file = tempfile.NamedTemporaryFile()
+    db_url = f"sqlite:///{db_file.name}"
+    return dao.DAO(db_url, **kwargs)
 
 
 class TestUuidType(unittest.TestCase):
@@ -25,7 +32,7 @@ class TestTableConversion(unittest.TestCase):
             meta={"primary key": ["a", "b"]},
         )
         schema_data = tables.Schema([entity])
-        test_dao = dao.DAO("sqlite:///:memory:", schema_data=schema_data)
+        test_dao = tmp_dao(schema_data=schema_data)
 
         table = test_dao.testentity
         keys = table.primary_key.columns.keys()
@@ -37,16 +44,16 @@ class TestLoadStandardRegimens(unittest.TestCase):
     '''Verify that standard regimens can be loaded'''
 
     def test_regimens_can_be_loaded(self):
-        d = dao.DAO("sqlite:///:memory:", engine_args={"echo": False})
+        d = tmp_dao(engine_args={"echo": False})
         d.init_db()
-        first_qry = d.engine.execute(d.regimen.select()).fetchall()
+        first_qry = list(d.query(d.regimen.select()))
         self.assertEqual(
             0,
             len(first_qry),
             "Expected no regimens in an un-loaded database",
         )
         d.load_standard_regimens()
-        second_qry = d.engine.execute(d.regimen.select()).fetchall()
+        second_qry = list(d.query(d.regimen.select()))
         self.assertGreater(
             len(second_qry),
             0,
@@ -58,7 +65,7 @@ class TestDaoOperations(unittest.TestCase):
     '''Verify that saving, loading, and querying work as expected'''
 
     def setUp(cls):
-        cls.dao = dao.DAO('sqlite:///:memory:', engine_args={"echo": False})
+        cls.dao = tmp_dao(engine_args={"echo": False})
         cls.dao.init_db()
 
     def test_insert_retrieve(self):
@@ -69,7 +76,7 @@ class TestDaoOperations(unittest.TestCase):
         }
 
         insert = self.dao.person.insert().values(**test_person)
-        insert_result = self.dao.execute(insert)
+        insert_result = self.dao.command(insert)
         self.assertIsNotNone(
             insert_result,
             'Test Person insert returned None',
@@ -77,7 +84,7 @@ class TestDaoOperations(unittest.TestCase):
 
         select = self.dao.person.select().where(
             self.dao.person.c.id == test_person['id'])
-        select_result = self.dao.execute(select).first()
+        select_result = next(self.dao.query(select))
         self.assertIsNotNone(
             select_result,
             "Couldn't retrieve created test person",
@@ -94,7 +101,7 @@ class TestDaoOperations(unittest.TestCase):
         preds = [tbl.columns[k] == v for k, v in props.items()]
         pred = sql.and_(*preds)
         select = tbl.select().where(pred)
-        result = self.dao.execute(select).first()
+        result = next(self.dao.query(select), None)
         self.assertIsNotNone(result)
 
     def test_insert_or_check_identical_with_existing(self):

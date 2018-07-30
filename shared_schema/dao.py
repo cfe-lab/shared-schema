@@ -1,6 +1,6 @@
-'''Concrete database connection functions and data-access-objects
+"""Concrete database connection functions and data-access-objects
 
-'''
+"""
 import uuid
 
 import sqlalchemy as sa
@@ -78,24 +78,20 @@ def as_column(field: tables.Field, entity: tables.Entity, schema_data):
 
 def as_table(entity: tables.Entity, meta, schema_data):
     columns = [as_column(f, entity, schema_data) for f in entity.fields]
-    return sa.Table(
-        entity.name,
-        meta,
-        *columns,
-    )
+    return sa.Table(entity.name, meta, *columns)
 
 
 class DAO(object):
-    '''A Data Access Object (DAO) that conforms to the SHARED Schema.
+    """A Data Access Object (DAO) that conforms to the SHARED Schema.
 
     The tables (as defined by a shared_schema.tables.Schema instance)
     are available in a dictionary that lives in an attribute called
     "tables". They're also available directly as attributes on the DOA
     (in lowercase, e.g. "dao.regimen" or "dao.behaviordata").
-    '''
+    """
 
     def __init__(self, db_url, engine_args=None, schema_data=None):
-        '''Connects to the database and creates as SqlAlchemy engine.
+        """Connects to the database and creates as SqlAlchemy engine.
 
         Arguments:
         - db_url        the connection string of the database to use
@@ -107,7 +103,7 @@ class DAO(object):
 
         If isn't provided, "shared_schema.data.schema_data" is used by
         default.
-        '''
+        """
         self._db_url = db_url
         self._meta = sa.MetaData()
         self.tables = {}
@@ -129,19 +125,13 @@ class DAO(object):
         self._meta.create_all(self.engine)
 
     def load_standard_regimens(self):
-        '''Populate the Regimen and RegimenDrugInclusion tables with the
+        """Populate the Regimen and RegimenDrugInclusion tables with the
         regimens from shared_schema.regimens.standard
-        '''
+        """
         for regname, regspec in regimens.standard.regimens.items():
             with self.engine.begin():
                 reg_id = uuid.uuid4()
-                self.insert(
-                    "regimen",
-                    {
-                        "id": reg_id,
-                        "name": regname,
-                    },
-                )
+                self.insert("regimen", {"id": reg_id, "name": regname})
                 regdata = regimens.cannonical.from_string(regspec)
                 inclusions = regimens.cannonical.drug_inclusions(regdata)
                 inclusion_data = [{
@@ -153,9 +143,18 @@ class DAO(object):
                 } for incl in inclusions]
                 self.insert("regimendruginclusion", inclusion_data)
 
-    def execute(self, expr, *rest):
+    def command(self, expr, *rest):
         with self.engine.begin() as conn:
             return conn.execute(expr, *rest)
+
+    def query(self, expr, *rest):
+        with self.engine.begin() as conn:
+            cursor = conn.execute(expr, *rest)
+            if cursor is not None and hasattr(cursor, "fetchall"):
+                results = list(cursor.fetchall())
+            else:
+                results = []
+        return iter(results)
 
     def insert(self, tablename, item):
         table = getattr(self, tablename)
@@ -171,8 +170,8 @@ class DAO(object):
             raise ValueError("No such table: {}".format(tablename))
         pk_cols = list(table.primary_key)
         identical = [col == item.get(col.name) for col in pk_cols]
-        fetched = self.execute(table.select().where(
-            sql.and_(*identical))).fetchone()
+        fetched = next(
+            self.query(table.select().where(sql.and_(*identical))), None)
         if fetched is None:
             self.insert(tablename, item)
         else:
@@ -190,5 +189,5 @@ class DAO(object):
 
     def get_regimen(self, reg_id):
         reg_qry = self.regimen.select(self.regimen.c.id == reg_id)
-        result = self.execute(reg_qry).fetchone()
+        result = next(self.query(reg_qry))
         return result

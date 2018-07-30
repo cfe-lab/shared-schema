@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 
 import shared_schema.dao
@@ -5,9 +6,10 @@ import shared_schema.regimens
 
 
 class TestCannonicalRegimenFromDao(unittest.TestCase):
-
     def new_initialized_dao(self):
-        dao = shared_schema.dao.DAO("sqlite:///:memory:")
+        self.tmp_dbfile = tempfile.NamedTemporaryFile()
+        db_url = f"sqlite:///{self.tmp_dbfile.name}"
+        dao = shared_schema.dao.DAO(db_url)
         dao.init_db()
         dao.load_standard_regimens()
         return dao
@@ -20,7 +22,7 @@ class TestCannonicalRegimenFromDao(unittest.TestCase):
 
     def test_integration_from_dao_works_as_expected(self):
         dao = self.new_initialized_dao()
-        regimens = dao.execute(dao.regimen.select()).fetchall()
+        regimens = list(dao.query(dao.regimen.select()))
         self.assertGreater(
             len(regimens),
             0,

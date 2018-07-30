@@ -344,7 +344,7 @@ def from_dao(dao, uid):
             dao.regimen.c.id == uid,
             dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id,
         ), )
-    reg_rows = dao.execute(query).fetchall()
+    reg_rows = dao.query(query)
     return consolidate(map(_reg_part, reg_rows))
 
 

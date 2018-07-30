@@ -8,12 +8,12 @@ import uuid
 
 import pypeg2 as pp
 
-import shared_schema.regimens.grammar as rg
 import shared_schema.regimens.cannonical as cannonical
-
+import shared_schema.regimens.grammar as rg
 
 # ---------------------------------------------------------------------
 # Helpers
+
 
 def methods_exist(obj):
     '''Verify that __eq__ and __hash__ exist on an object'''
@@ -50,12 +50,11 @@ boc_dose = cannonical._dose(amount=decimal.Decimal(3), compound='BOC')
 duration_12wks = decimal.Decimal(12 * 7)
 duration_24wks = decimal.Decimal(24 * 7)
 
-
 # ---------------------------------------------------------------------
 # Data Object Construction
 
-class TestParsingCompoundObjects(unittest.TestCase):
 
+class TestParsingCompoundObjects(unittest.TestCase):
     def test_dose(self):
         src = "1mg DCV"
         parsed = parse_from_source(src, rg.Dose)
@@ -88,12 +87,10 @@ class TestParsingCompoundObjects(unittest.TestCase):
                         doselist=frozenset([sof_dose]),
                     )
                 ]),
-            )
-        )
+            ))
 
 
 class TestParsingCollections(unittest.TestCase):
-
     def test_doselist_parses(self):
         src = "1mg DCV + 3mg BOC"
         parsed = parse_from_source(src, rg.DoseList)
@@ -265,7 +262,6 @@ class TestMonoidalOperations(unittest.TestCase):
 
 
 class TestFromString(unittest.TestCase):
-
     def is_regimen(self, parsed):
         self.assertIsInstance(parsed, frozenset)
         reg_part = next(iter(parsed))
@@ -302,34 +298,34 @@ class TestFromDao(unittest.TestCase):
     }
 
     indications = {
-        'sof100qd': cannonical._indication(
+        'sof100qd':
+        cannonical._indication(
             frequency='QD',
             doselist=frozenset([doses['sof100']]),
         ),
-        'sof100tid': cannonical._indication(
+        'sof100tid':
+        cannonical._indication(
             frequency='TID',
             doselist=frozenset([doses['sof100']]),
         ),
-        'dcv100qd': cannonical._indication(
+        'dcv100qd':
+        cannonical._indication(
             frequency='QD',
             doselist=frozenset([doses['dcv100']]),
         )
     }
 
     def verify_loaded(self, loaded, expected):
-        fetch_mock = mock.Mock()
-        fetch_mock.fetchall = mock.Mock(return_value=loaded)
-        exec_mock = mock.Mock(return_value=fetch_mock)
+        query_mock = mock.Mock(return_value=loaded)
         dao_mock = mock.Mock()
-        dao_mock.execute = exec_mock
+        dao_mock.query = query_mock
 
         uid = uuid.uuid4()
         sql_mod = 'shared_schema.regimens.cannonical.sql'
         with mock.patch(sql_mod) as sa_sql_mock:
             result = cannonical.from_dao(dao_mock, uid)
             sa_sql_mock.select.assert_called()
-        exec_mock.assert_called()
-        fetch_mock.fetchall.assert_called()
+        query_mock.assert_called()
         self.assertEqual(result, expected)
 
     def test_simple_load(self):
@@ -379,7 +375,6 @@ class TestFromDao(unittest.TestCase):
 
 
 class TestInclusions(unittest.TestCase):
-
     def test_simple_inclusions(self):
         drug_src = "100mg SOF BID 2 weeks"
         regimen = parse_from_source(drug_src, rg.Regimen)
