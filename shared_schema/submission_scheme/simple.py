@@ -159,6 +159,7 @@ scheme = {
         field(
             'seq_method',
             'string',
+            req=True,
             descr="The sequencing method used to obtain this sequence.",
             possible_values="``sanger``, ``ngs``",
             schema_path='not applicable',
