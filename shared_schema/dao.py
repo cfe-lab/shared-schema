@@ -1,6 +1,7 @@
 """Concrete database connection functions and data-access-objects
 
 """
+import typing as ty
 import uuid
 
 import sqlalchemy as sa
@@ -187,7 +188,7 @@ class DAO(object):
                     )
                     raise ValueError(msg)
 
-    def get_regimen(self, reg_id):
+    def get_regimen(self, reg_id) -> ty.Optional[uuid.UUID]:
         reg_qry = self.regimen.select(self.regimen.c.id == reg_id)
-        result = next(self.query(reg_qry))
+        result = next(self.query(reg_qry), None)
         return result
