@@ -158,6 +158,8 @@ class DAO(object):
         return iter(results)
 
     def insert(self, tablename, item):
+        if not item:  # Don't bother with empty lists
+            return
         table = getattr(self, tablename)
         if table is None:
             raise ValueError("No such table: {}".format(tablename))
