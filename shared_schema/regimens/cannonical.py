@@ -1,4 +1,4 @@
-'''A hashable, eq'able, canonical representation of drug regimens'''
+"""A hashable, eq'able, canonical representation of drug regimens"""
 import collections
 import decimal
 import functools
@@ -34,42 +34,41 @@ def types_match(f):
 
 # ---------------------------------------------------------------------
 # Canonicalizing Collections
-'''These functions operate on collections and objects that can
+"""These functions operate on collections and objects that can
 *sometimes* be consolidated, e.g. Doses of the same compound.
 
 - `key` accesses the attribute of an object that must match in order
   to consolidate
 - `add` combines to objects that can be consolidated
-'''
+"""
 
-_dose = collections.namedtuple('Dose', ['amount', 'compound'])
-_indication = collections.namedtuple('Indication', ['doselist', 'frequency'])
+_dose = collections.namedtuple("Dose", ["amount", "compound"])
+_indication = collections.namedtuple("Indication", ["doselist", "frequency"])
 _regimen_part = collections.namedtuple(
-    'RegimenPart',
-    ['drug_combination', 'duration'],
+    "RegimenPart", ["drug_combination", "duration"]
 )
 
 
 @functools.singledispatch
 def key(x):
-    '''Consolidatable types with the same key can be consolidated.
+    """Consolidatable types with the same key can be consolidated.
 
     E.g: For a Dose, the key is the compound type. Doses of the same
     compound can be consolidated, but doses of different compounds
     must be kept separate.
-    '''
+    """
     msg = "key: {}"
     raise NotImplemented(msg.format(x))
 
 
 @functools.singledispatch
 def add(x, other):
-    '''Binary operation for combining two consolidatable types that have
+    """Binary operation for combining two consolidatable types that have
     the same key.
 
     E.g: For two Doses with the same compound, return a new dose with
     the same compound, adding the amounts together.
-    '''
+    """
     msg = "add: {}"
     raise NotImplemented(msg.format(x))
 
@@ -81,7 +80,7 @@ def add(x, other):
 
 
 def consolidating_insert(collection, newobj):
-    '''Insert an object into a collection, consolidating if possible.
+    """Insert an object into a collection, consolidating if possible.
 
     Implemented in terms of `key` and `add` and iterability of
     collection.
@@ -93,7 +92,7 @@ def consolidating_insert(collection, newobj):
 
     The collection should contain only instances of the same class as
     newobj.
-    '''
+    """
     maybe_obj = next(iter(collection), None)
     if maybe_obj is not None:
         if type(maybe_obj) is not type(newobj):
@@ -124,10 +123,7 @@ def _(dose, other):
     if key(dose) != key(other):
         msg = "Can't add doses of different compounds: {} + {}"
         raise ValueError(msg.format(dose, other))
-    return _dose(
-        compound=dose.compound,
-        amount=dose.amount + other.amount,
-    )
+    return _dose(compound=dose.compound, amount=dose.amount + other.amount)
 
 
 @key.register(_indication)
@@ -142,10 +138,7 @@ def _(indication, other):
         msg = "Can't add indications of different frequencies: {} + {}"
         raise ValueError(msg.format(indication, other))
     new_doselist = consolidating_merge(indication.doselist, other.doselist)
-    return _indication(
-        doselist=new_doselist,
-        frequency=indication.frequency,
-    )
+    return _indication(doselist=new_doselist, frequency=indication.frequency)
 
 
 @key.register(_regimen_part)
@@ -160,12 +153,10 @@ def _(regimen_part, other):
         msg = "Can't add regimen parts with different durations: {} + {}"
         raise ValueError(msg.format(regimen_part, other))
     new_drug_combination = consolidating_merge(
-        regimen_part.drug_combination,
-        other.drug_combination,
+        regimen_part.drug_combination, other.drug_combination
     )
     return _regimen_part(
-        duration=regimen_part.duration,
-        drug_combination=new_drug_combination,
+        duration=regimen_part.duration, drug_combination=new_drug_combination
     )
 
 
@@ -175,13 +166,13 @@ def _(regimen_part, other):
 
 @functools.singledispatch
 def _parse(src):
-    '''Parse a grammar object into a hashable, eq'able object
+    """Parse a grammar object into a hashable, eq'able object
 
     This multi-method should turn each node that's parsed by the
     regimen grammar into a tuple or frozenset of builtin scalar
     datatypes. This ensures that two identical regimens will parse to
     the same object, even when they're expressed differently.
-    '''
+    """
     msg = "Unhandled object of type '{} : '{}'"
     raise ValueError(msg.format(type(src), src))
 
@@ -216,10 +207,7 @@ def _(src):
 @_parse.register(grammar.Indication)
 def _(src):
     doselist, frequency = src
-    return _indication(
-        doselist=_parse(doselist),
-        frequency=_parse(frequency),
-    )
+    return _indication(doselist=_parse(doselist), frequency=_parse(frequency))
 
 
 @_parse.register(grammar.Duration)
@@ -240,8 +228,7 @@ def _(src):
 def _(src):
     drug_combination, duration = src
     return _regimen_part(
-        drug_combination=_parse(drug_combination),
-        duration=_parse(duration),
+        drug_combination=_parse(drug_combination), duration=_parse(duration)
     )
 
 
@@ -256,7 +243,7 @@ def _(src):
 
 
 def parse(src):
-    '''Given a string representing a raw regimen, parse it into:
+    """Given a string representing a raw regimen, parse it into:
 
     ParsedRegimen = frozenset(RegimenPart)
     RegimenPart = NamedTuple(
@@ -299,17 +286,17 @@ def parse(src):
 
     because the compounds, indications, and regimens match, so they
     can be merged at every level.
-    '''
+    """
     return _parse(src)
 
 
 def from_string(src):
-    '''Parse a regimen from a string
+    """Parse a regimen from a string
 
     Given the name of a standard regimen or a well-formed regimen
     description, returns a data object with the normalized
     regimen. Otherwise, throws a SyntaxError.
-    '''
+    """
     if src.upper() in standard.regimens:
         standard_regimen = standard.regimens.get(src.upper())
         grammar_obj = grammar.parse(standard_regimen)
@@ -324,14 +311,10 @@ def from_string(src):
 def _reg_part(row):
     dose = _dose(amount=row.dose, compound=row.medication_id)
     doses = frozenset([dose])
-    indication = _indication(
-        frequency=row.frequency,
-        doselist=doses,
-    )
+    indication = _indication(frequency=row.frequency, doselist=doses)
     drug_combination = frozenset([indication])
     regpart = _regimen_part(
-        duration=row.duration,
-        drug_combination=drug_combination,
+        duration=row.duration, drug_combination=drug_combination
     )
     return regpart
 
@@ -343,7 +326,8 @@ def from_dao(dao, uid):
         sql.and_(
             dao.regimen.c.id == uid,
             dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id,
-        ), )
+        )
+    )
     reg_rows = dao.query(query)
     return consolidate(map(_reg_part, reg_rows))
 
@@ -352,8 +336,7 @@ def from_dao(dao, uid):
 # View Regimens
 
 _inclusion = collections.namedtuple(
-    "DrugInclusion",
-    ['medication_id', 'dose', 'frequency', 'duration'],
+    "DrugInclusion", ["medication_id", "dose", "frequency", "duration"]
 )
 
 

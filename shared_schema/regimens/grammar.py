@@ -1,4 +1,4 @@
-'''This module contains a parser for regimen descriptions.
+"""This module contains a parser for regimen descriptions.
 
 It turns a terse regimen description into structured data, suitable for
 analysis or creating database records.
@@ -26,24 +26,42 @@ Example regimens:
     (200mg DCV + 100mg PEG) TID 2 days
     1000mg BOC QD 2 weeks, 100mg ASV 3 days
     (1mg SOF + 2mg SOF) QID 3 weeks, (4mg DCV TID + 5mg BOC) BID 6 weeks
-'''
+"""
 
 import decimal
 import re
 
 import pypeg2 as pp
 
-
-_freqs = ['QD', 'BID', 'TID', 'QID', 'QWK']
+_freqs = ["QD", "BID", "TID", "QID", "QWK"]
 
 
 class Frequency(pp.Keyword):
     grammar = pp.Enum(*[pp.Keyword(f) for f in _freqs])
 
 
-_compounds = ["ASV", "BOC", "DCV", "DAS", "EBR", "GLP", "GZR", "LDV", "OMB",
-              "PAR", "PEG", "PIB", "RBV", "RIT", "SIM", "SOF", "TVR", "VAN",
-              "VEL", "VOX", ]
+_compounds = [
+    "ASV",
+    "BOC",
+    "DCV",
+    "DAS",
+    "EBR",
+    "GLP",
+    "GZR",
+    "LDV",
+    "OMB",
+    "PAR",
+    "PEG",
+    "PIB",
+    "RBV",
+    "RIT",
+    "SIM",
+    "SOF",
+    "TVR",
+    "VAN",
+    "VEL",
+    "VOX",
+]
 
 
 class Compound(pp.Keyword):
@@ -94,18 +112,14 @@ class Dose(pp.Concat):
 
 
 class DoseList(pp.List):
-    grammar = (
-        pp.optional("("),
-        pp.csl(Dose, separator='+'),
-        pp.optional(")"),
-    )
+    grammar = (pp.optional("("), pp.csl(Dose, separator="+"), pp.optional(")"))
 
 
 class Indication(pp.Concat):
     grammar = DoseList, Frequency
 
 
-_time_units = ['day', 'days', 'week', 'weeks']
+_time_units = ["day", "days", "week", "weeks"]
 
 
 class TimeUnit(pp.Keyword):
@@ -113,10 +127,10 @@ class TimeUnit(pp.Keyword):
 
     @property
     def _normed(self):
-        if self.name.startswith('day'):
-            return 'day'
-        elif self.name.startswith('week'):
-            return 'week'
+        if self.name.startswith("day"):
+            return "day"
+        elif self.name.startswith("week"):
+            return "week"
         else:
             msg = "Unexpected timeunit: {}".format(self.name)
             raise SyntaxError(msg)
@@ -139,9 +153,9 @@ class Duration(pp.Concat):
     def days(self):
         num = self[0]
         unit = self[1]
-        if unit.name.startswith('day'):
+        if unit.name.startswith("day"):
             return num.amount
-        elif unit.name.startswith('week'):
+        elif unit.name.startswith("week"):
             return num.amount * 7
         else:
             msg = "Unexpected timeunit value: {}".format(unit.name)

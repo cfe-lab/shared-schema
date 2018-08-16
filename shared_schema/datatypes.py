@@ -1,5 +1,5 @@
-'''This module defines the datatypes in the SHARED schema.
-'''
+"""This module defines the datatypes in the SHARED schema.
+"""
 
 import enum
 
@@ -7,7 +7,7 @@ import enum
 # issue 4184: https://github.com/python/mypy/issues/4184
 
 Datatype = enum.Enum(  # type: ignore
-    'Datatype',
+    "Datatype",
     [
         "INTEGER",
         "FLOAT",
@@ -32,9 +32,9 @@ def classify(src):
     if normed_src in TYPE_MAP:
         # covers everything except ENUM and FOREIGN_KEY
         return TYPE_MAP.get(normed_src)
-    if normed_src.startswith('enum'):
+    if normed_src.startswith("enum"):
         return Datatype.ENUM
-    if normed_src.startswith('foreign key'):
+    if normed_src.startswith("foreign key"):
         return Datatype.FOREIGN_KEY
     else:
         msg = "Can't parse a datatype from '{}'"

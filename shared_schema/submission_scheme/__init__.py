@@ -1,11 +1,11 @@
-'''Definition and export for the data submission scheme.
+"""Definition and export for the data submission scheme.
 
 The submission scheme is a simplified version of the schema that collaborators
 can use as a guide when submitting data, and SHARED can use as a target while
 normalising contributed data. Many fields in the submission scheme are derived
 directly from the schema, so that names, types, and descriptions aren't
 duplicated.
-'''
+"""
 
 from . import exporter, simple
 

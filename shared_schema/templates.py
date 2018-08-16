@@ -1,25 +1,20 @@
-'''Template rendering
+"""Template rendering
 
 Register Mustache templates and populate them with data.
-'''
+"""
 
 import os.path
 
 import pystache
 
-
 TEMPLATES = {}
 
-
-TEMPLATE_ROOT = os.path.join(
-    os.path.dirname(__file__),
-    "templates",
-)
+TEMPLATE_ROOT = os.path.join(os.path.dirname(__file__), "templates")
 
 
 def load_file(fname):
     fpath = os.path.join(TEMPLATE_ROOT, fname)
-    with open(fpath, 'r') as infile:
+    with open(fpath, "r") as infile:
         return infile.read()
 
 

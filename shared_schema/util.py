@@ -1,10 +1,10 @@
-'''Common utility functions'''
+"""Common utility functions"""
 
 import re
 
 
 def foreign_key_target(field_type):
-    '''What entity does a foreign key target?'''
+    """What entity does a foreign key target?"""
     matches = re.findall(r"foreign key\s*\((.+)\)", field_type)
     return matches[0]
 

@@ -1,7 +1,7 @@
 import csv
 import io
 
-COLUMNS = ['entity', 'field', 'field type', 'field description']
+COLUMNS = ["entity", "field", "field type", "field description"]
 
 
 def printable_field(entity_name, field):

@@ -1,4 +1,4 @@
-'''Record standard compounds and treatment regimens'''
+"""Record standard compounds and treatment regimens"""
 
 _compounds = [
     ("asunaprevir", "ASV"),
@@ -23,7 +23,7 @@ _compounds = [
     ("voxilaprevir", "VOX"),
 ]
 compounds = {cmpnd: abbr for cmpnd, abbr in _compounds}
-compound_keys = ('compound', 'abbreviation')
+compound_keys = ("compound", "abbreviation")
 
 _freqs = [
     ("QD", "once daily"),
@@ -33,7 +33,7 @@ _freqs = [
     ("QWK", "weekly"),
 ]
 freqs = {abbr: desc for abbr, desc in _freqs}
-freq_keys = ('abbreviation', 'description')
+freq_keys = ("abbreviation", "description")
 
 _regimens = [
     ("DAKLINZA", "60mg DCV QD 12 weeks"),
@@ -46,10 +46,11 @@ _regimens = [
     ("SUNVEPRA", "100mg ASV BID 24 weeks"),
     ("TECHNIVIE", "(25mg OMB + 150mg PAR + 100mg RIT) QD 12 weeks"),
     ("VICTRELIS", "800mg BOC TID 32 weeks"),
-    ("VIEKIRA PAK",
-     "250mg DAS BID & (250mg OMB + 150mg PAR + 100mg RIT) QD 12 weeks"),
-    ("VIEKIRA XR",
-     "(600mg DAS + 25mg OMB + 150mg PAR +100mg RIT) QD 12 weeks"),
+    (
+        "VIEKIRA PAK",
+        "250mg DAS BID & (250mg OMB + 150mg PAR + 100mg RIT) QD 12 weeks",
+    ),
+    ("VIEKIRA XR", "(600mg DAS + 25mg OMB + 150mg PAR +100mg RIT) QD 12 weeks"),
     ("VOSEVI", "(400mg SOF + 100mg VEL + 100mg VOX) QD 12 weeks"),
     ("ZEPATIER", "(50mg EBR + 100mg GZR) QD 12 weeks"),
     ("PEGASYS", "0.180mg PEG QWK 48 weeks"),
@@ -57,16 +58,16 @@ _regimens = [
     ("COPEGUS1200", "600mg RBV BID 48 weeks"),
 ]
 regimens = {name: reg for name, reg in _regimens}
-regimen_keys = ('name', 'regimen')
+regimen_keys = ("name", "regimen")
 
 
 def expand(src):
-    '''Replace standard regimen names with their contents.
+    """Replace standard regimen names with their contents.
 
     This function searchs a regimen source string for standard regimen
     names and replaces them with the long form of their contents, as
     understood by the grammar.
-    '''
+    """
     for name, explicit in regimens.items():
         if name in src:
             src = src.replace(name, explicit)

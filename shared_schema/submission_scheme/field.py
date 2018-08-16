@@ -1,4 +1,4 @@
-'''This module defines submission scheme's Fields
+"""This module defines submission scheme's Fields
 
 This includes functions for converting database schema field types to
 simpler submission scheme field types, and listing the possible values
@@ -6,7 +6,7 @@ for enum fields. The field obejct has methods for printing its
 converted type and possible values, and class methods for creating a
 submission scheme field from a database schema field, possible
 changing some of its properties in the process.
-'''
+"""
 
 from typing import List, Tuple
 
@@ -27,28 +27,30 @@ def _get_scheme_field_type(schema_field_type: datatypes.Datatype) -> str:
     if not isinstance(schema_field_type, datatypes.Datatype):
         raise ValueError()
     scheme_types = {
-        datatypes.Datatype.INTEGER: 'number',
-        datatypes.Datatype.FLOAT: 'number',
-        datatypes.Datatype.STRING: 'text',
-        datatypes.Datatype.DATE: 'date',
-        datatypes.Datatype.UUID: 'text',
-        datatypes.Datatype.BOOL: 'bool',
-        datatypes.Datatype.ENUM: 'text',
-        datatypes.Datatype.FOREIGN_KEY: 'text',
+        datatypes.Datatype.INTEGER: "number",
+        datatypes.Datatype.FLOAT: "number",
+        datatypes.Datatype.STRING: "text",
+        datatypes.Datatype.DATE: "date",
+        datatypes.Datatype.UUID: "text",
+        datatypes.Datatype.BOOL: "bool",
+        datatypes.Datatype.ENUM: "text",
+        datatypes.Datatype.FOREIGN_KEY: "text",
     }
     return scheme_types.get(schema_field_type)
 
 
 class Field(object):
-    '''A field in a submission scheme entity'''
+    """A field in a submission scheme entity"""
 
-    def __init__(self,
-                 name: str,
-                 schema_type: datatypes.Datatype,
-                 schema_path: Tuple[str, str] = None,
-                 descr: str = None,
-                 req: bool = False,
-                 possible_values: str = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        schema_type: datatypes.Datatype,
+        schema_path: Tuple[str, str] = None,
+        descr: str = None,
+        req: bool = False,
+        possible_values: str = None,
+    ) -> None:
         self.schema_type = schema_type
         self.name = name
         self.description = descr
@@ -73,17 +75,19 @@ class Field(object):
             vals = [
                 "``{}``".format(v) for v in _possible_values(self.schema_type)
             ]
-            return ', '.join(vals)
+            return ", ".join(vals)
         else:
             return self._possible_values
 
     @staticmethod
-    def from_schema_field(schema_field,
-                          req=False,
-                          new_descr=None,
-                          new_name=None,
-                          new_possible_values=None,
-                          schema_path=None):
+    def from_schema_field(
+        schema_field,
+        req=False,
+        new_descr=None,
+        new_name=None,
+        new_possible_values=None,
+        schema_path=None,
+    ):
         def or_default(item, default):
             if item is not None:
                 return item

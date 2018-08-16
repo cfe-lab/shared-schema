@@ -135,13 +135,16 @@ class DAO(object):
                 self.insert("regimen", {"id": reg_id, "name": regname})
                 regdata = regimens.cannonical.from_string(regspec)
                 inclusions = regimens.cannonical.drug_inclusions(regdata)
-                inclusion_data = [{
-                    "regimen_id": reg_id,
-                    "medication_id": incl.medication_id,
-                    "dose": incl.dose,
-                    "frequency": incl.frequency,
-                    "duration": incl.duration,
-                } for incl in inclusions]
+                inclusion_data = [
+                    {
+                        "regimen_id": reg_id,
+                        "medication_id": incl.medication_id,
+                        "dose": incl.dose,
+                        "frequency": incl.frequency,
+                        "duration": incl.duration,
+                    }
+                    for incl in inclusions
+                ]
                 self.insert("regimendruginclusion", inclusion_data)
 
     def command(self, expr, *rest):
@@ -174,12 +177,15 @@ class DAO(object):
         pk_cols = list(table.primary_key)
         identical = [col == item.get(col.name) for col in pk_cols]
         fetched = next(
-            self.query(table.select().where(sql.and_(*identical))), None)
+            self.query(table.select().where(sql.and_(*identical))), None
+        )
         if fetched is None:
             self.insert(tablename, item)
         else:
-            tmpl = ("Mismatch in expected datbase value: "
-                    "{tbl}.{fld} : {pre} != {given}")
+            tmpl = (
+                "Mismatch in expected datbase value: "
+                "{tbl}.{fld} : {pre} != {given}"
+            )
             for key, given in item.items():
                 if getattr(fetched, key, None) != given:
                     msg = tmpl.format(

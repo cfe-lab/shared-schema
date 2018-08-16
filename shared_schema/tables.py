@@ -1,19 +1,17 @@
-'''Objects for describing and checking tables an their fields.
+"""Objects for describing and checking tables an their fields.
 
 A Field maps to an individual database column.
 
 An Entity contains many fields, and represents a database table.
 
-A Schema contains many entities, and can check things like foreign keys.'''
+A Schema contains many entities, and can check things like foreign keys."""
 
 import collections
 
-from . import datatypes
-from . import util
+from . import datatypes, util
 
 _entity = collections.namedtuple(
-    "entity",
-    ["name", "description", "fields", "meta"],
+    "entity", ["name", "description", "fields", "meta"]
 )
 
 
@@ -25,14 +23,11 @@ class Entity(_entity):
         if meta is None:
             msg = "Missing metadata in {} (required for primary key)"
             raise UserWarning(msg.format(name))
-        if 'primary key' not in meta:
+        if "primary key" not in meta:
             raise UserWarning("Primary key is required in meta")
         if type(meta["primary key"]) is not str:
             for pk in meta["primary key"]:
-                fld = next(
-                    (fld for fld in fields if fld.name == pk),
-                    None,
-                )
+                fld = next((fld for fld in fields if fld.name == pk), None)
                 if fld is None:
                     msg = "Meta contains a Primary Key that isn't a field: {}"
                     raise UserWarning(msg.format(pk))
@@ -40,11 +35,11 @@ class Entity(_entity):
 
     @property
     def tags(self):
-        return self.meta.get('tags', {})
+        return self.meta.get("tags", {})
 
     @property
     def primary_key(self):
-        pk = self.meta.get('primary key')
+        pk = self.meta.get("primary key")
         if pk is None:
             msg = "Missing primary key on {}".format(self.name)
             raise ValueError(msg)
@@ -52,8 +47,7 @@ class Entity(_entity):
 
 
 _field = collections.namedtuple(
-    "field",
-    ["name", "type", "description", "meta"],
+    "field", ["name", "type", "description", "meta"]
 )
 
 
@@ -68,11 +62,11 @@ class Field(_field):
 
     @property
     def tags(self):
-        return self.meta.get('tags', {})
+        return self.meta.get("tags", {})
 
     @property
     def nullable(self):
-        return 'required' not in self.tags
+        return "required" not in self.tags
 
 
 field = Field.make
@@ -134,11 +128,10 @@ class Schema(object):
 
     def primary_key_of(self, entity_name):
         entity = self.get_entity(entity_name)
-        return entity.meta['primary key']
+        return entity.meta["primary key"]
 
     def namedtuple_for(self, entity_name):
         entity = self.get_entity(entity_name)
         return collections.namedtuple(
-            entity.name,
-            [fld.name for fld in entity.fields],
+            entity.name, [fld.name for fld in entity.fields]
         )
