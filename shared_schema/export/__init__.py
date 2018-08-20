@@ -10,9 +10,9 @@ function, calling it, and printing the result.
 import shared_schema
 from shared_schema import data
 
-from . import csv, dot, rst
+from . import csv, dot, erd, rst
 
-FORMATS = {"csv": csv.make, "dot": dot.make, "rst": rst.make}
+FORMATS = {"csv": csv.make, "dot": dot.make, "rst": rst.make, "erd": erd.make}
 
 
 def handler(args):
