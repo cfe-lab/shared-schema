@@ -11,6 +11,10 @@ import sqlalchemy.types as sa_types
 from . import data, datatypes, regimens, tables, util
 
 
+def constraints(specs: ty.Dict[str, str]) -> ty.List[sa.CheckConstraint]:
+    return [sa.CheckConstraint(src, name=name) for name, src in specs.items()]
+
+
 class UUID(sa_types.TypeDecorator):
     impl = sa_types.CHAR
 
@@ -79,7 +83,8 @@ def as_column(field: tables.Field, entity: tables.Entity, schema_data):
 
 def as_table(entity: tables.Entity, meta, schema_data):
     columns = [as_column(f, entity, schema_data) for f in entity.fields]
-    return sa.Table(entity.name, meta, *columns)
+    check_constraints = constraints(entity.meta.get("constraints", {}))
+    return sa.Table(entity.name, meta, *columns, *check_constraints)
 
 
 class DAO(object):
