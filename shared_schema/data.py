@@ -906,11 +906,13 @@ schema_data = Schema(
                     "labisolate_id",
                     "foreign key (LabIsolate)",
                     "The marked lab isolate",
+                    meta={"tags": {"required"}},
                 ),
                 field(
                     "reference_id",
                     "foreign key (Reference)",
                     "The associated literature reference",
+                    meta={"tags": {"required"}},
                 ),
             ],
             meta={"primary key": ("labisolate_id", "reference_id")},
