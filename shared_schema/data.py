@@ -803,7 +803,25 @@ schema_data = Schema(
                     ),
                 ),
             ],
-            meta={"primary key": ("alignment_id", "position")},
+            meta={
+                "primary key": ("alignment_id", "position"),
+                "constraints": {
+                    "content_matches_kind": """
+                        CASE kind
+                        WHEN 'simple' THEN (sub_aa IS NOT NULL
+                                            AND insertion IS NULL
+                                            AND deletion_length IS NULL)
+                        WHEN 'insertion' THEN (sub_aa IS NULL
+                                               AND insertion IS NOT NULL
+                                               AND deletion_length IS NULL)
+                        WHEN 'deletion' THEN (sub_aa IS NULL
+                                              AND insertion IS NULL
+                                              AND deletion_length IS NOT NULL)
+                        ELSE 0
+                        END
+                    """
+                },
+            },
         ),
         # ==================================================
         # Susceptibility results
