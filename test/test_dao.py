@@ -2,8 +2,10 @@ import tempfile
 import unittest
 import uuid
 
-from shared_schema import dao, tables
+import sqlalchemy as sa
 from sqlalchemy import sql
+
+from shared_schema import dao, tables
 
 
 def tmp_dao(**kwargs):
@@ -41,28 +43,24 @@ class TestTableConversion(unittest.TestCase):
 
 
 class TestLoadStandardRegimens(unittest.TestCase):
-    '''Verify that standard regimens can be loaded'''
+    """Verify that standard regimens can be loaded"""
 
     def test_regimens_can_be_loaded(self):
         d = tmp_dao(engine_args={"echo": False})
         d.init_db()
         first_qry = list(d.query(d.regimen.select()))
         self.assertEqual(
-            0,
-            len(first_qry),
-            "Expected no regimens in an un-loaded database",
+            0, len(first_qry), "Expected no regimens in an un-loaded database"
         )
         d.load_standard_regimens()
         second_qry = list(d.query(d.regimen.select()))
         self.assertGreater(
-            len(second_qry),
-            0,
-            "Expected some regimens in a loaded database",
+            len(second_qry), 0, "Expected some regimens in a loaded database"
         )
 
 
 class TestDaoOperations(unittest.TestCase):
-    '''Verify that saving, loading, and querying work as expected'''
+    """Verify that saving, loading, and querying work as expected"""
 
     def setUp(cls):
         cls.dao = tmp_dao(engine_args={"echo": False})
@@ -70,29 +68,26 @@ class TestDaoOperations(unittest.TestCase):
 
     def test_insert_retrieve(self):
         test_person = {
-            'id': uuid.uuid4(),
-            'sex': 'other',
-            'year_of_birth': 1999,
+            "id": uuid.uuid4(),
+            "sex": "other",
+            "year_of_birth": 1999,
         }
 
         insert = self.dao.person.insert().values(**test_person)
         insert_result = self.dao.command(insert)
-        self.assertIsNotNone(
-            insert_result,
-            'Test Person insert returned None',
-        )
+        self.assertIsNotNone(insert_result, "Test Person insert returned None")
 
         select = self.dao.person.select().where(
-            self.dao.person.c.id == test_person['id'])
+            self.dao.person.c.id == test_person["id"]
+        )
         select_result = next(self.dao.query(select))
         self.assertIsNotNone(
-            select_result,
-            "Couldn't retrieve created test person",
+            select_result, "Couldn't retrieve created test person"
         )
-        self.assertEqual(test_person['id'], select_result['id'])
+        self.assertEqual(test_person["id"], select_result["id"])
         self.assertEqual(
-            type(test_person['id']),
-            type(select_result['id']),
+            type(test_person["id"]),
+            type(select_result["id"]),
             "UUID didn't corretly serialize/deserialize",
         )
 
@@ -144,10 +139,7 @@ class TestDaoOperations(unittest.TestCase):
             "end_year": 2000,
             "notes": None,
         }
-        test_collaborator = {
-            "id": uuid.uuid4(),
-            "name": "Test Collaborator",
-        }
+        test_collaborator = {"id": uuid.uuid4(), "name": "Test Collaborator"}
         self.dao.insert("sourcestudy", test_sourcestudy)
         self.dao.insert("collaborator", test_collaborator)
 
@@ -156,18 +148,37 @@ class TestDaoOperations(unittest.TestCase):
             "study_name": test_sourcestudy["name"],
         }
         self.dao.insert_or_check_identical(
-            "sourcestudycollaborator",
-            test_sourcestudycollaborator,
+            "sourcestudycollaborator", test_sourcestudycollaborator
         )
         self.assert_entity_exists_with_properties(
-            "sourcestudycollaborator",
-            **test_sourcestudycollaborator,
+            "sourcestudycollaborator", **test_sourcestudycollaborator
         )
         self.dao.insert_or_check_identical(
-            "sourcestudycollaborator",
-            test_sourcestudycollaborator,
+            "sourcestudycollaborator", test_sourcestudycollaborator
         )
         # NOTE(nknight): None of the tables with multiple primary keys have
         # other fields, so the "check identical" function of this method
         # doesn't really apply. Any value that's different from the existing
         # value is a legitimate new value, and would be inserted.
+
+    def test_insert_list_fails(self):
+        test_persons = [
+            {"id": uuid.uuid4(), "sex": "other", "year_of_birth": 1980 + i}
+            for i in range(10)
+        ]
+        with self.assertRaises(ValueError):
+            self.dao.insert("person", test_persons)
+
+    def test_insert_many(self):
+        person_number = 10
+        test_persons = [
+            {"id": uuid.uuid4(), "sex": "other", "year_of_birth": 1980 + i}
+            for i in range(person_number)
+        ]
+        self.dao.insert_many("person", test_persons)
+        person_table_count = next(
+            self.dao.query(
+                sa.select([sa.func.count()]).select_from(self.dao.person)
+            )
+        )[0]
+        self.assertEqual(person_number, person_table_count)

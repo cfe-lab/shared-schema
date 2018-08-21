@@ -150,7 +150,7 @@ class DAO(object):
                     }
                     for incl in inclusions
                 ]
-                self.insert("regimendruginclusion", inclusion_data)
+                self.insert_many("regimendruginclusion", inclusion_data)
 
     def command(self, expr, *rest):
         with self.engine.begin() as conn:
@@ -165,15 +165,20 @@ class DAO(object):
                 results = []
         return iter(results)
 
-    def insert(self, tablename, item):
-        if not item:  # Don't bother with empty lists
-            return
+    def insert_many(self, tablename, items):
+        if not isinstance(items, list):
+            raise ValueError("insert_many expects a list")
+        if any(not isinstance(i, dict) for i in items):
+            raise ValueError("Expected a list of dictionaries")
         table = getattr(self, tablename)
         if table is None:
             raise ValueError("No such table: {}".format(tablename))
         ins = table.insert()
         with self.engine.begin() as conn:
-            conn.execute(ins, item)
+            conn.execute(ins, *items)
+
+    def insert(self, tablename, item):
+        return self.insert_many(tablename, [item])
 
     def insert_or_check_identical(self, tablename, item):
         table = getattr(self, tablename)
