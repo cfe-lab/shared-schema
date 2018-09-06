@@ -8,10 +8,7 @@ install_requires = [
     "SQLAlchemy >=1.1.14, <2.0",
 ]
 
-tests_require = [
-    "pycodestyle == 2.3.1",
-    "flake8 >= 3.5.0, <4.0",
-]
+tests_require = ["pycodestyle == 2.3.1", "flake8 >= 3.5.0, <4.0"]
 
 setup(
     name="shared_schema",
@@ -22,9 +19,8 @@ setup(
     packages=find_packages(),
     package_dir={"shared_schema": "shared_schema"},
     package_data={"shared_schema": ["templates/*.mustache"]},
+    python_requires="~= 3.5",
     install_requires=install_requires,
-    extras_require={
-        "tests": tests_require,
-    },
-    test_suite='test',
+    extras_require={"tests": tests_require},
+    test_suite="test",
 )
