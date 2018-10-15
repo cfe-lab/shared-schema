@@ -555,7 +555,6 @@ schema_data = Schema(
                         "The cutoff-fraction used to generate a consensus "
                         "sequence; '5%' is stored as '0.05'"
                     ),
-                    meta={"tags": {"required"}},
                 ),
                 field(
                     "raw_nt_seq",
