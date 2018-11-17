@@ -310,9 +310,15 @@ def from_string(src):
 
 def _reg_part(row):
     dose = _dose(amount=row.dose, compound=row.medication_id)
-    doses = frozenset([dose])
+    if all(dose):
+        doses = frozenset([dose])
+    else:
+        doses = frozenset()
     indication = _indication(frequency=row.frequency, doselist=doses)
-    drug_combination = frozenset([indication])
+    if all(indication):
+        drug_combination = frozenset([indication])
+    else:
+        drug_combination = frozenset()
     regpart = _regimen_part(
         duration=row.duration, drug_combination=drug_combination
     )
@@ -322,11 +328,10 @@ def _reg_part(row):
 def from_dao(dao, uid):
     if type(uid) is not uuid.UUID:
         uid = uuid.UUID(uid)
-    query = sql.select([dao.regimen, dao.regimendruginclusion]).where(
-        sql.and_(
-            dao.regimen.c.id == uid,
-            dao.regimen.c.id == dao.regimendruginclusion.c.regimen_id,
-        )
+    query = (
+        dao.regimen.outerjoin(dao.regimendruginclusion)
+        .select()
+        .where(dao.regimen.c.id == uid)
     )
     reg_rows = dao.query(query)
     return consolidate(map(_reg_part, reg_rows))

@@ -322,9 +322,8 @@ class TestFromDao(unittest.TestCase):
 
         uid = uuid.uuid4()
         sql_mod = 'shared_schema.regimens.cannonical.sql'
-        with mock.patch(sql_mod) as sa_sql_mock:
+        with mock.patch(sql_mod):
             result = cannonical.from_dao(dao_mock, uid)
-            sa_sql_mock.select.assert_called()
         query_mock.assert_called()
         self.assertEqual(result, expected)
 

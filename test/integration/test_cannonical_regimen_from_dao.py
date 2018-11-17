@@ -24,13 +24,7 @@ class TestCannonicalRegimenFromDao(unittest.TestCase):
         dao = self.new_initialized_dao()
         regimens = list(dao.query(dao.regimen.select()))
         self.assertGreater(
-            len(regimens),
-            0,
-            "Expected to have some standard regimens",
+            len(regimens), 0, "Expected to have some standard regimens"
         )
         for reg in regimens:
-            self.verify_that_standard_matches_loaded(
-                dao,
-                reg.name,
-                reg.id,
-            )
+            self.verify_that_standard_matches_loaded(dao, reg.name, reg.id)
