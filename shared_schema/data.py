@@ -363,12 +363,13 @@ schema_data = Schema(
                 ),
                 field(
                     "response",
-                    "enum(SVR, NR, EOT, BT, RL, RI)",
+                    "enum(SVR, NR, EOT, BT, RL, RI, VF)",
                     (
                         "Viral response: sustained, non-responsive, "
                         "detectable viral load at end-of-treatment, "
                         "viral-breakthrough during treatment, eventual "
-                        " relapse, or eventual reinfection"
+                        "relapse, eventual reinfection, or generic "
+                        "virologic failure"
                     ),
                 ),
                 field("notes", "string", "Additional notes (if applicable)"),
