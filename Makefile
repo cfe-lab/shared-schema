@@ -6,8 +6,8 @@ VBIN=./venv/bin
 
 venv:
 	python3 -m venv venv
+	${VBIN}/pip install --upgrade pip
 	${VBIN}/pip install -e '.[tests]'
-	${VBIN}/pip install -r dev-tools.txt
 
 clean:
 	find docs/ -mindepth 1 -delete
