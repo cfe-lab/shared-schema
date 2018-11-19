@@ -268,9 +268,9 @@ schema_data = Schema(
                 # NOTE(nknight): contains reStrucutredText markup for
                 # superscripts
                 field(
-                    "plate", "float", "Platelet count, in cells/mm\ :sup:`3`."
+                    "plate", "float", r"Platelet count, in cells/mm\ :sup:`3`."
                 ),
-                field("CD4", "float", "CD4 count, in cells/mm\ :sup:`3`."),
+                field("CD4", "float", r"CD4 count, in cells/mm\ :sup:`3`."),
                 field(
                     "crp", "float", "C-Reactive Protein test result, in mg/L."
                 ),
