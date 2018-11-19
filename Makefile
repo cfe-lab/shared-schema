@@ -22,8 +22,6 @@ test: $(PYTHON_SRC) $(TESTS) FORCE venv
 	${VBIN}/python -m unittest
 
 check: venv $(PYTHON_SRC) $(TESTS) FORCE test
-	${VBIN}/pycodestyle shared_schema
-	${VBIN}/pycodestyle test
 	${VBIN}/flake8 shared_schema
 	${VBIN}/flake8 test
 

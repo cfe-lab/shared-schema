@@ -8,7 +8,7 @@ install_requires = [
     "SQLAlchemy >=1.1.14, <2.0",
 ]
 
-tests_require = ["pycodestyle == 2.3.1", "flake8 >= 3.5.0, <4.0"]
+tests_require = ["flake8 >= 3.5.0, <4.0"]
 
 setup(
     name="shared_schema",
