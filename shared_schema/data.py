@@ -276,8 +276,8 @@ schema_data = Schema(
                 ),
                 field(
                     "il28b",
-                    "enum(TT,TC,CC)",
-                    "The participant's IL28B-rs12979860 genotype: TT, TC, CC",
+                    "enum(TT,CT,CC)",
+                    "The participant's IL28B-rs12979860 genotype: TT, CT, CC",
                 ),
                 field(
                     "asc",
