@@ -251,7 +251,7 @@ def parse(src):
                       drug_combination=frozenset(Indication),
                   )
     Indication = NamedTuple(
-                     frequency=Enum(QD, BID, TID, QID, QWK),
+                     frequency=Enum(qd, bid, tid, qid, qwk),
                      doselist=frozenset(Dose),
                  )
     Dose = NamedTuple(
@@ -265,11 +265,11 @@ def parse(src):
 
     For example,
 
-        100mg ASV QID 1 week, 100mg BOC TID 1 week, 100mg DCV QD 2 weeks
+        100mg asv qid 1 week, 100mg boc tid 1 week, 100mg dcv qd 2 weeks
 
     would be consolidated to
 
-        100mg ASV QID & 100mg BOC TID 1 week, 100mg DCV QD 2 weeks
+        100mg asv qid & 100mg boc tid 1 week, 100mg dcv qd 2 weeks
 
     The first two regimens were combined because they have the same
     duration, but the doses weren't combined because they are of
@@ -278,11 +278,11 @@ def parse(src):
 
     By contrast,
 
-        100mg EBR TID 2 weeks, 100 EBR TID 2 weeks
+        100mg ebr tid 2 weeks, 100 ebr tid 2 weeks
 
     would be consolidated to
 
-        200 mg EBR TID 2 weeks
+        200 mg ebr tid 2 weeks
 
     because the compounds, indications, and regimens match, so they
     can be merged at every level.

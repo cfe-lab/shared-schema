@@ -33,7 +33,7 @@ import re
 
 import pypeg2 as pp
 
-_freqs = ["QD", "BID", "TID", "QID", "QWK"]
+_freqs = ["qd", "bid", "tid", "qid", "qwk"]
 
 
 class Frequency(pp.Keyword):
@@ -41,26 +41,26 @@ class Frequency(pp.Keyword):
 
 
 _compounds = [
-    "ASV",
-    "BOC",
-    "DCV",
-    "DAS",
-    "EBR",
-    "GLP",
-    "GZR",
-    "LDV",
-    "OMB",
-    "PAR",
-    "PEG",
-    "PIB",
-    "RBV",
-    "RIT",
-    "SIM",
-    "SOF",
-    "TVR",
-    "VAN",
-    "VEL",
-    "VOX",
+    "asv",
+    "boc",
+    "dcv",
+    "das",
+    "ebr",
+    "glp",
+    "gzr",
+    "ldv",
+    "omb",
+    "par",
+    "peg",
+    "pib",
+    "rbv",
+    "rit",
+    "sim",
+    "sof",
+    "tvr",
+    "van",
+    "vel",
+    "vox",
 ]
 
 
