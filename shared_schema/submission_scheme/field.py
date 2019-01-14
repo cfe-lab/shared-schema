@@ -1,4 +1,4 @@
-"""This module defines submission scheme's Fields
+"""This module defines the submission scheme's Fields
 
 This includes functions for converting database schema field types to
 simpler submission scheme field types, and listing the possible values
