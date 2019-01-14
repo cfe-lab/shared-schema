@@ -12,7 +12,7 @@ tests_require = ["flake8 >= 3.5.0, <4.0"]
 
 setup(
     name="shared_schema",
-    version="0.1",
+    version="0.2",
     author="Nathaniel Knight",
     author_email="nknight@cfenet.ubc.ca",
     url="https://github.com/hcv-shared/shared-schema",
