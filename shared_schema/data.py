@@ -5,7 +5,7 @@ from .regimens import standard
 field = Field.make
 
 drug_ids = [code for _, code in standard._compounds]
-drug_id_enum_type = "enum({})".format(", ".join(drug_ids))
+drug_id_enum_type = "enum({})".format(", ".join(i.lower() for i in drug_ids))
 
 schema_data = Schema(
     [
