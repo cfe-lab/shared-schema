@@ -5,7 +5,6 @@ from shared_schema.regimens import grammar as rg
 
 
 class TestStandardRegimens(unittest.TestCase):
-
     def test_parsing(self):
         "Check that the regimens in the standard regimens can be parsed"
         for nm, reg in standard.regimens.items():
@@ -17,7 +16,6 @@ class TestStandardRegimens(unittest.TestCase):
 
 
 class TestExpandStandard(unittest.TestCase):
-
     def test_valid_source_passes_through(self):
         cases = standard.regimens.values()
         for case in cases:
@@ -29,17 +27,14 @@ class TestExpandStandard(unittest.TestCase):
 
     def test_names_expand_as_expected(self):
         for name, value in standard.regimens.items():
-            self.assertEqual(
-                standard.expand(name),
-                value,
-            )
+            self.assertEqual(standard.expand(name), value)
 
     def test_names_and_source_can_coexist(self):
         cases = [
-            "60mg DCV QD 12 weeks, PEGASYS",
-            "VOSEVI, 600mg RBV BID 48 weeks",
-            "VICTRELIS, VIEKIRA PAK, 400mg SOF QD 12 weeks",
-            "400mg SOF + 100mg VEL QD 12 weeks, PEGASYS, 60mg DCV QD 12 weeks",
+            "60mg dcv qd 12 weeks, PEGASYS",
+            "VOSEVI, 600mg rbv bid 48 weeks",
+            "VICTRELIS, VIEKIRA PAK, 400mg sof qd 12 weeks",
+            "400mg sof + 100mg vel qd 12 weeks, PEGASYS, 60mg dcv qd 12 weeks",
         ]
         for src in cases:
             expanded_src = standard.expand(src)

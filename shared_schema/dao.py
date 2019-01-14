@@ -58,7 +58,7 @@ def column_type(field_type, schema_data):
         fk_target = "{}.{}".format(target_entity, target_entity_pk)
         return sa.ForeignKey(fk_target)
     if dt is datatypes.Datatype.ENUM:
-        members = list(util.enum_members(field_type))
+        members = [m.lower() for m in util.enum_members(field_type)]
         if not members:
             msg = "Invalid enum type: {}"
             raise ValueError(msg.format(field_type))
@@ -143,9 +143,9 @@ class DAO(object):
                 inclusion_data = [
                     {
                         "regimen_id": reg_id,
-                        "medication_id": incl.medication_id,
+                        "medication_id": incl.medication_id.lower(),
                         "dose": incl.dose,
-                        "frequency": incl.frequency,
+                        "frequency": incl.frequency.lower(),
                         "duration": incl.duration,
                     }
                     for incl in inclusions
